@@ -1,0 +1,42 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+
+class Authentication {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Future<bool> login(String username, String password) async {
+    var headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+    // var data = {'usr': 'nishant.shingate@erpdata.in', 'pwd': 'Admin@123'};
+    var data = {'usr': username, 'pwd': password};
+    var dio = Dio();
+
+    try {
+      var response = await dio.request(
+        'http://deverpvppl.erpdata.in/api/method/login',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        final SharedPreferences prefs = await _prefs;
+        Logger().i(response.headers["set-cookie"]);
+        prefs.setString("Cookie", response.headers["set-cookie"].toString());
+        Logger().i(json.encode(response.data));
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      Logger().e('Error occurred during login request: $e');
+      return false;
+    }
+  }
+}

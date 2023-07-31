@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/views/login_view/login_view_model.dart';
+import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
 class LoginViewScreen extends StatefulWidget {
   const LoginViewScreen({super.key});
@@ -20,41 +21,48 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
           centerTitle: true,
           title: const Text('Login to App'),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-          child: Form(
-            key: model.formGlobalKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextFormField(
-                  controller: model.username,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
+        body: fullScreenLoader(
+          context: context,
+          loader: model.isloading,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+            child: Form(
+              key: model.formGlobalKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    controller: model.usernameController,
+                    focusNode: model.focusNode,
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
+                    ),
+                    validator: (value) => model.validateUsername(value),
                   ),
-                  validator: (value) => model.validateUsername(value),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: model.password,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: model.passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                    ),
+                    validator: (value) => model.validatePassword(value),
                   ),
-                  validator: (value) => model.validatePassword(value),
-                ),
-                const SizedBox(height: 32.0),
-                ElevatedButton(
-                  onPressed: () {
-                    if (model.formGlobalKey.currentState!.validate()) {
-                      model.formGlobalKey.currentState!.save();
-                      model.loginwithUsernamePassword();
-                    }
-                  },
-                  child: const Text('Login'),
-                ),
-              ],
+                  const SizedBox(height: 32.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      if (model.formGlobalKey.currentState!.validate()) {
+                        model.formGlobalKey.currentState!.save();
+                        model.loginwithUsernamePassword(context);
+                      }
+                    },
+                    child: const Text('Login'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
