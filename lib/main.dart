@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:stacked_services/stacked_services.dart';
+import 'package:sugar_mill_app/router.locator.dart';
+import 'package:sugar_mill_app/router.router.dart';
+import 'package:sugar_mill_app/views/splash_screen_view/splash_screen.dart';
 import 'themes/color_schemes.g.dart';
 import 'themes/custom_color.g.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 
-import 'views/home_view/home_view_screen.dart';
-
 void main() {
+  setupLocator();
   runApp(const MyApp());
 }
 
@@ -34,6 +37,8 @@ class MyApp extends StatelessWidget {
         }
 
         return MaterialApp(
+          navigatorKey: StackedService.navigatorKey,
+          onGenerateRoute: StackedRouter().onGenerateRoute,
           theme: ThemeData(
             useMaterial3: true,
             colorScheme: lightScheme,
@@ -44,35 +49,9 @@ class MyApp extends StatelessWidget {
             colorScheme: darkScheme,
             extensions: [darkCustomColors],
           ),
-          home: const HomePageScreen(),
+          home: const SplashScreen(),
         );
       },
     );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 2,
-          title: Text("Material Theme Builder"),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Update with your UI',
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton:
-            FloatingActionButton(onPressed: () => {}, tooltip: 'Increment'));
   }
 }

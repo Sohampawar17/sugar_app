@@ -7,7 +7,7 @@ class HomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<HomePageModel>.reactive(
+    return ViewModelBuilder<HomeViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         body: Center(
           child: Hero(
@@ -43,7 +43,7 @@ class HomePageScreen extends StatelessWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => HomePageModel(),
+      viewModelBuilder: () => HomeViewModel(),
       onViewModelReady: (model) => model.initialise(),
     );
   }
