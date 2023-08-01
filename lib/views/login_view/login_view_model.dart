@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
@@ -23,16 +22,13 @@ class LoginViewModel extends BaseViewModel {
     Logger().i(username);
     Logger().i(password);
     bool res = await Authentication().login(username, password);
+    isloading = false;
+    notifyListeners();
     if (res) {
       if (context.mounted) {
         Navigator.popAndPushNamed(context, Routes.homePageScreen);
       }
     } else {
-      notifyListeners();
-      if (kDebugMode) {
-        print("THERE YOU ARE!");
-      }
-      isloading = false;
       Fluttertoast.showToast(
           msg: "Invalid Credentials",
           toastLength: Toast.LENGTH_LONG,
