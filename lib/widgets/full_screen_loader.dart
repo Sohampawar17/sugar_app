@@ -4,7 +4,7 @@ import 'package:sugar_mill_app/constants.dart';
 
 Widget fullScreenLoader(
     {required bool loader,
-    required Padding child,
+    required Widget child,
     required BuildContext context}) {
   return Stack(
     children: [

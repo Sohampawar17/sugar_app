@@ -1,46 +1,42 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:logger/logger.dart';
 
 class GeolocationService {
-  Future<Position> determinePosition() async {
+  Future<Position?> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      Fluttertoast.showToast(msg: 'Location Serices are disabled');
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        Fluttertoast.showToast(msg: 'Location permissions are denied');
-        return Future.error('Location permissions are denied');
+    try {
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      Logger().i("SOME SHEET HAPPENED");
+      if (!serviceEnabled) {
+        Fluttertoast.showToast(msg: 'Location Serices are disabled');
+        Future.error('Location services are disabled.');
+        return null;
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      Fluttertoast.showToast(
-          msg:
-              'Location permissions are permanently denied, we cannot request permissions.');
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          Fluttertoast.showToast(msg: 'Location permissions are denied');
+          Future.error('Location permissions are denied');
+          return null;
+        }
+      }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
+      if (permission == LocationPermission.deniedForever) {
+        Fluttertoast.showToast(
+            msg:
+                'Location permissions are permanently denied, we cannot request permissions.');
+        Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
+        return null;
+      }
+
+      return await Geolocator.getCurrentPosition();
+    } catch (e) {
+      return null;
+    }
   }
 }
