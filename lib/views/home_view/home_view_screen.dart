@@ -36,6 +36,13 @@ class HomePageScreen extends StatelessWidget {
                       decoration:
                           InputDecoration(labelText: 'Enter your password'),
                     ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text("Fetch Location"),
+                    ),
                   ],
                 ),
               ),
