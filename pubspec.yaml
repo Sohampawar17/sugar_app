@@ -38,10 +38,18 @@ dependencies:
   dynamic_color: ^1.6.6
   stacked: ^3.4.1
   stacked_services: ^1.3.0
+  fluttertoast: ^8.2.2
+  logger: ^1.4.0
+  dio: ^5.3.0
+  shared_preferences: ^2.2.0
+  loading_animation_widget: ^1.2.0+4
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: 
+  stacked_generator:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
