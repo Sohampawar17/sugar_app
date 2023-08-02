@@ -415,11 +415,13 @@ class FarmerViewModel extends BaseViewModel {
     final formState = bankformKey.currentState;
     if (formState!.validate()) {
       // Form is valid, submit it
-      if (!isRoleAlreadyPresent(selectedRole ?? "")) {
-        Fluttertoast.showToast(
-            msg: "Account of selected role already exist",
-            toastLength: Toast.LENGTH_LONG);
-        return;
+      if (index == -1) {
+        if (!isRoleAlreadyPresent(selectedRole ?? "")) {
+          Fluttertoast.showToast(
+              msg: "Account of selected role already exist",
+              toastLength: Toast.LENGTH_LONG);
+          return;
+        }
       }
       submitAccount(index);
       Navigator.pop(context);
@@ -441,7 +443,7 @@ class FarmerViewModel extends BaseViewModel {
       return;
     }
     bankAccounts.add(FarmerDataBankDetails(
-      farmer: selectedRole == "Transporter" ? 1 : 0,
+      farmer: selectedRole == "Farmer" ? 1 : 0,
       harvester: selectedRole == "Harvester" ? 1 : 0,
       transporter: selectedRole == "Farmer" ? 1 : 0,
       bankName: bankName,
@@ -468,17 +470,19 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   bool isRoleAlreadyPresent(String field) {
-    for (var account in bankAccounts) {
-      Logger().i(account.transporter);
+    for (var i in bankAccounts) {
+      Logger().i(i.transporter);
+      Logger().i(i.farmer);
+      Logger().i(i.harvester);
       switch (field) {
         case 'Transporter':
-          if (account.transporter == 1) return false;
+          if (i.transporter == 1) return false;
           break;
         case 'Harvester':
-          if (account.harvester == 1) return false;
+          if (i.harvester == 1) return false;
           break;
         case 'Farmer':
-          if (account.farmer == 1) return false;
+          if (i.farmer == 1) return false;
           break;
       }
     }

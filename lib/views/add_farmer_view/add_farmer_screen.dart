@@ -375,13 +375,13 @@ class AddFarmerScreen extends StatelessWidget {
                               dataRowHeight: 40.0,
                               columns: const [
                                 DataColumn(
+                                  label: Text('Far.'),
+                                ),
+                                DataColumn(
                                   label: Text('Trans.'),
                                 ),
                                 DataColumn(
                                   label: Text('Har.'),
-                                ),
-                                DataColumn(
-                                  label: Text('Far.'),
                                 ),
                                 DataColumn(
                                   label: Text('Bank Name'),
