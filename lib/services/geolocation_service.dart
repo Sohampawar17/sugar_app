@@ -1,4 +1,5 @@
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:logger/logger.dart';
 
@@ -8,7 +9,6 @@ class GeolocationService {
     LocationPermission permission;
     try {
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      Logger().i("SOME SHEET HAPPENED");
       if (!serviceEnabled) {
         Fluttertoast.showToast(msg: 'Location Serices are disabled');
         Future.error('Location services are disabled.');
@@ -34,9 +34,20 @@ class GeolocationService {
         return null;
       }
 
-      return await Geolocator.getCurrentPosition();
+      return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
     } catch (e) {
       return null;
     }
+  }
+
+  Future<Placemark> getPlacemarks(Position? position) async {
+    List<Placemark> list =
+        await placemarkFromCoordinates(position!.latitude, position.longitude);
+    for (var i in list) {
+      Logger().i(i);
+    }
+    return list[0];
   }
 }

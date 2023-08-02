@@ -24,7 +24,9 @@ class LoginViewModel extends BaseViewModel {
     bool res = await Authentication().login(username, password);
     isloading = false;
     notifyListeners();
+
     if (res) {
+      // if (true) {
       if (context.mounted) {
         Navigator.popAndPushNamed(context, Routes.homePageScreen);
       }
