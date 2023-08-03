@@ -208,7 +208,7 @@ class FarmerData {
     data['pan_number'] = panNumber;
     data['mobile_number'] = mobileNumber;
     data['date_of_birth'] = dateOfBirth;
-    data['existing_supplier_code'] = existingSupplierCode;
+    // data['existing_supplier_code'] = existingSupplierCode;
     data['gender'] = gender;
     data['age'] = age;
     data['country'] = country;

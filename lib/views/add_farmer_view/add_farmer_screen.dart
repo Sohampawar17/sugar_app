@@ -15,6 +15,7 @@ class AddFarmerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<FarmerViewModel>.reactive(
       viewModelBuilder: () => FarmerViewModel(),
+      onViewModelReady: (model) => model.initialise(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Farmer Form'),
@@ -27,13 +28,6 @@ class AddFarmerScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(32.0),
                 child: Column(
                   children: [
-                    // TextFormField(
-                    //   decoration: const InputDecoration(labelText: 'Plant'),
-                    //   validator: (value) =>
-                    //       value!.isEmpty ? 'Please enter a Plant' : null,
-                    //   onChanged: (value) => model.farmerData!.branch = value,
-                    // ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -42,8 +36,8 @@ class AddFarmerScreen extends StatelessWidget {
                           child: CdropDown(
                             dropdownButton: DropdownButtonFormField<String>(
                               isExpanded: true,
-                              value: model
-                                  .selectedPlant, // Replace null with the selected value if needed
+                              value: model.farmerData
+                                  .branch, // Replace null with the selected value if needed
                               decoration: const InputDecoration(
                                 labelText: 'Plant',
                               ),
@@ -68,8 +62,7 @@ class AddFarmerScreen extends StatelessWidget {
                           child: CdropDown(
                             dropdownButton: DropdownButtonFormField<String>(
                               isExpanded: true,
-                              value: model
-                                  .selectedVendorGroup, // Replace null with the selected value if needed
+                              value: "Cane",
                               hint: const Text('Select Vendor Group'),
                               decoration: const InputDecoration(
                                 labelText: 'Vendro Group',
@@ -91,43 +84,10 @@ class AddFarmerScreen extends StatelessWidget {
                     TextFormField(
                       decoration:
                           const InputDecoration(labelText: 'Vendor Name'),
-                      validator: (value) => value!.isEmpty
-                          ? 'Please enter a supplier name'
-                          : null,
+                      validator: (value) =>
+                          value!.isEmpty ? 'Please enter a Vendor name' : null,
                       onChanged: (value) =>
-                          model.farmerData!.supplierName = value,
-                    ),
-
-                    //for aadhar card
-                    TextFormField(
-                      controller: model.aadharNumberController,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(12),
-                      ],
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Aadhar Card Number',
-                        hintText: 'Enter 12-digit Aadhar number',
-                      ),
-                      validator: model.validateAadhar,
-                      onChanged: model.onAadharChanged,
-                    ),
-
-                    //for pan card
-                    TextFormField(
-                      controller: model.panNumberController,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                        UppercaseTextFormatter()
-                      ],
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        labelText: 'PAN Number',
-                        hintText: 'Enter 10-character PAN number',
-                      ),
-                      validator: model.validatePanNumber,
-                      onChanged: model.onPanNumberChanged,
+                          model.farmerData.supplierName = value,
                     ),
 
                     //mobile number
@@ -144,6 +104,49 @@ class AddFarmerScreen extends StatelessWidget {
                       ),
                       validator: model.validateMobileNumber,
                       onChanged: model.onMobileNumberChanged,
+                    ),
+
+                    Row(
+                      children: [
+                        //for aadhar card
+                        Expanded(
+                          child: TextFormField(
+                            controller: model.aadharNumberController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(12),
+                            ],
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Aadhar Card Number',
+                              hintText: 'Enter 12-digit Aadhar number',
+                            ),
+                            validator: model.validateAadhar,
+                            onChanged: model.onAadharChanged,
+                          ),
+                        ),
+
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        //for pan card
+                        Expanded(
+                          child: TextFormField(
+                            controller: model.panNumberController,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(11),
+                              UppercaseTextFormatter()
+                            ],
+                            keyboardType: TextInputType.text,
+                            decoration: const InputDecoration(
+                              labelText: 'PAN Number',
+                              hintText: 'Enter 10-character PAN number',
+                            ),
+                            validator: model.validatePanNumber,
+                            onChanged: model.onPanNumberChanged,
+                          ),
+                        ),
+                      ],
                     ),
 
                     Row(
@@ -172,44 +175,26 @@ class AddFarmerScreen extends StatelessWidget {
                             decoration: const InputDecoration(labelText: 'Age'),
                             validator: (value) =>
                                 value!.isEmpty ? 'Please enter an age' : null,
-                            onChanged: (value) => model.farmerData!.age = value,
+                            onChanged: (value) => model.farmerData.age = value,
                           ),
                         ),
                       ],
                     ),
 
                     //supplier code
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: 'Existing vendor Code'),
-                      validator: (value) => value!.isEmpty
-                          ? 'Please enter an existing suppliervendor code'
-                          : null,
-                      onChanged: (value) =>
-                          model.farmerData!.existingSupplierCode = value,
-                    ),
-
-                    // //supplier group
                     // TextFormField(
-                    //   decoration:
-                    //       const InputDecoration(labelText: 'Vendor Group'),
-                    //   validator: (value) =>
-                    //       value!.isEmpty ? 'Please enter a vendor group' : null,
+                    //   decoration: const InputDecoration(
+                    //       labelText: 'Existing vendor Code'),
+                    //   validator: (value) => value!.isEmpty
+                    //       ? 'Please enter an existing suppliervendor code'
+                    //       : null,
                     //   onChanged: (value) =>
-                    //       model.farmerData!.supplierGroup = value,
+                    //       model.farmerData!.existingSupplierCode = value,
                     // ),
 
-                    //supplier village
-                    // TextFormField(
-                    //   decoration: const InputDecoration(labelText: 'Village'),
-                    //   validator: (value) =>
-                    //       value!.isEmpty ? 'Please enter a village' : null,
-                    //   onChanged: (value) => model.farmerData!.village = value,
+                    // const SizedBox(
+                    //   height: 10.0,
                     // ),
-
-                    const SizedBox(
-                      height: 10.0,
-                    ),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -241,37 +226,95 @@ class AddFarmerScreen extends StatelessWidget {
                         ),
                         Expanded(
                           //for role
-                          child: CdropDown(
-                            dropdownButton: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              value: model.selectedVillage,
-                              decoration: const InputDecoration(
-                                labelText: 'Village',
-                              ),
-                              hint: const Text('Select Village'),
-                              onChanged: model.setSelectedVillage,
-                              items: model.villageList.map((role) {
-                                return DropdownMenuItem<String>(
-                                  value: role,
-                                  child: Text(role),
-                                );
-                              }).toList(),
-                              validator: model.validateVillage,
-                            ),
+                          child: Autocomplete<String>(
+                            optionsBuilder:
+                                (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text.isEmpty) {
+                                return const Iterable<String>.empty();
+                              }
+                              return model.villageList.where((village) =>
+                                  village.toLowerCase().contains(
+                                      textEditingValue.text.toLowerCase()));
+                            },
+                            onSelected: model.setSelectedVillage,
+                            fieldViewBuilder: (BuildContext context,
+                                TextEditingController textEditingController,
+                                FocusNode focusNode,
+                                VoidCallback onFieldSubmitted) {
+                              return TextFormField(
+                                controller: textEditingController,
+                                focusNode: focusNode,
+                                decoration: const InputDecoration(
+                                  labelText: 'Village',
+                                ),
+                                onChanged: (String value) {},
+                              );
+                            },
+                            optionsViewBuilder: (BuildContext contpext,
+                                AutocompleteOnSelected<String> onSelected,
+                                Iterable<String> options) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  elevation: 4.0,
+                                  child: Container(
+                                    constraints:
+                                        const BoxConstraints(maxHeight: 200),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: options.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        final String option =
+                                            options.elementAt(index);
+                                        return GestureDetector(
+                                          onTap: () {
+                                            onSelected(option);
+                                          },
+                                          child: ListTile(
+                                            title: Text(option),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            optionsMaxHeight: 200,
                           ),
+
+                          // child: CdropDown(
+                          //   dropdownButton: DropdownButtonFormField<String>(
+                          //     isExpanded: true,
+                          //     value: model.selectedVillage,
+                          //     decoration: const InputDecoration(
+                          //       labelText: 'Village',
+                          //     ),
+                          //     hint: const Text('Select Village'),
+                          //     onChanged: model.setSelectedVillage,
+                          //     items: model.villageList.map((role) {
+                          //       return DropdownMenuItem<String>(
+                          //         value: role,
+                          //         child: Text(role),
+                          //       );
+                          //     }).toList(),
+                          //     validator: model.validateVillage,
+                          //   ),
+                          // ),
                         ),
                       ],
                     ),
 
                     //roles of user
                     Wrap(
-                      spacing: 8.0,
-                      runSpacing: 8.0,
+                      spacing: 4.0,
+                      runSpacing: 3.0,
                       alignment: WrapAlignment.center,
                       children: [
                         for (String item in model.items)
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(4.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -338,7 +381,7 @@ class AddFarmerScreen extends StatelessWidget {
                                     'Bank Passbook File: ${model.files.getFile(kBankpdf)?.path.split("/").last}',
                                     overflow: TextOverflow.ellipsis,
                                   )
-                                : const Text('Attach Bank Passbook'),
+                                : const Text('Attach Passbook'),
                           ),
                         ),
                         const SizedBox(
@@ -378,10 +421,10 @@ class AddFarmerScreen extends StatelessWidget {
                                   label: Text('Far.'),
                                 ),
                                 DataColumn(
-                                  label: Text('Trans.'),
+                                  label: Text('Har.'),
                                 ),
                                 DataColumn(
-                                  label: Text('Har.'),
+                                  label: Text('Trans.'),
                                 ),
                                 DataColumn(
                                   label: Text('Bank Name'),

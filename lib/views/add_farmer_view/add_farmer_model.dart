@@ -9,6 +9,8 @@ import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmer.dart';
 import 'package:intl/intl.dart';
+import 'package:sugar_mill_app/router.router.dart';
+import 'package:sugar_mill_app/services/add_farmer_service.dart';
 
 class FarmerViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
@@ -21,8 +23,13 @@ class FarmerViewModel extends BaseViewModel {
   TextEditingController dobController = TextEditingController();
   TextEditingController ageController = TextEditingController();
 
+  final List<String> items = ['Transporter', 'Harvester', 'Farmer', 'Member'];
+  final List<String> plantlist = ['Bedkihal', 'Nagpur'];
+  final List<String> vendorGroupList = ['Cane'];
+  List<String> villageList = ["AHERWADI", "BHAWAMWADI", "VASUD"];
+
   DateTime? selectedDate;
-  FarmerData? farmerData;
+  FarmerData farmerData = FarmerData();
 
   late String accountNumber;
 
@@ -30,10 +37,33 @@ class FarmerViewModel extends BaseViewModel {
 
   late String bankName;
 
-  void onSavePressed(BuildContext context) {
-    // if (formKey.currentState!.validate()) {}
-    Fluttertoast.showToast(msg: "Farmer Added");
-    Navigator.pop(context);
+  initialise(BuildContext context) async {
+    setBusy(true);
+    villageList = await AddFarmerService().fetchVillages();
+    if (villageList.length == 1 && villageList[0] == "401") {
+      if (context.mounted) {
+        setBusy(false);
+        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+      }
+    }
+    farmerData.supplierGroup = "CANE";
+    setBusy(false);
+  }
+
+  void onSavePressed(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      // Fluttertoast.showToast(msg: "Farmer Added");
+      setBusy(true);
+      bool res = await AddFarmerService().addFarmer(farmerData);
+      if (res) {
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
+      }
+
+      setBusy(false);
+      // Navigator.pop(context);
+    }
   }
 
 ////////////////////////////////// aadhar functions////////////////////////////////
@@ -41,7 +71,8 @@ class FarmerViewModel extends BaseViewModel {
     if (value == null || value.isEmpty) {
       return 'Please enter Aadhar card number';
     }
-    if (value.replaceAll(' ', '').length != 15) {
+
+    if (value.replaceAll(' ', '').length != 12) {
       return 'Aadhar card number should be exactly 12 digits';
     }
     // Additional validation rules can be added if needed.
@@ -57,6 +88,7 @@ class FarmerViewModel extends BaseViewModel {
       text: formattedAadhar,
       selection: TextSelection.collapsed(offset: selectionIndex),
     );
+    farmerData.aadhaarNumber = aadharNumberController.text.replaceAll(" ", '');
   }
 
   String _formatAadhar(String value) {
@@ -76,7 +108,7 @@ class FarmerViewModel extends BaseViewModel {
     if (value == null || value.isEmpty) {
       return 'Please enter PAN number';
     }
-    if (value.replaceAll(' ', '').length != 11) {
+    if (value.replaceAll(' ', '').length != 10) {
       return 'PAN number should be exactly 10 characters';
     }
     // Additional validation rules can be added if needed.
@@ -89,6 +121,7 @@ class FarmerViewModel extends BaseViewModel {
       text: formattedPanNumber,
       selection: TextSelection.collapsed(offset: formattedPanNumber.length),
     );
+    farmerData.panNumber = panNumberController.text.replaceAll(" ", '');
   }
 
   String _formatPanNumber(String value) {
@@ -119,6 +152,7 @@ class FarmerViewModel extends BaseViewModel {
       text: formattedMobileNumber,
       selection: TextSelection.collapsed(offset: formattedMobileNumber.length),
     );
+    farmerData.mobileNumber = mobileNumberController.text.replaceAll(" ", '');
   }
 
   String formatMobileNumber(String value) {
@@ -144,6 +178,7 @@ class FarmerViewModel extends BaseViewModel {
   void onDobChanged(String value) {
     // You can use the value here if needed.
     // Since we are using a date picker to select DOB, the value will not change through regular typing.
+    farmerData.dateOfBirth = value;
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -156,7 +191,8 @@ class FarmerViewModel extends BaseViewModel {
 
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
-      dobController.text = DateFormat('dd-MM-yyyy').format(picked);
+      dobController.text = DateFormat('yyyy-MM-dd').format(picked);
+      farmerData.dateOfBirth = dobController.text;
       _calculateAge();
     }
   }
@@ -174,6 +210,7 @@ class FarmerViewModel extends BaseViewModel {
       ageController.value = TextEditingValue(
         text: age.toString(),
       );
+      farmerData.age = age.toString();
       notifyListeners();
     } else {
       ageController.value = const TextEditingValue(
@@ -192,13 +229,12 @@ class FarmerViewModel extends BaseViewModel {
 
   void setSelectedGender(String? gender) {
     _selectedGender = gender;
+    farmerData.gender = _selectedGender;
     notifyListeners();
   }
 
-  String? selectedPlant;
-
   void setSelectedPlant(String? plant) {
-    selectedPlant = plant;
+    farmerData.branch = plant;
     notifyListeners();
   }
 
@@ -206,6 +242,7 @@ class FarmerViewModel extends BaseViewModel {
 
   void setSelectedVendorGroup(String? vender) {
     selectedVendorGroup = vender;
+    farmerData.supplierGroup = vender;
     notifyListeners();
   }
 
@@ -213,6 +250,7 @@ class FarmerViewModel extends BaseViewModel {
 
   void setSelectedVillage(String? village) {
     selectedVillage = village;
+    farmerData.village = selectedVillage;
     notifyListeners();
   }
 
@@ -266,11 +304,6 @@ class FarmerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  final List<String> items = ['Transporter', 'Harvester', 'Farmer', 'Member'];
-  final List<String> plantlist = ['Bedkihal', 'Nagpur'];
-  final List<String> vendorGroupList = ['Bedkihal', 'Dealer', 'Cane'];
-  final List<String> villageList = ["AHERWADI", "BHAWAMWADI", "VASUD"];
-
   final List<String> _selectedItems = [];
 
   List<String> get selectedItems => _selectedItems;
@@ -278,9 +311,35 @@ class FarmerViewModel extends BaseViewModel {
   void toggleItem(String item) {
     if (_selectedItems.contains(item)) {
       _selectedItems.remove(item);
+      // 'Transporter', 'Harvester', 'Farmer', 'Member'
+      if (item == items[0]) {
+        farmerData.isTransporter = 0;
+      }
+      if (item == items[1]) {
+        farmerData.isHarvester = 0;
+      }
+      if (item == items[2]) {
+        farmerData.isFarmer = 0;
+      }
+      if (item == items[3]) {
+        farmerData.isMember = 0;
+      }
     } else {
       _selectedItems.add(item);
+      if (item == items[0]) {
+        farmerData.isTransporter = 1;
+      }
+      if (item == items[1]) {
+        farmerData.isHarvester = 1;
+      }
+      if (item == items[2]) {
+        farmerData.isFarmer = 1;
+      }
+      if (item == items[3]) {
+        farmerData.isMember = 1;
+      }
     }
+
     notifyListeners();
   }
   ///////////////////////////////////////////////////////////////////////
@@ -294,7 +353,7 @@ class FarmerViewModel extends BaseViewModel {
   Future<void> selectPdf(String fileType) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf'],
+      allowedExtensions: ['pdf', 'jpeg', 'png'],
     );
 
     if (result != null) {
@@ -445,7 +504,7 @@ class FarmerViewModel extends BaseViewModel {
     bankAccounts.add(FarmerDataBankDetails(
       farmer: selectedRole == "Farmer" ? 1 : 0,
       harvester: selectedRole == "Harvester" ? 1 : 0,
-      transporter: selectedRole == "Farmer" ? 1 : 0,
+      transporter: selectedRole == "Transporter" ? 1 : 0,
       bankName: bankName,
       branchifscCode: branchifscCode,
       accountNumber: accountNumber,
