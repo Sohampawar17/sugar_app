@@ -51,18 +51,22 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   void onSavePressed(BuildContext context) async {
+    setBusy(true);
+
+    await uploadFiles();
     if (formKey.currentState!.validate()) {
       // Fluttertoast.showToast(msg: "Farmer Added");
       setBusy(true);
+      farmerData.bankDetails = bankAccounts;
       bool res = await AddFarmerService().addFarmer(farmerData);
       if (res) {
         if (context.mounted) {
+          setBusy(false);
           Navigator.pop(context);
         }
       }
 
       setBusy(false);
-      // Navigator.pop(context);
     }
   }
 
@@ -357,29 +361,47 @@ class FarmerViewModel extends BaseViewModel {
     );
 
     if (result != null) {
-      files.setFile(fileType, File(result.files.single.path!));
+      // print("SIZE BEFORE: ${result.files.single.size}");
+      setBusy(true);
+      File? compressedFile =
+          await compressFile(File(result.files.single.path ?? ""));
+      // print("SIZE BEFORE: ${compressedFile?.lengthSync()}");
+      files.setFile(fileType, compressedFile);
+      setBusy(false);
       notifyListeners();
     }
   }
 
   // Function to upload the selected PDF file (Aadhar card)
-  Future<void> uploadPdf(String fileType) async {
-    if (files.getFile(fileType) == null) {
-      // Handle case when no PDF file is selected
-      return;
+  Future<void> uploadFiles() async {
+    String aadharUrl =
+        await AddFarmerService().uploadDocs(files.adharCard ?? File(""));
+    if (aadharUrl == "") {
+      Fluttertoast.showToast(msg: "Failed to upload Aadhar");
     }
-
-    // Implement your file upload logic here
-    // For example, you can use HTTP package to upload the file to a server
-    // and show upload progress using a progress indicator
-
-    // After successful upload, you can navigate to a new screen
-    // await _navigationService.navigateTo(Routes.successScreen);
+    String panUrl =
+        await AddFarmerService().uploadDocs(files.panCard ?? File(""));
+    if (panUrl == "") {
+      Fluttertoast.showToast(msg: "Failed to upload Aadhar");
+    }
+    String bankUrl =
+        await AddFarmerService().uploadDocs(files.bankPassbook ?? File(""));
+    if (bankUrl == "") {
+      Fluttertoast.showToast(msg: "Failed to upload Aadhar");
+    }
+    String letterUrl =
+        await AddFarmerService().uploadDocs(files.consentLetter ?? File(""));
+    if (letterUrl == "") {
+      Fluttertoast.showToast(msg: "Failed to upload Aadhar");
+    }
+    farmerData.aadhaarCard = aadharUrl;
+    farmerData.panCard = panUrl;
+    farmerData.bankPassbook = bankUrl;
+    farmerData.consentLetter = letterUrl;
   }
 
   // Function to check if a PDF file is selected
   bool isFileSelected(String fileType) {
-    Logger().i(files.getFile(fileType));
     return files.getFile(fileType) != null;
   }
 
@@ -482,7 +504,7 @@ class FarmerViewModel extends BaseViewModel {
           return;
         }
       }
-      submitAccount(index);
+      submitBankAccount(index);
       Navigator.pop(context);
     } else {
       // Form is invalid, show error messages
@@ -490,7 +512,7 @@ class FarmerViewModel extends BaseViewModel {
     }
   }
 
-  void submitAccount(int index) {
+  void submitBankAccount(int index) {
     if (index != -1) {
       bankAccounts[index].farmer = selectedRole == "Farmer" ? 1 : 0;
       bankAccounts[index].harvester = selectedRole == "Harvester" ? 1 : 0;

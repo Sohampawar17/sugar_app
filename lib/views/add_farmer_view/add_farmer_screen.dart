@@ -526,58 +526,79 @@ class AddFarmerScreen extends StatelessWidget {
           builder: (context) {
             return AlertDialog(
               title: const Text('Add Bank Account'),
-              content: Form(
-                key: model.bankformKey,
-                child: Column(
-                  children: [
-                    CdropDown(
-                      dropdownButton: DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        value: model.selectedRole,
-                        decoration: const InputDecoration(
-                          labelText: 'Select Role',
+              content: SizedBox(
+                height: getHeight(context) / 2,
+                child: Form(
+                  key: model.bankformKey,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: CdropDown(
+                          dropdownButton: DropdownButtonFormField<String>(
+                            isExpanded: true,
+                            value: model.selectedRole,
+                            decoration: const InputDecoration(
+                              labelText: 'Select Role',
+                            ),
+                            hint: const Text('Select Role'),
+                            onChanged: model.setSelectedRole,
+                            items: model.roles.map((role) {
+                              return DropdownMenuItem<String>(
+                                value: role,
+                                child: Text(role),
+                              );
+                            }).toList(),
+                            validator: model.validateRole,
+                          ),
                         ),
-                        hint: const Text('Select Role'),
-                        onChanged: model.setSelectedRole,
-                        items: model.roles.map((role) {
-                          return DropdownMenuItem<String>(
-                            value: role,
-                            child: Text(role),
-                          );
-                        }).toList(),
-                        validator: model.validateRole,
                       ),
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Bank Name',
-                      ),
-                      initialValue: index == -1 ? null : model.bankName,
-                      onChanged: (value) {
-                        model.bankName = value;
-                      },
-                      validator: model.validateBankName,
-                    ),
-                    TextFormField(
-                        initialValue: index == -1 ? null : model.branchifscCode,
-                        decoration: const InputDecoration(
-                          labelText: 'Branch IFSC Code',
+                      Expanded(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Bank Name',
+                          ),
+                          initialValue: index == -1 ? null : model.bankName,
+                          onChanged: (value) {
+                            model.bankName = value;
+                          },
+                          validator: model.validateBankName,
                         ),
-                        onChanged: (value) {
-                          model.branchifscCode = value;
-                        },
-                        validator: model.validateBranchIfscCode),
-                    TextFormField(
-                      initialValue: index == -1 ? null : model.accountNumber,
-                      decoration: const InputDecoration(
-                        labelText: 'Account Number',
                       ),
-                      onChanged: (value) {
-                        model.accountNumber = value;
-                      },
-                      validator: model.validateAccountNumber,
-                    ),
-                  ],
+                      Expanded(
+                        child: TextFormField(
+                            initialValue:
+                                index == -1 ? null : model.branchifscCode,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(11),
+                              UppercaseTextFormatter()
+                            ],
+                            decoration: const InputDecoration(
+                              labelText: 'Branch IFSC Code',
+                            ),
+                            onChanged: (value) {
+                              model.branchifscCode = value;
+                            },
+                            validator: model.validateBranchIfscCode),
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          initialValue:
+                              index == -1 ? null : model.accountNumber,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                            UppercaseTextFormatter()
+                          ],
+                          decoration: const InputDecoration(
+                            labelText: 'Account Number',
+                          ),
+                          onChanged: (value) {
+                            model.accountNumber = value;
+                          },
+                          validator: model.validateAccountNumber,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               actions: [

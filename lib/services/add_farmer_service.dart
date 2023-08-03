@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -45,8 +46,6 @@ class AddFarmerService {
     var data = json.encode({
       "data": farmerData,
     });
-
-    print(data);
     try {
       var dio = Dio();
       var response = await dio.request(
@@ -69,5 +68,43 @@ class AddFarmerService {
       Logger().e(e);
     }
     return false;
+  }
+
+  Future<String> uploadDocs(File file) async {
+    try {
+      FormData data = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          file.path,
+          filename: generateUniqueFileName(file),
+        ),
+      });
+      var dio = Dio();
+      var response = await dio.request(
+        'http://deverpvppl.erpdata.in/api/method/upload_file',
+        options: Options(
+          method: 'POST',
+          headers: {'Cookie': await getTocken()},
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        Logger().i(json.encode(response.data));
+        String jsonString = json
+            .encode(response.data); // Convert the response.data to JSON string
+        Map<String, dynamic> jsonResponse = json.decode(jsonString);
+
+// Extract the "file_url" from the jsonResponse
+        String fileUrl = jsonResponse["message"]["file_url"];
+
+        return fileUrl;
+      } else {
+        Logger().i(response.statusMessage);
+      }
+    } catch (e) {
+      Logger().e(e);
+    }
+
+    return "";
   }
 }
