@@ -397,7 +397,7 @@ class AddFarmerScreen extends StatelessWidget {
                                     'Concent Letter File: ${model.files.getFile(kConcentpdf)?.path.split("/").last}',
                                     overflow: TextOverflow.ellipsis,
                                   )
-                                : const Text('Attch Concent Letter'),
+                                : const Text('Attach Letter'),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -467,7 +467,6 @@ class AddFarmerScreen extends StatelessWidget {
                                     DataCell(
                                       SizedBox(
                                         height: 24.0,
-                                        width: 120,
                                         child: ElevatedButton(
                                           onPressed: () {
                                             getBankDetails(

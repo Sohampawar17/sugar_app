@@ -61,10 +61,12 @@ class AddFarmerService {
         Fluttertoast.showToast(msg: "FARMER ADDED");
         return true;
       } else {
-        Fluttertoast.showToast(msg: "FARMER FUCKED UP!");
+        Fluttertoast.showToast(msg: "UNABLE TO ADD FARMER!");
         return false;
       }
     } catch (e) {
+      Fluttertoast.showToast(msg: "Error accoured $e ");
+      Fluttertoast.showToast(msg: "Select Correct Village!");
       Logger().e(e);
     }
     return false;
