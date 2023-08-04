@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
@@ -26,7 +26,7 @@ class FarmerViewModel extends BaseViewModel {
   final List<String> items = ['Transporter', 'Harvester', 'Farmer', 'Member'];
   final List<String> plantlist = ['Bedkihal', 'Nagpur'];
   final List<String> vendorGroupList = ['Cane'];
-  List<String> villageList = ["AHERWADI", "BHAWAMWADI", "VASUD"];
+  List<String> villageList = [];
 
   DateTime? selectedDate;
   FarmerData farmerData = FarmerData();
@@ -51,8 +51,12 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   void onSavePressed(BuildContext context) async {
+    if (!villageList.contains(farmerData.village)) {
+      Fluttertoast.showToast(
+          msg: "Invalid Village", toastLength: Toast.LENGTH_LONG);
+      return;
+    }
     setBusy(true);
-
     await uploadFiles();
     if (formKey.currentState!.validate()) {
       // Fluttertoast.showToast(msg: "Farmer Added");
@@ -354,21 +358,39 @@ class FarmerViewModel extends BaseViewModel {
   Files files = Files();
 
   // Function to open file picker and select PDF file
-  Future<void> selectPdf(String fileType) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'jpeg', 'png'],
-    );
+  Future<void> selectPdf(String fileType, ImageSource source) async {
+    try {
+      final result = await ImagePicker().pickImage(source: source);
+      //   if (pickedFile != null) {
+      //     // Handle image picked
+      //   } else {
+      //     final pickedDocument = await ImagePicker().pickImage(source: source);
+      //     if (pickedDocument != null) {
+      //       // Handle document picked
+      //     }
+      //   }
+      // } catch (e) {
+      //   Fluttertoast.showToast(
+      //       msg: 'Error while picking an image or document: $e');
+      // }
 
-    if (result != null) {
-      // print("SIZE BEFORE: ${result.files.single.size}");
-      setBusy(true);
-      File? compressedFile =
-          await compressFile(File(result.files.single.path ?? ""));
-      // print("SIZE BEFORE: ${compressedFile?.lengthSync()}");
-      files.setFile(fileType, compressedFile);
-      setBusy(false);
-      notifyListeners();
+      // FilePickerResult? result = await FilePicker.platform.pickFiles(
+      //   type: FileType.custom,
+      //   allowedExtensions: ['pdf', 'jpeg', 'png'],
+      // );
+
+      if (result != null) {
+        // print("SIZE BEFORE: ${result.files.single.size}");
+        setBusy(true);
+        File? compressedFile = await compressFile(fileFromXFile(result));
+        // print("SIZE BEFORE: ${compressedFile?.lengthSync()}");
+        files.setFile(fileType, compressedFile);
+        setBusy(false);
+        notifyListeners();
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: 'Error while picking an image or document: $e');
     }
   }
 

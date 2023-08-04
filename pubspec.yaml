@@ -49,6 +49,7 @@ dependencies:
   intl: ^0.18.1
   file_picker: ^5.3.3
   flutter_image_compress: ^2.0.4
+  image_picker: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

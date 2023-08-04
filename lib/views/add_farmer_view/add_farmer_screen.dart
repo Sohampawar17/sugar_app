@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/views/add_farmer_view/add_farmer_model.dart';
@@ -337,7 +338,9 @@ class AddFarmerScreen extends StatelessWidget {
                         //for adhar card
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => model.selectPdf(kAadharpdf),
+                            // onPressed: () => model.selectPdf(kAadharpdf),
+                            onPressed: () =>
+                                pickDoc(kAadharpdf, context, model),
                             child: model.isFileSelected(kAadharpdf)
                                 ? Text(
                                     'Aadhar File: ${model.files.getFile(kAadharpdf)?.path.split("/").last}',
@@ -353,7 +356,8 @@ class AddFarmerScreen extends StatelessWidget {
                         //for pand card
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => model.selectPdf(kPanpdf),
+                            onPressed: () => pickDoc(kPanpdf, context, model),
+                            // model.selectPdf(kPanpdf, ImageSource.camera),
                             child: model.isFileSelected(kPanpdf)
                                 ? Text(
                                     'Pan Card File: ${model.files.getFile(kPanpdf)?.path.split("/").last}',
@@ -375,7 +379,8 @@ class AddFarmerScreen extends StatelessWidget {
                         //for bank passbook card
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => model.selectPdf(kBankpdf),
+                            onPressed: () => pickDoc(kPanpdf, context, model),
+                            // model.selectPdf(kBankpdf, ImageSource.camera),
                             child: model.isFileSelected(kBankpdf)
                                 ? Text(
                                     'Bank Passbook File: ${model.files.getFile(kBankpdf)?.path.split("/").last}',
@@ -391,7 +396,9 @@ class AddFarmerScreen extends StatelessWidget {
                         //for concent latter
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => model.selectPdf(kConcentpdf),
+                            onPressed: () =>
+                                pickDoc(kConcentpdf, context, model),
+                            //  model.selectPdf( kConcentpdf, ImageSource.camera),
                             child: model.isFileSelected(kConcentpdf)
                                 ? Text(
                                     'Concent Letter File: ${model.files.getFile(kConcentpdf)?.path.split("/").last}',
@@ -618,6 +625,36 @@ class AddFarmerScreen extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  pickDoc(String filetype, BuildContext context, FarmerViewModel model) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Pick an image or document'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera),
+              title: const Text('Image'),
+              onTap: () {
+                Navigator.of(context).pop();
+                model.selectPdf(filetype, ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.file_copy),
+              title: const Text('Document'),
+              onTap: () {
+                Navigator.of(context).pop();
+                model.selectPdf(filetype, ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
