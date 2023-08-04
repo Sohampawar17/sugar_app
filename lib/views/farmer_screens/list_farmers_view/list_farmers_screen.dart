@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
-import 'package:sugar_mill_app/views/list_farmers_view/list_farmers_model.dart';
+import 'package:sugar_mill_app/views/farmer_screens/list_farmers_view/list_farmers_model.dart';
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
 class ListFarmersScreen extends StatelessWidget {
@@ -67,7 +67,7 @@ class ListFarmersScreen extends StatelessWidget {
                                   model.villageController.text = value;
                                   model.filterList(value, "name");
                                 },
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'ID',
                                   // prefixIcon: Icon(Icons.search),
                                 ),

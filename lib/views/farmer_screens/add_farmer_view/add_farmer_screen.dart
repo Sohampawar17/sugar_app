@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
-import 'package:sugar_mill_app/views/add_farmer_view/add_farmer_model.dart';
+import 'package:sugar_mill_app/views/farmer_screens/add_farmer_view/add_farmer_model.dart';
 import 'package:sugar_mill_app/widgets/cdrop_down_widget.dart';
 import 'package:sugar_mill_app/widgets/ctext_button.dart';
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';

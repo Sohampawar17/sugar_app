@@ -11,7 +11,6 @@ class ListFarmersModel extends BaseViewModel {
   List<FarmersListModelData> farmresList = [];
   List<FarmersListModelData> filteredList = [];
   initialise(BuildContext context) async {
-    print("HERE");
     setBusy(true);
     farmresList = await ListFarmersService().getAllFarmersList();
     filteredList = farmresList;
@@ -27,7 +26,6 @@ class ListFarmersModel extends BaseViewModel {
     notifyListeners();
     filteredList =
         await ListFarmersService().getFarmersListByFilter(query, filter);
-    print(filteredList);
     notifyListeners();
   }
 }

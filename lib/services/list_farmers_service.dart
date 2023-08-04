@@ -19,7 +19,6 @@ class ListFarmersService {
       );
 
       if (response.statusCode == 200) {
-        print(json.encode(response.data));
         Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
         List<FarmersListModelData> farmersList = List.from(jsonData['data'])
             .map<FarmersListModelData>(
@@ -39,8 +38,6 @@ class ListFarmersService {
 
   Future<List<FarmersListModelData>> getFarmersListByFilter(
       String query, String filter) async {
-    print(
-        "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]&filters=[[\"$filter\",\"like\",\"$query\"]]");
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
@@ -54,7 +51,6 @@ class ListFarmersService {
       );
 
       if (response.statusCode == 200) {
-        print(json.encode(response.data));
         Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
         List<FarmersListModelData> farmersList = List.from(jsonData['data'])
             .map<FarmersListModelData>(
