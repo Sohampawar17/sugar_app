@@ -363,7 +363,7 @@ class AddFarmerScreen extends StatelessWidget {
                                     'Pan Card File: ${model.files.getFile(kPanpdf)?.path.split("/").last}',
                                     overflow: TextOverflow.ellipsis,
                                   )
-                                : const Text('Attach Pan'),
+                                : const Text('Attach PAN'),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -379,7 +379,7 @@ class AddFarmerScreen extends StatelessWidget {
                         //for bank passbook card
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => pickDoc(kPanpdf, context, model),
+                            onPressed: () => pickDoc(kBankpdf, context, model),
                             // model.selectPdf(kBankpdf, ImageSource.camera),
                             child: model.isFileSelected(kBankpdf)
                                 ? Text(
@@ -638,7 +638,7 @@ class AddFarmerScreen extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.camera),
-              title: const Text('Image'),
+              title: const Text('Camera'),
               onTap: () {
                 Navigator.of(context).pop();
                 model.selectPdf(filetype, ImageSource.camera);
@@ -646,7 +646,7 @@ class AddFarmerScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.file_copy),
-              title: const Text('Document'),
+              title: const Text('Gallary'),
               onTap: () {
                 Navigator.of(context).pop();
                 model.selectPdf(filetype, ImageSource.gallery);

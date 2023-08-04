@@ -14,6 +14,19 @@ const kPanpdf = "PanCard";
 const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
 
+// api usrls
+String apiVillageListGet = 'http://deverpvppl.erpdata.in/api/resource/Village';
+String apiFarmerListPost =
+    'http://deverpvppl.erpdata.in/api/resource/Farmer List';
+String apiUploadFilePost =
+    'http://deverpvppl.erpdata.in/api/method/upload_file';
+String apiLoginGet = 'http://deverpvppl.erpdata.in/api/method/login';
+
+String apiFarmerAllListGet =
+    "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]";
+
+///functions
+
 Future<Map<String, String>> getTocken() async {
   final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
   final SharedPreferences prefs = await prefs0;

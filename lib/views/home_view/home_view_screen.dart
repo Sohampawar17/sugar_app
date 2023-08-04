@@ -49,23 +49,44 @@ class HomePageScreen extends StatelessWidget {
                         const SizedBox(
                           height: 20.0,
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            model.getGeoLocation();
-                          },
-                          child: const Text("Fetch Location"),
+                        SizedBox(
+                          width: 300,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              model.getGeoLocation();
+                            },
+                            child: const Text("Fetch Location"),
+                          ),
                         ),
                         const SizedBox(
                           height: 10.0,
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.addFarmerScreen,
-                            );
-                          },
-                          child: const Text("Add new farmer"),
+                        SizedBox(
+                          width: 300,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.addFarmerScreen,
+                              );
+                            },
+                            child: const Text("Add new farmer"),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.listFarmersScreen,
+                              );
+                            },
+                            child: const Text("List all farmer"),
+                          ),
                         ),
                       ],
                     ),

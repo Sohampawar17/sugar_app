@@ -5,13 +5,15 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i6;
+import 'package:flutter/material.dart' as _i7;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i7;
+import 'package:stacked_services/stacked_services.dart' as _i8;
 import 'package:sugar_mill_app/views/add_farmer_view/add_farmer_screen.dart'
     as _i5;
 import 'package:sugar_mill_app/views/home_view/home_view_screen.dart' as _i3;
+import 'package:sugar_mill_app/views/list_farmers_view/list_farmers_screen.dart'
+    as _i6;
 import 'package:sugar_mill_app/views/login_view/login_view_screen.dart' as _i4;
 import 'package:sugar_mill_app/views/splash_screen_view/splash_screen.dart'
     as _i2;
@@ -25,11 +27,14 @@ class Routes {
 
   static const addFarmerScreen = '/add-farmer-screen';
 
+  static const listFarmersScreen = '/list-farmers-screen';
+
   static const all = <String>{
     splashScreen,
     homePageScreen,
     loginViewScreen,
     addFarmerScreen,
+    listFarmersScreen,
   };
 }
 
@@ -51,30 +56,40 @@ class StackedRouter extends _i1.RouterBase {
       Routes.addFarmerScreen,
       page: _i5.AddFarmerScreen,
     ),
+    _i1.RouteDef(
+      Routes.listFarmersScreen,
+      page: _i6.ListFarmersScreen,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.SplashScreen: (data) {
-      return _i6.MaterialPageRoute<dynamic>(
+      return _i7.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SplashScreen(),
         settings: data,
       );
     },
     _i3.HomePageScreen: (data) {
-      return _i6.MaterialPageRoute<dynamic>(
+      return _i7.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.HomePageScreen(),
         settings: data,
       );
     },
     _i4.LoginViewScreen: (data) {
-      return _i6.MaterialPageRoute<dynamic>(
+      return _i7.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.LoginViewScreen(),
         settings: data,
       );
     },
     _i5.AddFarmerScreen: (data) {
-      return _i6.MaterialPageRoute<dynamic>(
+      return _i7.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.AddFarmerScreen(),
+        settings: data,
+      );
+    },
+    _i6.ListFarmersScreen: (data) {
+      return _i7.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i6.ListFarmersScreen(),
         settings: data,
       );
     },
@@ -86,7 +101,7 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i7.NavigationService {
+extension NavigatorStateExtension on _i8.NavigationService {
   Future<dynamic> navigateToSplashScreen([
     int? routerId,
     bool preventDuplicates = true,
@@ -143,6 +158,20 @@ extension NavigatorStateExtension on _i7.NavigationService {
         transition: transition);
   }
 
+  Future<dynamic> navigateToListFarmersScreen([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.listFarmersScreen,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
   Future<dynamic> replaceWithSplashScreen([
     int? routerId,
     bool preventDuplicates = true,
@@ -193,6 +222,20 @@ extension NavigatorStateExtension on _i7.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.addFarmerScreen,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithListFarmersScreen([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.listFarmersScreen,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

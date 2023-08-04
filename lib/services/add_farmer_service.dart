@@ -12,7 +12,7 @@ class AddFarmerService {
     try {
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Village',
+        apiVillageListGet,
         options: Options(
           method: 'GET',
           headers: {'Cookie': await getTocken()},
@@ -49,7 +49,7 @@ class AddFarmerService {
     try {
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Farmer List',
+        apiFarmerListPost,
         options: Options(
           method: 'POST',
           headers: {'Cookie': await getTocken()},
@@ -82,7 +82,7 @@ class AddFarmerService {
       });
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/method/upload_file',
+        apiUploadFilePost,
         options: Options(
           method: 'POST',
           headers: {'Cookie': await getTocken()},
