@@ -43,7 +43,7 @@ class ListFarmersService {
       var dio = Dio();
       var response = await dio.request(
         // "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=['supplier_name','village','name','circle_office']&filters=[['$filter','like','$query'']]",
-        "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]&filters=[[\"$filter\",\"like\",\"$query%\"]]",
+        "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]&filters=[[\"$filter\",\"like\",\"%$query%\"]]",
         options: Options(
           method: 'GET',
           headers: headers,
