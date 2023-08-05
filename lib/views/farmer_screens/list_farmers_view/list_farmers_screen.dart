@@ -20,90 +20,69 @@ class ListFarmersScreen extends StatelessWidget {
         body: fullScreenLoader(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 100,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          onChanged: (value) {
-                            model.nameController.text = value;
-                            model.filterList(value, "supplier_name");
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'Search by Name',
-                            prefixIcon: Icon(Icons.search),
+              Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 100,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            // controller: model.villageController,
+                            onChanged: (value) {
+                              model.villageController.text = value;
+                              model.filterListByNameAndVillage(village: value);
+                            },
+                            decoration: const InputDecoration(
+                              labelText: 'Village',
+                              prefixIcon: Icon(Icons.search),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      // TextField(
-                      //   // controller: _vendorIdController,
-                      //   // onChanged: (value) {
-                      //   //   _filterList(_nameController.text, value,
-                      //   //       _villageController.text);
-                      //   // },
-                      //   decoration: InputDecoration(
-                      //     labelText: 'Search by Vendor ID',
-                      //     prefixIcon: Icon(Icons.search),
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //     width: getWidth(context) / 2,
-                      //     child: Row(
-                      //       children: [
-                      SizedBox(
-                        width: getWidth(context) / 2.3,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                // controller: model.villageController,
-                                onChanged: (value) {
-                                  model.villageController.text = value;
-                                  model.filterList(value, "name");
-                                },
-                                decoration: const InputDecoration(
-                                  labelText: 'ID',
-                                  // prefixIcon: Icon(Icons.search),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 5.0),
-                            Expanded(
-                              child: TextField(
-                                // controller: model.villageController,
-                                onChanged: (value) {
-                                  model.villageController.text = value;
-                                  model.filterList(value, "village");
-                                },
-                                decoration: const InputDecoration(
-                                  labelText: 'Village',
-                                  // prefixIcon: Icon(Icons.search),
-                                ),
-                              ),
-                            ),
-                          ],
+                        const SizedBox(
+                          width: 10.0,
                         ),
-                      )
-                      //         TextField(
-                      //           // controller: model.villageController,
-                      //           onChanged: (value) {
-                      //             model.villageController.text = value;
-                      //             model.filterList(value, "village");
-                      //           },
-                      //           decoration: const InputDecoration(
-                      //             labelText: 'Search by Village',
-                      //             prefixIcon: Icon(Icons.search),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     )),
-                    ],
+                        SizedBox(
+                          width: getWidth(context) / 1.6,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  onChanged: (value) {
+                                    model.nameController.text = value;
+                                    model.filterListByNameAndVillage(
+                                        name: value);
+                                  },
+                                  decoration: const InputDecoration(
+                                    labelText: 'Search by Name',
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                              SizedBox(
+                                width: getWidth(context) / 4,
+                                child: TextField(
+                                  // controller: model.villageController,
+                                  onChanged: (value) {
+                                    model.villageController.text = value;
+                                    model.filterList("name", value);
+                                  },
+                                  decoration: const InputDecoration(
+                                    labelText: 'ID',
+                                    // prefixIcon: Icon(Icons.search),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 5.0),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -111,31 +90,63 @@ class ListFarmersScreen extends StatelessWidget {
                 child: ListView.separated(
                   itemCount: model.filteredList.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: SizedBox(
-                        width: 120,
-                        child: AutoSizeText(
-                          model.filteredList[index].village ?? '',
-                          maxLines: 2,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: ListTile(
+                        tileColor:
+                            model.filteredList[index].workflowState == "New"
+                                ? const Color(0xFFD3E8FD)
+                                : model.filteredList[index].workflowState ==
+                                        "Approved"
+                                    ? const Color(0xFFEAF5EE)
+                                    : const Color(0xFFFFF5F5),
+                        trailing: SizedBox(
+                          width: 120,
+                          child: AutoSizeText(
+                            model.filteredList[index].village ?? '',
+                            maxLines: 2,
+                          ),
                         ),
+                        leading: SizedBox(
+                          width: 120,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              AutoSizeText(
+                                model.filteredList[index].circleOffice ?? '',
+                                maxLines: 2,
+                              ),
+                              AutoSizeText(
+                                model.filteredList[index].workflowState ?? '',
+                                maxLines: 1,
+                                style: const TextStyle(
+                                  fontSize: 8,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        title: Text(
+                          model.filteredList[index].supplierName ?? '',
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                        subtitle: Text(
+                          model.filteredList[index].name ?? '',
+                          style: const TextStyle(fontSize: 8),
+                        ),
+                        onTap: () {
+                          // Handle row click here
+                          // _onRowClick(context, filteredList[index]);
+                          model.onRowClick(context, model.filteredList[index]);
+                        },
                       ),
-                      title: Text(
-                        model.filteredList[index].supplierName ?? '',
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                      subtitle: Text(
-                        model.filteredList[index].name ?? '',
-                        style: const TextStyle(fontSize: 8),
-                      ),
-                      onTap: () {
-                        // Handle row click here
-                        // _onRowClick(context, filteredList[index]);
-                        model.onRowClick(context, model.filteredList[index]);
-                      },
                     );
                   },
                   separatorBuilder: (context, index) {
-                    return const Divider();
+                    return const Divider(
+                      color: Colors.white, // Color of the line
+                      thickness: 0, // Thickness of the line
+                    );
                   },
                 ),
               ),

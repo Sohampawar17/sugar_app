@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmer.dart';
 
-class AddFarmerService {
+class FarmerService {
   Future<List<String>> fetchVillages() async {
     try {
       var dio = Dio();
@@ -42,9 +42,43 @@ class AddFarmerService {
     }
   }
 
-  Future<bool> addFarmer(FarmerData farmerData) async {
+  Future<List<String>> fetchBanks() async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        apiBankListGet,
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonData = json.encode(response.data);
+        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
+        List<dynamic> dataList = jsonDataMap["data"];
+        List<String> namesList =
+            dataList.map((item) => item["name"].toString()).toList();
+        return namesList;
+      }
+
+      if (response.statusCode == 401) {
+        Fluttertoast.showToast(msg: "Unauthorized Access!");
+        return ["401"];
+      } else {
+        Fluttertoast.showToast(msg: "Unable to fetch Villages");
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+      Fluttertoast.showToast(msg: "Unauthorized Access!");
+      return [];
+    }
+  }
+
+  Future<bool> addFarmer(Farmer farmer) async {
     var data = json.encode({
-      "data": farmerData,
+      "data": farmer,
     });
     try {
       var dio = Dio();
@@ -72,7 +106,10 @@ class AddFarmerService {
     return false;
   }
 
-  Future<String> uploadDocs(File file) async {
+  Future<String> uploadDocs(File? file) async {
+    if (file == null) {
+      return "";
+    }
     try {
       FormData data = FormData.fromMap({
         'file': await MultipartFile.fromFile(
@@ -108,5 +145,30 @@ class AddFarmerService {
     }
 
     return "";
+  }
+
+  Future<Farmer?> getFarmer(String id) async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        'http://deverpvppl.erpdata.in/api/resource/Farmer List/$id',
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Logger().i(response.data);
+        return Farmer.fromJson(response.data["data"]);
+      } else {
+        // print(response.statusMessage);
+        return null;
+      }
+    } catch (e) {
+      Logger().i(e);
+      Fluttertoast.showToast(msg: "Error while fetching user");
+    }
+    return null;
   }
 }

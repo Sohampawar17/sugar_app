@@ -68,6 +68,8 @@ class HomePageScreen extends StatelessWidget {
                               Navigator.pushNamed(
                                 context,
                                 Routes.addFarmerScreen,
+                                arguments: const AddFarmerScreenArguments(
+                                    farmerid: ""),
                               );
                             },
                             child: const Text("Add new farmer"),

@@ -6,12 +6,12 @@ import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmrs_list_model.dart';
 
 class ListFarmersService {
-  Future<List<FarmersListModelData>> getAllFarmersList() async {
+  Future<List<FarmersListModel>> getAllFarmersList() async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=["supplier_name","village","name"]',
+        apiFarmerAllListGet,
         options: Options(
           method: 'GET',
           headers: headers,
@@ -20,9 +20,8 @@ class ListFarmersService {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
-        List<FarmersListModelData> farmersList = List.from(jsonData['data'])
-            .map<FarmersListModelData>(
-                (data) => FarmersListModelData.fromJson(data))
+        List<FarmersListModel> farmersList = List.from(jsonData['data'])
+            .map<FarmersListModel>((data) => FarmersListModel.fromJson(data))
             .toList();
         return farmersList;
       } else {
@@ -36,14 +35,15 @@ class ListFarmersService {
     return [];
   }
 
-  Future<List<FarmersListModelData>> getFarmersListByFilter(
+  Future<List<FarmersListModel>> getFarmersListByFilter(
       String query, String filter) async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
+
       var response = await dio.request(
         // "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=['supplier_name','village','name','circle_office']&filters=[['$filter','like','$query'']]",
-        "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]&filters=[[\"$filter\",\"like\",\"%$query%\"]]",
+        "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]&filters=[[\"$filter\",\"like\",\"$query%\"]]",
         options: Options(
           method: 'GET',
           headers: headers,
@@ -52,9 +52,39 @@ class ListFarmersService {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
-        List<FarmersListModelData> farmersList = List.from(jsonData['data'])
-            .map<FarmersListModelData>(
-                (data) => FarmersListModelData.fromJson(data))
+        List<FarmersListModel> farmersList = List.from(jsonData['data'])
+            .map<FarmersListModel>((data) => FarmersListModel.fromJson(data))
+            .toList();
+        return farmersList;
+      } else {
+        Logger().e(response.statusMessage);
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+    }
+
+    return [];
+  }
+
+  Future<List<FarmersListModel>> getFarmersListByNameFilter(
+      String name, String village) async {
+    try {
+      var headers = {'Cookie': await getTocken()};
+      var dio = Dio();
+      var response = await dio.request(
+        // "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=['supplier_name','village','name','circle_office']&filters=[['$filter','like','$query'']]",
+        "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"$village%\" ],[\"supplier_name\",  \"like\", \"$name%\" ]]",
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
+        List<FarmersListModel> farmersList = List.from(jsonData['data'])
+            .map<FarmersListModel>((data) => FarmersListModel.fromJson(data))
             .toList();
         return farmersList;
       } else {

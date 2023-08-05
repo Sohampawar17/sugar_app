@@ -20,7 +20,22 @@ class DetailedFarmerScreen extends StatelessWidget {
         body: fullScreenLoader(
           context: context,
           loader: model.isBusy,
-          child: Text(id),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  color: Colors.blueAccent,
+                  child: const Text("C1"),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.blueAccent,
+                  child: const Text("C1"),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

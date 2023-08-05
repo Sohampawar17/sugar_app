@@ -16,6 +16,7 @@ const kConcentpdf = "ConcentLetter";
 
 // api usrls
 String apiVillageListGet = 'http://deverpvppl.erpdata.in/api/resource/Village';
+String apiBankListGet = 'http://deverpvppl.erpdata.in/api/resource/Bank';
 String apiFarmerListPost =
     'http://deverpvppl.erpdata.in/api/resource/Farmer List';
 String apiUploadFilePost =
@@ -23,7 +24,9 @@ String apiUploadFilePost =
 String apiLoginGet = 'http://deverpvppl.erpdata.in/api/method/login';
 
 String apiFarmerAllListGet =
-    "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]";
+    "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"workflow_state\",\"circle_office\"]";
+String apitFilterOnFarmerListGet =
+    "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"bed%\" ],[\"supplier_name\",  \"like\", \"abhi%\" ]]";
 
 ///functions
 

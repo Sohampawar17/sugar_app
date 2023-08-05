@@ -9,8 +9,10 @@ class ListFarmersModel extends BaseViewModel {
   TextEditingController villageController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
-  List<FarmersListModelData> farmresList = [];
-  List<FarmersListModelData> filteredList = [];
+  List<FarmersListModel> farmresList = [];
+  List<FarmersListModel> filteredList = [];
+  String farmerNameFilter = "";
+  String farmerVillageFilter = "";
   initialise(BuildContext context) async {
     setBusy(true);
     farmresList = await ListFarmersService().getAllFarmersList();
@@ -19,16 +21,31 @@ class ListFarmersModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void onRowClick(BuildContext context, FarmersListModelData? farmresList) {
+  void onRowClick(BuildContext context, FarmersListModel? farmresList) {
     Logger().i("${farmresList?.name}");
-    Navigator.pushNamed(context, Routes.detailedFarmerScreen,
-        arguments: DetailedFarmerScreenArguments(id: farmresList?.name ?? ""));
+    Navigator.pushNamed(
+      context,
+      Routes.addFarmerScreen,
+      arguments: AddFarmerScreenArguments(farmerid: farmresList?.name ?? ""),
+    );
+    // Navigator.pushNamed(context, Routes.detailedFarmerScreen,
+    //     arguments: DetailedFarmerScreenArguments(id: farmresList?.name ?? ""));
   }
 
-  void filterList(String query, String filter) async {
+  void filterList(String filter, String query) async {
     notifyListeners();
     filteredList =
-        await ListFarmersService().getFarmersListByFilter(query, filter);
+        await ListFarmersService().getFarmersListByFilter(filter, query);
+    notifyListeners();
+  }
+
+  // getFarmersListByNameFilter
+  void filterListByNameAndVillage({String? name, String? village}) async {
+    farmerNameFilter = name ?? farmerNameFilter;
+    farmerVillageFilter = village ?? farmerVillageFilter;
+    notifyListeners();
+    filteredList = await ListFarmersService()
+        .getFarmersListByNameFilter(farmerNameFilter, farmerVillageFilter);
     notifyListeners();
   }
 }
