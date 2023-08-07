@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sugar_mill_app/constants.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class Authentication {
@@ -17,7 +18,7 @@ class Authentication {
 
     try {
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/method/login',
+        apiLoginGet,
         options: Options(
           method: 'GET',
           headers: headers,

@@ -22,24 +22,54 @@ class FarmerViewModel extends BaseViewModel {
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController ageController = TextEditingController();
-
-  final List<String> items = ['Transporter', 'Harvester', 'Farmer', 'Member'];
+  TextEditingController villageController = TextEditingController();
+  List<BankDetails> bankAccounts = [];
+  final List<String> items = ['Farmer', 'Member'];
   final List<String> plantlist = ['Bedkihal', 'Nagpur'];
   final List<String> vendorGroupList = ['Cane'];
-  List<String> villageList = [];
+  List<String> villageList = [""];
+  List<String> bankList = [];
 
   DateTime? selectedDate;
-  FarmerData farmerData = FarmerData();
-
+  Farmer farmerData = Farmer();
   late String accountNumber;
-
   late String branchifscCode;
-
   late String bankName;
+  late String farmerId;
+  bool isEdit = false;
 
-  initialise(BuildContext context) async {
+  final List<String> _selectedItems = [];
+
+  List<String> get selectedItems => _selectedItems;
+
+  initialise(BuildContext context, String farmerid) async {
     setBusy(true);
-    villageList = await AddFarmerService().fetchVillages();
+    villageList = await FarmerService().fetchVillages();
+    bankList = await FarmerService().fetchBanks();
+    farmerId = farmerid;
+    //setting aleardy available data
+    if (farmerId != "") {
+      isEdit = true;
+      farmerData = await FarmerService().getFarmer(farmerid) ?? Farmer();
+      notifyListeners();
+      plantController.text = farmerData.branch ?? "";
+      supplierNameController.text = farmerData.supplierName ?? "";
+      aadharNumberController.text =
+          _formatAadhar(farmerData.aadhaarNumber ?? "");
+      panNumberController.text = _formatPanNumber(farmerData.panNumber ?? "");
+      mobileNumberController.text = farmerData.mobileNumber ?? "";
+      dobController.text = farmerData.dateOfBirth ?? "";
+      ageController.text = farmerData.age ?? "";
+      // 'Transporter', 'Harvester', 'Farmer', 'Member'
+      bankAccounts.addAll(farmerData.bankDetails?.toList() ?? []);
+      if (farmerData.isFarmer == 1) {
+        _selectedItems.add(items[0]);
+      }
+      if (farmerData.isMember == 1) {
+        _selectedItems.add(items[1]);
+      }
+    }
+
     if (villageList.length == 1 && villageList[0] == "401") {
       if (context.mounted) {
         setBusy(false);
@@ -51,27 +81,42 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   void onSavePressed(BuildContext context) async {
+    if (farmerData.workflowState == "Approved") {
+      Fluttertoast.showToast(msg: "Can not edit approved document!");
+      return;
+    }
     if (!villageList.contains(farmerData.village)) {
       Fluttertoast.showToast(
           msg: "Invalid Village", toastLength: Toast.LENGTH_LONG);
       return;
     }
     setBusy(true);
-    await uploadFiles();
     if (formKey.currentState!.validate()) {
       // Fluttertoast.showToast(msg: "Farmer Added");
-      setBusy(true);
+      await uploadFiles();
       farmerData.bankDetails = bankAccounts;
-      bool res = await AddFarmerService().addFarmer(farmerData);
-      if (res) {
-        if (context.mounted) {
-          setBusy(false);
-          Navigator.pop(context);
+      bool res = false;
+      if (isEdit == true) {
+        res = await FarmerService().updateFarmer(farmerData);
+        if (res) {
+          if (context.mounted) {
+            setBusy(false);
+            setBusy(false);
+            Navigator.pop(context);
+          }
+        }
+      } else {
+        res = await FarmerService().addFarmer(farmerData);
+        if (res) {
+          if (context.mounted) {
+            setBusy(false);
+            setBusy(false);
+            Navigator.pop(context);
+          }
         }
       }
-
-      setBusy(false);
     }
+    setBusy(false);
   }
 
 ////////////////////////////////// aadhar functions////////////////////////////////
@@ -147,7 +192,7 @@ class FarmerViewModel extends BaseViewModel {
     if (value == null || value.isEmpty) {
       return 'Please enter mobile number';
     }
-    if (value.length != 12) {
+    if (value.replaceAll(" ", "").length != 10) {
       return 'Mobile number should be exactly 10 digits';
     }
     // Additional validation rules can be added if needed.
@@ -262,6 +307,11 @@ class FarmerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void setSelectedBank(String? bank) {
+    bankName = bank ?? "";
+    notifyListeners();
+  }
+
   String? selectedRole;
 
   void setSelectedRole(String? role) {
@@ -312,39 +362,23 @@ class FarmerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  final List<String> _selectedItems = [];
-
-  List<String> get selectedItems => _selectedItems;
-
   void toggleItem(String item) {
     if (_selectedItems.contains(item)) {
       _selectedItems.remove(item);
       // 'Transporter', 'Harvester', 'Farmer', 'Member'
       if (item == items[0]) {
-        farmerData.isTransporter = 0;
-      }
-      if (item == items[1]) {
-        farmerData.isHarvester = 0;
-      }
-      if (item == items[2]) {
         farmerData.isFarmer = 0;
       }
-      if (item == items[3]) {
+      if (item == items[1]) {
         farmerData.isMember = 0;
       }
     } else {
       _selectedItems.add(item);
       if (item == items[0]) {
-        farmerData.isTransporter = 1;
+        farmerData.isFarmer = 1;
       }
       if (item == items[1]) {
         farmerData.isHarvester = 1;
-      }
-      if (item == items[2]) {
-        farmerData.isFarmer = 1;
-      }
-      if (item == items[3]) {
-        farmerData.isMember = 1;
       }
     }
 
@@ -396,30 +430,29 @@ class FarmerViewModel extends BaseViewModel {
 
   // Function to upload the selected PDF file (Aadhar card)
   Future<void> uploadFiles() async {
-    String aadharUrl =
-        await AddFarmerService().uploadDocs(files.adharCard ?? File(""));
-    if (aadharUrl == "") {
+    String aadharUrl = await FarmerService().uploadDocs(files.adharCard);
+    if (aadharUrl == "" && isEdit == false) {
       Fluttertoast.showToast(msg: "Failed to upload Aadhar");
     }
-    String panUrl =
-        await AddFarmerService().uploadDocs(files.panCard ?? File(""));
-    if (panUrl == "") {
-      Fluttertoast.showToast(msg: "Failed to upload Aadhar");
+    String panUrl = await FarmerService().uploadDocs(files.panCard);
+    if (panUrl == "" && isEdit == false) {
+      Fluttertoast.showToast(msg: "Failed to upload Pan");
     }
-    String bankUrl =
-        await AddFarmerService().uploadDocs(files.bankPassbook ?? File(""));
-    if (bankUrl == "") {
-      Fluttertoast.showToast(msg: "Failed to upload Aadhar");
+    String bankUrl = await FarmerService().uploadDocs(files.bankPassbook);
+    if (bankUrl == "" && isEdit == false) {
+      Fluttertoast.showToast(msg: "Failed to upload Bank");
     }
-    String letterUrl =
-        await AddFarmerService().uploadDocs(files.consentLetter ?? File(""));
-    if (letterUrl == "") {
-      Fluttertoast.showToast(msg: "Failed to upload Aadhar");
+    String letterUrl = await FarmerService().uploadDocs(files.consentLetter);
+    if (letterUrl == "" && isEdit == false) {
+      Fluttertoast.showToast(msg: "Failed to upload Letter");
     }
-    farmerData.aadhaarCard = aadharUrl;
-    farmerData.panCard = panUrl;
-    farmerData.bankPassbook = bankUrl;
-    farmerData.consentLetter = letterUrl;
+
+    farmerData.aadhaarCard =
+        aadharUrl == "" ? farmerData.aadhaarCard : aadharUrl;
+    farmerData.panCard = panUrl == "" ? farmerData.panCard : panUrl;
+    farmerData.bankPassbook = bankUrl == "" ? farmerData.bankPassbook : bankUrl;
+    farmerData.consentLetter =
+        letterUrl == "" ? farmerData.consentLetter : letterUrl;
   }
 
   // Function to check if a PDF file is selected
@@ -431,10 +464,8 @@ class FarmerViewModel extends BaseViewModel {
 
   /////////////// Bank Account ///////////////////////////////
 
-  List<FarmerDataBankDetails> bankAccounts = [];
-
-  FarmerData? getFarmerData() {
-    farmerData = FarmerData(
+  Farmer? getFarmer() {
+    farmerData = Farmer(
       supplierName: 'ABHAY PURANDAR KHOT ',
       supplierType: 'Individual',
       branch: 'Bedkihal',
@@ -442,7 +473,6 @@ class FarmerViewModel extends BaseViewModel {
       panNumber: 'df4geh454b',
       mobileNumber: '4759456232',
       dateOfBirth: '1970-05-06',
-      existingSupplierCode: '2',
       gender: 'Male',
       age: '53',
       country: 'India',
@@ -460,7 +490,7 @@ class FarmerViewModel extends BaseViewModel {
       panCard: '/files/quantbit-client.py',
       consentLetter: '/files/quantbit-client.py',
       bankDetails: [
-        FarmerDataBankDetails(
+        BankDetails(
           farmer: 1,
           harvester: 0,
           transporter: 0,
@@ -515,6 +545,10 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   void validateForm(BuildContext context, int index) {
+    if (farmerData.workflowState == "Approved") {
+      Fluttertoast.showToast(msg: "Can not edit Approved document");
+      return;
+    }
     final formState = bankformKey.currentState;
     if (formState!.validate()) {
       // Form is valid, submit it
@@ -545,7 +579,7 @@ class FarmerViewModel extends BaseViewModel {
       notifyListeners();
       return;
     }
-    bankAccounts.add(FarmerDataBankDetails(
+    bankAccounts.add(BankDetails(
       farmer: selectedRole == "Farmer" ? 1 : 0,
       harvester: selectedRole == "Harvester" ? 1 : 0,
       transporter: selectedRole == "Transporter" ? 1 : 0,
@@ -558,6 +592,9 @@ class FarmerViewModel extends BaseViewModel {
 
   void setValuesToBankVaribles(int index) {
     if (index != -1) {
+      if (index >= bankAccounts.length) {
+        return;
+      }
       selectedRole = bankAccounts[index].farmer == 1
           ? "Farmer"
           : bankAccounts[index].harvester == 1
@@ -565,6 +602,7 @@ class FarmerViewModel extends BaseViewModel {
               : bankAccounts[index].transporter == 1
                   ? "Transporter"
                   : "None";
+
       bankName = bankAccounts[index].bankName!;
       branchifscCode = bankAccounts[index].branchifscCode!;
       accountNumber = bankAccounts[index].accountNumber!;
@@ -619,6 +657,22 @@ class FarmerViewModel extends BaseViewModel {
     if (value.length > 20) {
       return 'The account number must be no more than 20 characters long';
     }
+    return null;
+  }
+
+  void updateFarmerName(String value) {
+    farmerData.supplierName = value.toUpperCase();
+  }
+
+  getVisibility() {
+    return isEdit;
+  }
+
+  String? getFileFromFarmer(String filetype) {
+    if (filetype == kAadharpdf) return farmerData.aadhaarCard;
+    if (filetype == kPanpdf) return farmerData.panCard;
+    if (filetype == kBankpdf) return farmerData.bankPassbook;
+    if (filetype == kConcentpdf) return farmerData.consentLetter;
     return null;
   }
 }
