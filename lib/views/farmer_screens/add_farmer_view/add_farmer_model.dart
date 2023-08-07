@@ -60,7 +60,6 @@ class FarmerViewModel extends BaseViewModel {
       mobileNumberController.text = farmerData.mobileNumber ?? "";
       dobController.text = farmerData.dateOfBirth ?? "";
       ageController.text = farmerData.age ?? "";
-      // 'Transporter', 'Harvester', 'Farmer', 'Member'
       bankAccounts.addAll(farmerData.bankDetails?.toList() ?? []);
       if (farmerData.isFarmer == 1) {
         _selectedItems.add(items[0]);
@@ -378,7 +377,7 @@ class FarmerViewModel extends BaseViewModel {
         farmerData.isFarmer = 1;
       }
       if (item == items[1]) {
-        farmerData.isHarvester = 1;
+        farmerData.isMember = 1;
       }
     }
 
@@ -395,24 +394,6 @@ class FarmerViewModel extends BaseViewModel {
   Future<void> selectPdf(String fileType, ImageSource source) async {
     try {
       final result = await ImagePicker().pickImage(source: source);
-      //   if (pickedFile != null) {
-      //     // Handle image picked
-      //   } else {
-      //     final pickedDocument = await ImagePicker().pickImage(source: source);
-      //     if (pickedDocument != null) {
-      //       // Handle document picked
-      //     }
-      //   }
-      // } catch (e) {
-      //   Fluttertoast.showToast(
-      //       msg: 'Error while picking an image or document: $e');
-      // }
-
-      // FilePickerResult? result = await FilePicker.platform.pickFiles(
-      //   type: FileType.custom,
-      //   allowedExtensions: ['pdf', 'jpeg', 'png'],
-      // );
-
       if (result != null) {
         // print("SIZE BEFORE: ${result.files.single.size}");
         setBusy(true);
@@ -461,51 +442,6 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   ////////////////// Adhar Upload End ///////////////////
-
-  /////////////// Bank Account ///////////////////////////////
-
-  Farmer? getFarmer() {
-    farmerData = Farmer(
-      supplierName: 'ABHAY PURANDAR KHOT ',
-      supplierType: 'Individual',
-      branch: 'Bedkihal',
-      aadhaarNumber: '157855154445',
-      panNumber: 'df4geh454b',
-      mobileNumber: '4759456232',
-      dateOfBirth: '1970-05-06',
-      gender: 'Male',
-      age: '53',
-      country: 'India',
-      supplierGroup: 'CANE',
-      isTransporter: 0,
-      isHarvester: 0,
-      isFarmer: 1,
-      isMember: 0,
-      village: 'BEDKIHAL',
-      circleOffice: 'BEDKIHAL',
-      taluka: 'CHIKODI',
-      state: 'Karnataka',
-      aadhaarCard: '/files/quantbit-client.py',
-      bankPassbook: '/files/final_rfid.py',
-      panCard: '/files/quantbit-client.py',
-      consentLetter: '/files/quantbit-client.py',
-      bankDetails: [
-        BankDetails(
-          farmer: 1,
-          harvester: 0,
-          transporter: 0,
-          bankName: '161930',
-          branchifscCode: 'h5785jjjtj',
-          accountNumber: '576576567575',
-          parent: 'FA-1',
-          parentfield: 'bank_details',
-          parenttype: 'Farmer List',
-          doctype: 'Bank Details',
-        ),
-      ],
-    );
-    return farmerData;
-  }
 
   ////////////////// validators ////////////////////////////////////
 
@@ -673,6 +609,14 @@ class FarmerViewModel extends BaseViewModel {
     if (filetype == kPanpdf) return farmerData.panCard;
     if (filetype == kBankpdf) return farmerData.bankPassbook;
     if (filetype == kConcentpdf) return farmerData.consentLetter;
+    return null;
+  }
+
+  File? getFileFromFileType(String filetype) {
+    if (filetype == kAadharpdf) return files.adharCard;
+    if (filetype == kPanpdf) return files.panCard;
+    if (filetype == kBankpdf) return files.bankPassbook;
+    if (filetype == kConcentpdf) return files.consentLetter;
     return null;
   }
 }

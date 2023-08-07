@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
         }
 
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           navigatorKey: StackedService.navigatorKey,
           onGenerateRoute: StackedRouter().onGenerateRoute,
           theme: ThemeData(
