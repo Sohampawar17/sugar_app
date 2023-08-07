@@ -100,21 +100,19 @@ class ListFarmersScreen extends StatelessWidget {
                                         "Approved"
                                     ? const Color(0xFFEAF5EE)
                                     : const Color(0xFFFFF5F5),
-                        trailing: SizedBox(
-                          width: 120,
-                          child: AutoSizeText(
-                            model.filteredList[index].village ?? '',
-                            maxLines: 2,
-                          ),
+                        trailing: AutoSizeText(
+                          model.filteredList[index].village ?? '',
+                          maxLines: 2,
                         ),
                         leading: SizedBox(
-                          width: 120,
+                          width: getWidth(context) / 5,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               AutoSizeText(
                                 model.filteredList[index].circleOffice ?? '',
-                                maxLines: 2,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               AutoSizeText(
                                 model.filteredList[index].workflowState ?? '',

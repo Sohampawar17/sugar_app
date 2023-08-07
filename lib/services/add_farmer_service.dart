@@ -100,7 +100,6 @@ class FarmerService {
       }
     } catch (e) {
       Fluttertoast.showToast(msg: "Error accoured $e ");
-      Fluttertoast.showToast(msg: "Select Correct Village!");
       Logger().e(e);
     }
     return false;
@@ -159,7 +158,6 @@ class FarmerService {
       );
 
       if (response.statusCode == 200) {
-        Logger().i(response.data);
         return Farmer.fromJson(response.data["data"]);
       } else {
         // print(response.statusMessage);
@@ -170,5 +168,33 @@ class FarmerService {
       Fluttertoast.showToast(msg: "Error while fetching user");
     }
     return null;
+  }
+
+  Future<bool> updateFarmer(Farmer farmer) async {
+    try {
+      // var data = json.encode({farmer});
+
+      var dio = Dio();
+      var response = await dio.request(
+        'http://deverpvppl.erpdata.in/api/resource/Farmer List/${farmer.name}',
+        options: Options(
+          method: 'PUT',
+          headers: {'Cookie': await getTocken()},
+        ),
+        data: farmer.toJson(),
+      );
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(msg: "FARMER Updated");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: "UNABLE TO UPDATE FARMER!");
+        return false;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error accoured $e ");
+      Logger().e(e);
+    }
+    return false;
   }
 }

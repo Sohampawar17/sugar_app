@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/models/farmrs_list_model.dart';
 import 'package:sugar_mill_app/router.router.dart';
@@ -22,7 +21,6 @@ class ListFarmersModel extends BaseViewModel {
   }
 
   void onRowClick(BuildContext context, FarmersListModel? farmresList) {
-    Logger().i("${farmresList?.name}");
     Navigator.pushNamed(
       context,
       Routes.addFarmerScreen,
