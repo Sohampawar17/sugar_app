@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +10,8 @@ import 'package:sugar_mill_app/views/farmer_screens/add_farmer_view/add_farmer_m
 import 'package:sugar_mill_app/widgets/cdrop_down_widget.dart';
 import 'package:sugar_mill_app/widgets/ctext_button.dart';
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
+import 'package:sugar_mill_app/widgets/view_docs_from_internet.dart';
+import 'package:sugar_mill_app/widgets/view_image.dart';
 
 class AddFarmerScreen extends StatelessWidget {
   final String farmerid;
@@ -846,7 +850,30 @@ class AddFarmerScreen extends StatelessWidget {
                     (model.getFileFromFarmer(filetype) != null &&
                         model.getFileFromFarmer(filetype) != ""))
                 ? ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      (model.files.getFile(filetype) != null)
+                          ? Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => ViewImage(
+                                  image: Image.file(
+                                    model.getFileFromFileType(filetype) ??
+                                        File(""),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ViewImageInternet(
+                                  url: model.getFileFromFarmer(filetype) ??
+                                      "http://deverpvppl.erpdata.in/files/1691065818762.jpg",
+                                ),
+                              ),
+                            );
+                    },
                     child: const Text("View Uploaded File"),
                   )
                 : Container(),
