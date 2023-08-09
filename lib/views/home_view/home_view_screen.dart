@@ -144,35 +144,37 @@ class HomePageScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        // SizedBox(
-                        //   width: 300,
-                        //   child: ElevatedButton(
-                        //     onPressed: () {
-                        //       Navigator.pushNamed(
-                        //         context,
-                        //         Routes.addFarmerScreen,
-                        //         arguments: const AddFarmerScreenArguments(
-                        //             farmerid: ""),
-                        //       );
-                        //     },
-                        //     child: const Text("Add new farmer"),
-                        //   ),
-                        // ),
-                        // const SizedBox(
-                        //   height: 10.0,
-                        // ),
-                        // SizedBox(
-                        //   width: 300,
-                        //   child: ElevatedButton(
-                        //     onPressed: () {
-                        //       Navigator.pushNamed(
-                        //         context,
-                        //         Routes.listFarmersScreen,
-                        //       );
-                        //     },
-                        //     child: const Text("List all farmer"),
-                        //   ),
-                        // ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.addCaneScreen,
+                                arguments:
+                                    const AddCaneScreenArguments(caneId: ""),
+                              );
+                            },
+                            child: const Text("Add new cane registration"),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, Routes.listCaneScreen);
+                            },
+                            child: const Text("List Cane Master"),
+                          ),
+                        ),
+ 
                       ],
                     ),
                   ),
