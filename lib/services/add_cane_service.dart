@@ -378,4 +378,56 @@ class AddCaneService {
       return [];
     }
   }
+
+  Future<bool> updateCane(Cane cane) async {
+    try {
+      // var data = json.encode({farmer});
+
+      var dio = Dio();
+      var response = await dio.request(
+        'http://deverpvppl.erpdata.in/api/resource/Cane Master/${Cane}',
+        options: Options(
+          method: 'PUT',
+          headers: {'Cookie': await getTocken()},
+        ),
+        data: cane.toJson(),
+      );
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(msg: "FARMER Updated");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: "UNABLE TO UPDATE FARMER!");
+        return false;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error accoured $e ");
+      Logger().e(e);
+    }
+    return false;
+  }
+
+  Future<Cane?> getCane(String id) async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        'http://deverpvppl.erpdata.in/api/resource/Cane Master/$id',
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return Cane.fromJson(response.data["data"]);
+      } else {
+        // print(response.statusMessage);
+        return null;
+      }
+    } catch (e) {
+      Logger().i(e);
+      Fluttertoast.showToast(msg: "Error while fetching user");
+    }
+    return null;
+  }
 }

@@ -9,13 +9,15 @@ import '../../widgets/ctext_button.dart';
 import '../../widgets/full_screen_loader.dart';
 
 class AddCaneScreen extends StatelessWidget {
-  const AddCaneScreen({super.key});
+  final String caneId;
+
+  const AddCaneScreen({super.key, required this.caneId});
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CaneViewModel>.reactive(
         viewModelBuilder: () => CaneViewModel(),
-        onViewModelReady: (model) => model.initialise(context),
+        onViewModelReady: (model) => model.initialise(context, caneId),
         builder: (context, model, child) => Scaffold(
               appBar: AppBar(
                 title: const Text('Cane Registration'),
@@ -446,15 +448,13 @@ class AddCaneScreen extends StatelessWidget {
                                 decoration:
                                     const InputDecoration(labelText: 'KM'),
                                 initialValue:
-                                    model.selectedDistance.toString() ?? "",
+                                    model.canedata.routeKm.toString() ?? "",
                                 onChanged: (newValue) {
                                   // Handle the newValue here, you can update the routeKm value
                                   // using the setroutekm function with the new value.
                                   double? parsedValue =
                                       double.tryParse(newValue) ?? 0;
-                                  if (parsedValue != null) {
-                                    model.setroutekm(parsedValue);
-                                  }
+                                  model.setroutekm(parsedValue);
                                 },
                               )),
                             ],
@@ -822,7 +822,6 @@ class AddCaneScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [

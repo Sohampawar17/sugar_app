@@ -14,6 +14,7 @@ const kAadharpdf = "AadharCard";
 const kPanpdf = "PanCard";
 const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
+const BaseUrl="http://deverpvppl.erpdata.in";
 
 // api usrls
 
@@ -30,6 +31,8 @@ String apitFilterOnFarmerListGet =
     "http://deverpvppl.erpdata.in/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"bed%\" ],[\"supplier_name\",  \"like\", \"abhi%\" ]]";
 String apiLoginGet = 'http://deverpvppl.erpdata.in/api/method/login';
 //Cane Registration
+String apifetchCaneList =
+    'http://deverpvppl.erpdata.in/api/resource/Cane Master?fields=["plantation_status","area","circle_office","name","grower_code","grower_name","plantattion_ratooning_date"]';
 String apiFarmerListGetwithfilter =
     'http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1]]&limit_page_length=999999999999999';
 String apiCaneRegistration =

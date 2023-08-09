@@ -98,9 +98,26 @@ class HomePageScreen extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.pushNamed(
-                                  context, Routes.addCaneScreen);
+                                context,
+                                Routes.addCaneScreen,
+                                arguments:
+                                    const AddCaneScreenArguments(caneId: ""),
+                              );
                             },
                             child: const Text("Add new cane registration"),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, Routes.listCaneScreen);
+                            },
+                            child: const Text("List Cane Master"),
                           ),
                         ),
                       ],

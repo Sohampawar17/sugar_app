@@ -44,6 +44,7 @@ class CaneViewModel extends BaseViewModel {
   List<String> irrigationSourceList = [""];
   List<String> soilTypeList = [""];
   List<String> cropVarietyList = [""];
+  late String caneId;
 
   String? validateplantationdate(String? value) {
     if (value == null || value.isEmpty) {
@@ -104,7 +105,7 @@ class CaneViewModel extends BaseViewModel {
     }
   }
 
-  initialise(BuildContext context) async {
+  initialise(BuildContext context, String caneId) async {
     setBusy(true);
     villageList = await AddCaneService().fetchVillages();
     canevarietyList = await AddCaneService().fetchCaneVariety();
@@ -116,6 +117,12 @@ class CaneViewModel extends BaseViewModel {
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
     soilTypeList = await AddCaneService().fetchSoilType();
     farmerList = await AddCaneService().fetchfarmerListwithfilter();
+    Logger().i(caneId);
+    if (caneId != "") {
+      isEdit = true;
+      canedata = await AddCaneService().getCane(caneId) ?? Cane();
+      notifyListeners();
+    }
     setBusy(false);
   }
 
@@ -124,17 +131,13 @@ class CaneViewModel extends BaseViewModel {
 
     if (formKey.currentState!.validate()) {
       bool res = false;
-
       // Create an instance of your GeolocationService
       GeolocationService geolocationService = GeolocationService();
-
       // Get the user's position using the geolocation service
       Position? position = await geolocationService.determinePosition();
-
       if (position != null) {
         // Get the placemark using the geolocation service
         Placemark? placemark = await geolocationService.getPlacemarks(position);
-
         if (placemark != null) {
           // Extract properties from the placemark
           String street = placemark.street ?? '';
@@ -142,11 +145,9 @@ class CaneViewModel extends BaseViewModel {
           String locality = placemark.locality ?? '';
           String postalCode = placemark.postalCode ?? '';
           String country = placemark.country ?? '';
-
           // Create a formatted address string
           String formattedAddress =
               '$street, $subLocality, $locality $postalCode, $country';
-
           // Update canedata object with latitude, longitude, and address
           canedata.latitude = position.latitude.toString();
           canedata.longitude = position.longitude.toString();
@@ -154,6 +155,7 @@ class CaneViewModel extends BaseViewModel {
           Logger().i(canedata.toJson().toString());
           // Now you have the updated canedata object with location information
           // You can proceed with saving the data
+
           res = await AddCaneService().addCane(canedata);
           if (res) {
             if (context.mounted) {
