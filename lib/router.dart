@@ -7,7 +7,8 @@ import 'package:sugar_mill_app/views/farmer_screens/list_farmers_view/list_farme
 import 'package:sugar_mill_app/views/home_view/home_view_screen.dart';
 import 'package:sugar_mill_app/views/list_cane_view/list_cane_screen.dart';
 import 'package:sugar_mill_app/views/login_view/login_view_screen.dart';
-import 'package:sugar_mill_app/views/splash_screen_view/splash_screen.dart';
+import 'package:sugar_mill_app/views/splash_screen_view/splash_screen.dart'; 
+import 'views/farmer_screens/list_farmers_view/list_farmers_screen.dart';
 
 @StackedApp(
   routes: [
@@ -17,9 +18,11 @@ import 'package:sugar_mill_app/views/splash_screen_view/splash_screen.dart';
     MaterialRoute(page: AddFarmerScreen),
     MaterialRoute(page: ListFarmersScreen),
     // DetailedFarmerScreen
+
     MaterialRoute(page: DetailedFarmerScreen),
     MaterialRoute(page: AddCaneScreen),
     MaterialRoute(page: ListCaneScreen)
+
   ],
   dependencies: [
     Singleton(classType: NavigationService),
