@@ -42,12 +42,17 @@ class GeolocationService {
     }
   }
 
-  Future<Placemark> getPlacemarks(Position? position) async {
-    List<Placemark> list =
-        await placemarkFromCoordinates(position!.latitude, position.longitude);
-    for (var i in list) {
-      Logger().i(i);
+  Future<Placemark?> getPlacemarks(Position? position) async {
+    try {
+      List<Placemark> list = await placemarkFromCoordinates(
+          position!.latitude, position.longitude);
+      if (list.isNotEmpty) {
+        Placemark placemark = list[0];
+        return placemark;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Location data not available');
     }
-    return list[0];
+    return null;
   }
 }
