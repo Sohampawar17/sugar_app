@@ -13,7 +13,7 @@ class HomeViewModel extends BaseViewModel {
     notifyListeners();
     Position? position = await GeolocationService().determinePosition();
     Logger().i(position);
-    Placemark placemark = await GeolocationService().getPlacemarks(position);
+    Placemark? placemark = await GeolocationService().getPlacemarks(position);
     Fluttertoast.showToast(
         msg: placemark.toString(), toastLength: Toast.LENGTH_LONG);
     setBusy(false);

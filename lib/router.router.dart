@@ -5,10 +5,11 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/material.dart' as _i9;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i9;
+import 'package:stacked_services/stacked_services.dart' as _i10;
+import 'package:sugar_mill_app/views/add_cane_view/add_cane_screen.dart' as _i8;
 import 'package:sugar_mill_app/views/farmer_screens/add_farmer_view/add_farmer_screen.dart'
     as _i5;
 import 'package:sugar_mill_app/views/farmer_screens/detailed_farmer_view/detailed_farmer_screen.dart'
@@ -33,6 +34,8 @@ class Routes {
 
   static const detailedFarmerScreen = '/detailed-farmer-screen';
 
+  static const addCaneScreen = '/add-cane-screen';
+
   static const all = <String>{
     splashScreen,
     homePageScreen,
@@ -40,6 +43,7 @@ class Routes {
     addFarmerScreen,
     listFarmersScreen,
     detailedFarmerScreen,
+    addCaneScreen,
   };
 }
 
@@ -69,46 +73,56 @@ class StackedRouter extends _i1.RouterBase {
       Routes.detailedFarmerScreen,
       page: _i7.DetailedFarmerScreen,
     ),
+    _i1.RouteDef(
+      Routes.addCaneScreen,
+      page: _i8.AddCaneScreen,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.SplashScreen: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SplashScreen(),
         settings: data,
       );
     },
     _i3.HomePageScreen: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.HomePageScreen(),
         settings: data,
       );
     },
     _i4.LoginViewScreen: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.LoginViewScreen(),
         settings: data,
       );
     },
     _i5.AddFarmerScreen: (data) {
       final args = data.getArgs<AddFarmerScreenArguments>(nullOk: false);
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i5.AddFarmerScreen(key: args.key, farmerid: args.farmerid),
         settings: data,
       );
     },
     _i6.ListFarmersScreen: (data) {
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.ListFarmersScreen(),
         settings: data,
       );
     },
     _i7.DetailedFarmerScreen: (data) {
       final args = data.getArgs<DetailedFarmerScreenArguments>(nullOk: false);
-      return _i8.MaterialPageRoute<dynamic>(
+      return _i9.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i7.DetailedFarmerScreen(key: args.key, id: args.id),
+        settings: data,
+      );
+    },
+    _i8.AddCaneScreen: (data) {
+      return _i9.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i8.AddCaneScreen(),
         settings: data,
       );
     },
@@ -126,7 +140,7 @@ class AddFarmerScreenArguments {
     required this.farmerid,
   });
 
-  final _i8.Key? key;
+  final _i9.Key? key;
 
   final String farmerid;
 
@@ -153,7 +167,7 @@ class DetailedFarmerScreenArguments {
     required this.id,
   });
 
-  final _i8.Key? key;
+  final _i9.Key? key;
 
   final String id;
 
@@ -174,7 +188,7 @@ class DetailedFarmerScreenArguments {
   }
 }
 
-extension NavigatorStateExtension on _i9.NavigationService {
+extension NavigatorStateExtension on _i10.NavigationService {
   Future<dynamic> navigateToSplashScreen([
     int? routerId,
     bool preventDuplicates = true,
@@ -218,7 +232,7 @@ extension NavigatorStateExtension on _i9.NavigationService {
   }
 
   Future<dynamic> navigateToAddFarmerScreen({
-    _i8.Key? key,
+    _i9.Key? key,
     required String farmerid,
     int? routerId,
     bool preventDuplicates = true,
@@ -249,7 +263,7 @@ extension NavigatorStateExtension on _i9.NavigationService {
   }
 
   Future<dynamic> navigateToDetailedFarmerScreen({
-    _i8.Key? key,
+    _i9.Key? key,
     required String id,
     int? routerId,
     bool preventDuplicates = true,
@@ -259,6 +273,20 @@ extension NavigatorStateExtension on _i9.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.detailedFarmerScreen,
         arguments: DetailedFarmerScreenArguments(key: key, id: id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToAddCaneScreen([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.addCaneScreen,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -308,7 +336,7 @@ extension NavigatorStateExtension on _i9.NavigationService {
   }
 
   Future<dynamic> replaceWithAddFarmerScreen({
-    _i8.Key? key,
+    _i9.Key? key,
     required String farmerid,
     int? routerId,
     bool preventDuplicates = true,
@@ -339,7 +367,7 @@ extension NavigatorStateExtension on _i9.NavigationService {
   }
 
   Future<dynamic> replaceWithDetailedFarmerScreen({
-    _i8.Key? key,
+    _i9.Key? key,
     required String id,
     int? routerId,
     bool preventDuplicates = true,
@@ -349,6 +377,20 @@ extension NavigatorStateExtension on _i9.NavigationService {
   }) async {
     return replaceWith<dynamic>(Routes.detailedFarmerScreen,
         arguments: DetailedFarmerScreenArguments(key: key, id: id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithAddCaneScreen([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.addCaneScreen,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

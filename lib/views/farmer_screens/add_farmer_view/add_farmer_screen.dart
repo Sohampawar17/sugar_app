@@ -11,6 +11,7 @@ import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
 class AddFarmerScreen extends StatelessWidget {
   final String farmerid;
+
   const AddFarmerScreen({super.key, required this.farmerid});
 
   @override
@@ -38,8 +39,8 @@ class AddFarmerScreen extends StatelessWidget {
                           child: CdropDown(
                             dropdownButton: DropdownButtonFormField<String>(
                               isExpanded: true,
-                              value: model.farmerData
-                                  .branch, // Replace null with the selected value if needed
+                              value: model.farmerData.branch,
+                              // Replace null with the selected value if needed
                               decoration: const InputDecoration(
                                 labelText: 'Plant',
                               ),
@@ -67,7 +68,7 @@ class AddFarmerScreen extends StatelessWidget {
                               value: "Cane",
                               hint: const Text('Select Vendor Group'),
                               decoration: const InputDecoration(
-                                labelText: 'Vendro Group',
+                                labelText: 'Vendor Group',
                               ),
                               onChanged: model.setSelectedVendorGroup,
                               items: model.vendorGroupList.map((val) {
@@ -600,14 +601,14 @@ class AddFarmerScreen extends StatelessWidget {
                                   label: Text('Acc. Number'),
                                 ),
                                 DataColumn(
-                                  label: Text(
-                                      'Action'), // Add a new DataColumn for the button
+                                  label: Text('Action'),
+                                  // Add a new DataColumn for the button
                                   numeric: false,
                                 ),
                               ],
                               rows: List<DataRow>.generate(
-                                model.bankAccounts
-                                    .length, // Replace 10 with the actual number of rows you want
+                                model.bankAccounts.length,
+                                // Replace 10 with the actual number of rows you want
                                 (int index) => DataRow(
                                   cells: [
                                     // DataCell(Text(model

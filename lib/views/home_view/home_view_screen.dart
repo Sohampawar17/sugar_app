@@ -90,6 +90,19 @@ class HomePageScreen extends StatelessWidget {
                             child: const Text("List all farmer"),
                           ),
                         ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, Routes.addCaneScreen);
+                            },
+                            child: const Text("Add new cane registration"),
+                          ),
+                        ),
                       ],
                     ),
                   ),

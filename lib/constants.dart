@@ -5,6 +5,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 getHeight(context) => (MediaQuery.of(context).size.height);
+
 getWidth(context) => (MediaQuery.of(context).size.width);
 
 Color lightBlack = Colors.black.withOpacity(0.5);
@@ -15,21 +16,40 @@ const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
 
 // api usrls
+
+//farmer List
 String apiVillageListGet = 'http://deverpvppl.erpdata.in/api/resource/Village';
 String apiBankListGet = 'http://deverpvppl.erpdata.in/api/resource/Bank';
 String apiFarmerListPost =
     'http://deverpvppl.erpdata.in/api/resource/Farmer List';
 String apiUploadFilePost =
     'http://deverpvppl.erpdata.in/api/method/upload_file';
-String apiLoginGet = 'http://deverpvppl.erpdata.in/api/method/login';
-
 String apiFarmerAllListGet =
     "http://deverpvppl.erpdata.in/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"workflow_state\",\"circle_office\"]";
 String apitFilterOnFarmerListGet =
     "http://deverpvppl.erpdata.in/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"bed%\" ],[\"supplier_name\",  \"like\", \"abhi%\" ]]";
+String apiLoginGet = 'http://deverpvppl.erpdata.in/api/method/login';
+//Cane Registration
+String apiFarmerListGetwithfilter =
+    'http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1]]&limit_page_length=999999999999999';
+String apiCaneRegistration =
+    'http://deverpvppl.erpdata.in/api/resource/Cane Master';
+String apifetchroute =
+    'http://deverpvppl.erpdata.in/api/resource/Route?fields=["route","distance_km","name"]&limit_page_length=99999';
+String apifetchcanevariety =
+    'http://deverpvppl.erpdata.in/api/resource/Cane Variety?limit_page_length=50';
+String apifetchplantationsystem =
+    'http://deverpvppl.erpdata.in/api/resource/Plantation System';
+String apifetchseedmaterial =
+    'http://deverpvppl.erpdata.in/api/resource/Seed Material Used';
+String apifetchirrigationmethod =
+    'http://deverpvppl.erpdata.in/api/resource/Irrigation Method';
+String apifetchcrptype = 'http://deverpvppl.erpdata.in/api/resource/Crop Type';
+String apifetchirrigationsource =
+    'http://deverpvppl.erpdata.in/api/resource/Irrigation Source';
+String apifetchsoiltype = 'http://deverpvppl.erpdata.in/api/resource/Soil Type';
 
 ///functions
-
 Future<Map<String, String>> getTocken() async {
   final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
   final SharedPreferences prefs = await prefs0;
