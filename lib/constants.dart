@@ -14,10 +14,13 @@ const kAadharpdf = "AadharCard";
 const kPanpdf = "PanCard";
 const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
-const BaseUrl="http://deverpvppl.erpdata.in";
+const BaseUrl = "http://deverpvppl.erpdata.in";
 
 // api usrls
 
+String apifetchSeason =
+    'http://deverpvppl.erpdata.in/api/resource/Season?filters=[["disabled","=","0"]]';
+String apifetchPlant = 'http://deverpvppl.erpdata.in/api/resource/Branch';
 //farmer List
 String apiVillageListGet = 'http://deverpvppl.erpdata.in/api/resource/Village';
 String apiBankListGet = 'http://deverpvppl.erpdata.in/api/resource/Bank';
@@ -34,7 +37,7 @@ String apiLoginGet = 'http://deverpvppl.erpdata.in/api/method/login';
 String apifetchCaneList =
     'http://deverpvppl.erpdata.in/api/resource/Cane Master?fields=["plantation_status","area","circle_office","name","grower_code","grower_name","plantattion_ratooning_date"]';
 String apiFarmerListGetwithfilter =
-    'http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1]]&limit_page_length=999999999999999';
+    'http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1]]&limit_page_length=999999';
 String apiCaneRegistration =
     'http://deverpvppl.erpdata.in/api/resource/Cane Master';
 String apifetchroute =
@@ -51,6 +54,10 @@ String apifetchcrptype = 'http://deverpvppl.erpdata.in/api/resource/Crop Type';
 String apifetchirrigationsource =
     'http://deverpvppl.erpdata.in/api/resource/Irrigation Source';
 String apifetchsoiltype = 'http://deverpvppl.erpdata.in/api/resource/Soil Type';
+
+///Agri
+String apifetchcanelistwithfilter =
+    'http://deverpvppl.erpdata.in/api/resource/Cane Master?fields=["vendor_code","grower_name","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name"]&limit_page_length=99999';
 
 ///functions
 Future<Map<String, String>> getTocken() async {

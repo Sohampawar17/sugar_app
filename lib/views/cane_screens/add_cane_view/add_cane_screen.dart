@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-
 import 'package:stacked/stacked.dart';
-import 'package:sugar_mill_app/views/add_cane_view/add_cane_model.dart';
+import 'package:sugar_mill_app/views/cane_screens/add_cane_view/add_cane_model.dart';
 
-import '../../widgets/cdrop_down_widget.dart';
-import '../../widgets/ctext_button.dart';
-import '../../widgets/full_screen_loader.dart';
+import '../../../widgets/cdrop_down_widget.dart';
+import '../../../widgets/ctext_button.dart';
+import '../../../widgets/full_screen_loader.dart';
 
 class AddCaneScreen extends StatelessWidget {
   final String caneId;
@@ -91,7 +89,7 @@ class AddCaneScreen extends StatelessWidget {
                               child: Autocomplete<String>(
                                 key: Key(model.canedata.growerCode ?? "05"),
                                 initialValue: TextEditingValue(
-                                  text: model.canedata.growerCode ?? " ",
+                                  text: model.canedata.growerCode ?? "",
                                 ),
                                 optionsBuilder:
                                     (TextEditingValue textEditingValue) {
@@ -180,6 +178,7 @@ class AddCaneScreen extends StatelessWidget {
                             )),
                           ]),
                           TextFormField(
+                              readOnly: true,
                               key: Key(model.canedata.growerName ?? "07"),
                               initialValue: model.canedata.growerName,
                               decoration: const InputDecoration(
@@ -194,14 +193,15 @@ class AddCaneScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: TextFormField(
-                                    key: Key(model.canedata.formNumber ?? "04"),
-                                    initialValue: model.canedata.formNumber,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Form Number'),
-                                    validator: (value) => value!.isEmpty
-                                        ? 'Please enter a form  Number'
-                                        : null,
-                                    onChanged: model.setFormNumber),
+                                  key: Key(model.canedata.formNumber ?? "04"),
+                                  initialValue: model.canedata.formNumber,
+                                  decoration: const InputDecoration(
+                                      labelText: 'Form Number'),
+                                  validator: (value) => value!.isEmpty
+                                      ? 'Please enter a form  Number'
+                                      : null,
+                                  onChanged: model.setFormNumber,
+                                ),
                               ),
                               const SizedBox(
                                 width: 20.0,
@@ -442,13 +442,11 @@ class AddCaneScreen extends StatelessWidget {
                               ),
                               Expanded(
                                   child: TextFormField(
-                                key: Key(
-                                    model.selectedDistance.toString() ?? ""),
+                                key: Key(model.canedata.routeKm.toString()),
                                 readOnly: true,
                                 decoration:
                                     const InputDecoration(labelText: 'KM'),
-                                initialValue:
-                                    model.canedata.routeKm.toString() ?? "",
+                                initialValue: model.canedata.routeKm.toString(),
                                 onChanged: (newValue) {
                                   // Handle the newValue here, you can update the routeKm value
                                   // using the setroutekm function with the new value.
@@ -649,9 +647,7 @@ class AddCaneScreen extends StatelessWidget {
                                   decoration: const InputDecoration(
                                     labelText: 'Area In Acrs',
                                   ),
-                                  validator: (value) => value!.isEmpty
-                                      ? 'Please enter an Area In Acrs'
-                                      : null,
+                                  validator: model.validateAreaInAcrs,
                                   onChanged: (newValue) {
                                     if (newValue != null) {
                                       model.setSelectedareainacrs(newValue);
@@ -667,7 +663,6 @@ class AddCaneScreen extends StatelessWidget {
                                 child: TextFormField(
                                   controller: model.plantationdateController,
                                   onTap: () => model.selectDate(context),
-                                  readOnly: true,
                                   decoration: const InputDecoration(
                                     labelText: 'Plantation Date',
                                     hintText: 'Select Plantation Date',
@@ -681,12 +676,10 @@ class AddCaneScreen extends StatelessWidget {
                                 child: TextFormField(
                                   controller: model.baselDateController,
                                   onTap: () => model.selectBaselDate(context),
-                                  readOnly: true,
                                   decoration: const InputDecoration(
                                     labelText: 'Basel Date',
                                     hintText: 'Select Basel Date',
                                   ),
-                                  validator: model.validateBaseldate,
                                   onChanged: model.onBaseldateChanged,
                                 ),
                               ),
@@ -766,7 +759,6 @@ class AddCaneScreen extends StatelessWidget {
                                     }).toList(),
                                     onChanged: (value) =>
                                         model.setSelectedisMachine(value),
-                                    validator: model.validateisMachine,
                                   ),
                                 ),
                               ),
@@ -789,7 +781,6 @@ class AddCaneScreen extends StatelessWidget {
                                     }).toList(),
                                     onChanged: (value) =>
                                         model.setSelectedseedType(value),
-                                    validator: model.validateSeedType,
                                   ),
                                 ),
                               ),
@@ -816,7 +807,6 @@ class AddCaneScreen extends StatelessWidget {
                                     }).toList(),
                                     onChanged: (value) =>
                                         model.setSelectedDevelopmentplot(value),
-                                    validator: model.validateDevelopmentPlot,
                                   ),
                                 ),
                               ),

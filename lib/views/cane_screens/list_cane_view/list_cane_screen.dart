@@ -1,9 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:sugar_mill_app/views/list_cane_view/list_cane_model.dart';
+import 'package:sugar_mill_app/views/cane_screens/list_cane_view/list_cane_model.dart';
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
-import '../../constants.dart';
+
+import '../../../constants.dart';
 
 class ListCaneScreen extends StatelessWidget {
   const ListCaneScreen({super.key});
@@ -56,7 +57,8 @@ class ListCaneScreen extends StatelessWidget {
                                         name: value);
                                   },
                                   decoration: const InputDecoration(
-                                    labelText: 'Search by Name',
+                                    labelText: 'Name',
+                                    prefixIcon: Icon(Icons.search),
                                   ),
                                 ),
                               ),
@@ -73,6 +75,7 @@ class ListCaneScreen extends StatelessWidget {
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'ID',
+                                    prefixIcon: Icon(Icons.search),
                                     // prefixIcon: Icon(Icons.search),
                                   ),
                                 ),
@@ -86,6 +89,58 @@ class ListCaneScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  tileColor: Colors.black45,
+                  trailing: const AutoSizeText(
+                    'Village',
+                    maxLines: 2,
+                  ),
+                  leading: SizedBox(
+                    width: getWidth(context) / 5,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        AutoSizeText(
+                          'Circle Office',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        AutoSizeText(
+                          'Plantation Status',
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  title: const Text(
+                    'Name',
+                    style: TextStyle(fontSize: 11),
+                  ),
+                  subtitle: const Row(
+                    children: [
+                      Text(
+                        'ID',
+                        style: TextStyle(fontSize: 11),
+                      ),
+                      SizedBox(
+                        width: 35,
+                      ),
+                      Text(
+                        'Plantation Date',
+                        style: TextStyle(fontSize: 11),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Expanded(
                 child: ListView.separated(
                   itemCount: model.canefilterList.length,
@@ -93,14 +148,8 @@ class ListCaneScreen extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ListTile(
-                        tileColor: model
-                                    .canefilterList[index].plantationStatus ==
-                                "New"
-                            ? const Color(0xFFD3E8FD)
-                            : model.canefilterList[index].plantationStatus ==
-                                    "To Sampling"
-                                ? const Color(0xFFEAF5EE)
-                                : const Color(0xFFFFF5F5),
+                        tileColor: model.getTileColor(
+                            model.canefilterList[index].plantationStatus),
                         trailing: AutoSizeText(
                           model.canefilterList[index].area ?? '',
                           maxLines: 2,
@@ -118,7 +167,7 @@ class ListCaneScreen extends StatelessWidget {
                               AutoSizeText(
                                 model.canefilterList[index].plantationStatus ??
                                     '',
-                                maxLines: 1,
+                                maxLines: 2,
                                 style: const TextStyle(
                                   fontSize: 8,
                                 ),

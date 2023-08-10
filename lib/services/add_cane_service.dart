@@ -99,11 +99,81 @@ class AddCaneService {
     }
   }
 
+  Future<List<String>> fetchSeason() async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        apifetchSeason,
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonData = json.encode(response.data);
+        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
+        List<dynamic> dataList = jsonDataMap["data"];
+        Logger().i(dataList);
+        List<String> namesList =
+            dataList.map((item) => item["name"].toString()).toList();
+        return namesList;
+      }
+
+      if (response.statusCode == 401) {
+        Fluttertoast.showToast(msg: "Unauthorized Access!");
+        return ["401"];
+      } else {
+        Fluttertoast.showToast(msg: "Unable to fetch Villages");
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+      Fluttertoast.showToast(msg: "Unauthorized Access!");
+      return [];
+    }
+  }
+
   Future<List<String>> fetchVillages() async {
     try {
       var dio = Dio();
       var response = await dio.request(
         apiVillageListGet,
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonData = json.encode(response.data);
+        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
+        List<dynamic> dataList = jsonDataMap["data"];
+        Logger().i(dataList);
+        List<String> namesList =
+            dataList.map((item) => item["name"].toString()).toList();
+        return namesList;
+      }
+
+      if (response.statusCode == 401) {
+        Fluttertoast.showToast(msg: "Unauthorized Access!");
+        return ["401"];
+      } else {
+        Fluttertoast.showToast(msg: "Unable to fetch Villages");
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+      Fluttertoast.showToast(msg: "Unauthorized Access!");
+      return [];
+    }
+  }
+
+  Future<List<String>> fetchPlant() async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        apifetchPlant,
         options: Options(
           method: 'GET',
           headers: {'Cookie': await getTocken()},
@@ -382,10 +452,10 @@ class AddCaneService {
   Future<bool> updateCane(Cane cane) async {
     try {
       // var data = json.encode({farmer});
-
+      Logger().i(cane.name.toString());
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Cane Master/${Cane}',
+        'http://deverpvppl.erpdata.in/api/resource/Cane Master/${cane.name.toString()}',
         options: Options(
           method: 'PUT',
           headers: {'Cookie': await getTocken()},
@@ -419,6 +489,7 @@ class AddCaneService {
       );
 
       if (response.statusCode == 200) {
+        Logger().i(response.data["data"]);
         return Cane.fromJson(response.data["data"]);
       } else {
         // print(response.statusMessage);

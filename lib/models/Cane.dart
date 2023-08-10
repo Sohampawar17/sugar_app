@@ -1,4 +1,5 @@
 class Cane {
+  int? name;
   String? season;
   String? plantationStatus;
   String? plantName;
@@ -32,14 +33,14 @@ class Cane {
   String? seedMaterial;
   String? seedType;
   String? roadSide;
-  String? supervisorName;
   String? longitude;
   String? latitude;
   String? city;
   String? state;
 
   Cane(
-      {this.season,
+      {this.name,
+      this.season,
       this.plantationStatus,
       this.plantName,
       this.formNumber,
@@ -72,13 +73,13 @@ class Cane {
       this.seedMaterial,
       this.seedType,
       this.roadSide,
-      this.supervisorName,
       this.longitude,
       this.latitude,
       this.city,
       this.state});
 
   Cane.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
     season = json['season'];
     plantationStatus = json['plantation_status'];
     plantName = json['plant_name'];
@@ -112,7 +113,6 @@ class Cane {
     seedMaterial = json['seed_material'];
     seedType = json['seed_type'];
     roadSide = json['road_side'];
-    supervisorName = json['supervisor_name'];
     longitude = json['longitude'];
     latitude = json['latitude'];
     city = json['city'];
@@ -120,7 +120,8 @@ class Cane {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['name'] = this.name;
     data['season'] = this.season;
     data['plantation_status'] = this.plantationStatus;
     data['plant_name'] = this.plantName;
@@ -154,7 +155,6 @@ class Cane {
     data['seed_material'] = this.seedMaterial;
     data['seed_type'] = this.seedType;
     data['road_side'] = this.roadSide;
-    data['supervisor_name'] = this.supervisorName;
     data['longitude'] = this.longitude;
     data['latitude'] = this.latitude;
     data['city'] = this.city;

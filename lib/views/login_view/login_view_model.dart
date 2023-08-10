@@ -11,6 +11,7 @@ class LoginViewModel extends BaseViewModel {
   TextEditingController passwordController = TextEditingController();
   final FocusNode focusNode = FocusNode();
 
+  bool obscurePassword = true;
   bool isloading = false;
   initialise() {}
 

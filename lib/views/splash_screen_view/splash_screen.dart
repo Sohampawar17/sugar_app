@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 // ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 import '../../router.router.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -39,14 +39,31 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.blue, // Set the background color
       body: Center(
-        child: Text(
-          'Quant Sugar',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedTextKit(
+              // Use AnimatedTextKit for text animation
+              animatedTexts: [
+                TyperAnimatedText(
+                  'Quant Sugar',
+                  textStyle: const TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white, // Text color
+                  ),
+                ),
+              ],
+              totalRepeatCount: 1, // Animation repeat count
+              pause:
+                  const Duration(milliseconds: 1000), // Pause between animation
+            ),
+            const SizedBox(height: 20),
+            const CircularProgressIndicator(),
+          ],
         ),
       ),
     );

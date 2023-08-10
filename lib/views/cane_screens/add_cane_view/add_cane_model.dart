@@ -9,7 +9,8 @@ import 'package:sugar_mill_app/models/CaneFarmer.dart';
 import 'package:sugar_mill_app/models/CaneRoute.dart';
 import 'package:sugar_mill_app/services/add_cane_service.dart';
 import 'package:sugar_mill_app/services/geolocation_service.dart';
-import '../../models/Cane.dart';
+import '../../../models/Cane.dart';
+import '../../../router.router.dart';
 
 class CaneViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
@@ -18,8 +19,8 @@ class CaneViewModel extends BaseViewModel {
   TextEditingController areainAcrsController = TextEditingController();
   TextEditingController baselDateController = TextEditingController();
   Cane canedata = Cane();
-  final List<String> plantlist = ['Bedkihal', 'Nagpur'];
-  final List<String> seasonlist = ["2022-2023", "2023-2024"];
+  List<String> plantlist = [""];
+  List<String> seasonlist = [""];
   final List<String> yesno = ["Yes", "No"];
   final List<String> yesnomachine = ["YES", "NO"];
   final List<String> yesnoroadside = ["Yes (होय)", "No (नाही)"];
@@ -45,68 +46,23 @@ class CaneViewModel extends BaseViewModel {
   List<String> soilTypeList = [""];
   List<String> cropVarietyList = [""];
   late String caneId;
-
-  String? validateplantationdate(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please select plantation date';
-    }
-    return null;
-  }
-
-  String? validateBaseldate(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please select Basel Date';
-    }
-    return null;
-  }
-
-  void onplantationdateChanged(String value) {
-    // You can use the value here if needed.
-    // Since we are using a date picker to select DOB, the value will not change through regular typing.
-    canedata.plantattionRatooningDate = value;
-  }
-
-  void onBaseldateChanged(String value) {
-    // You can use the value here if needed.
-    // Since we are using a date picker to select DOB, the value will not change through regular typing.
-    canedata.basalDate = value;
-  }
-
+  String? selectedVillage;
+  String? selectedirrigationmethod;
+  String? selectedirrigationsource;
+  String? selectedcroptype;
+  String? selectedcropVariety;
+  String? selectedSoilType;
+  String? selectedSeedMaterial;
+  String? selectedRoute;
+  String? selectedPlantationSystem;
+  double? selectedDistance;
   DateTime? selectedDate;
   DateTime? selectedBaselDate;
 
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null && picked != selectedDate) {
-      selectedDate = picked;
-      plantationdateController.text = DateFormat('yyyy-MM-dd').format(picked);
-      canedata.plantattionRatooningDate = plantationdateController.text;
-    }
-  }
-
-  Future<void> selectBaselDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedBaselDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null && picked != selectedBaselDate) {
-      selectedBaselDate = picked;
-      baselDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-      canedata.basalDate = baselDateController.text;
-    }
-  }
-
   initialise(BuildContext context, String caneId) async {
     setBusy(true);
+    plantlist = await AddCaneService().fetchPlant();
+    seasonlist = await AddCaneService().fetchSeason();
     villageList = await AddCaneService().fetchVillages();
     canevarietyList = await AddCaneService().fetchCaneVariety();
     plantationsystemList = await AddCaneService().fetchplantationsystem();
@@ -122,6 +78,14 @@ class CaneViewModel extends BaseViewModel {
       isEdit = true;
       canedata = await AddCaneService().getCane(caneId) ?? Cane();
       notifyListeners();
+      plantationdateController.text = canedata.plantattionRatooningDate ?? '';
+      baselDateController.text = canedata.basalDate ?? '';
+    }
+    if (villageList.length == 1 && villageList[0] == "401") {
+      if (context.mounted) {
+        setBusy(false);
+        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+      }
     }
     setBusy(false);
   }
@@ -155,13 +119,23 @@ class CaneViewModel extends BaseViewModel {
           Logger().i(canedata.toJson().toString());
           // Now you have the updated canedata object with location information
           // You can proceed with saving the data
-
-          res = await AddCaneService().addCane(canedata);
-          if (res) {
-            if (context.mounted) {
-              setBusy(false);
-              Navigator.pop(context);
-              // Do something after successful save
+          if (isEdit == true) {
+            res = await AddCaneService().updateCane(canedata);
+            if (res) {
+              if (context.mounted) {
+                setBusy(false);
+                setBusy(false);
+                Navigator.pop(context);
+              }
+            }
+          } else {
+            res = await AddCaneService().addCane(canedata);
+            if (res) {
+              if (context.mounted) {
+                setBusy(false);
+                setBusy(false);
+                Navigator.pop(context);
+              }
             }
           }
         } else {
@@ -179,16 +153,47 @@ class CaneViewModel extends BaseViewModel {
     setBusy(false);
   }
 
-  String? selectedVillage;
-  String? selectedirrigationmethod;
-  String? selectedirrigationsource;
-  String? selectedcroptype;
-  String? selectedcropVariety;
-  String? selectedSoilType;
-  String? selectedSeedMaterial;
-  String? selectedRoute;
-  String? selectedPlantationSystem;
-  double? selectedDistance;
+  void onplantationdateChanged(String value) {
+    // You can use the value here if needed.
+    // Since we are using a date picker to select DOB, the value will not change through regular typing.
+    canedata.plantattionRatooningDate = value;
+  }
+
+  void onBaseldateChanged(String value) {
+    // You can use the value here if needed.
+    // Since we are using a date picker to select DOB, the value will not change through regular typing.
+    canedata.basalDate = value;
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      selectedDate = picked;
+      plantationdateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      canedata.plantattionRatooningDate = plantationdateController.text;
+    }
+  }
+
+  Future<void> selectBaselDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedBaselDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != selectedBaselDate) {
+      selectedBaselDate = picked;
+      baselDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      canedata.basalDate = baselDateController.text;
+    }
+  }
 
   void setSelectedseedType(String? seedType) {
     canedata.seedType = seedType;
@@ -342,6 +347,20 @@ class CaneViewModel extends BaseViewModel {
 
   ////////////////// validators ////////////////////////////////////
 
+  String? validateAreaInAcrs(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select Area in Acrs';
+    }
+    return null;
+  }
+
+  String? validateplantationdate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select plantation date';
+    }
+    return null;
+  }
+
   String? validateRoute(String? value) {
     if (value == null || value.isEmpty) {
       return 'please select Route';
@@ -359,20 +378,6 @@ class CaneViewModel extends BaseViewModel {
   String? validatePlantationSystem(String? value) {
     if (value == null || value.isEmpty) {
       return 'please select Plantation System';
-    }
-    return null;
-  }
-
-  String? validateDevelopmentPlot(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'please select Development Plot';
-    }
-    return null;
-  }
-
-  String? validateisMachine(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'please select Is Machine';
     }
     return null;
   }
@@ -450,13 +455,6 @@ class CaneViewModel extends BaseViewModel {
   String? validateRoadSide(String? value) {
     if (value == null || value.isEmpty) {
       return 'please select Road Side';
-    }
-    return null;
-  }
-
-  String? validateSeedType(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'please select Seed Type';
     }
     return null;
   }

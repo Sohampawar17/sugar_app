@@ -100,8 +100,10 @@ class HomePageScreen extends StatelessWidget {
                                       height: double.infinity,
                                       child: Center(
                                         child: Text(
-                                          "Add new farmer",
-                                          style: TextStyle(color: Colors.black),
+                                          "New farmer",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
                                         ),
                                       ),
                                     ),
@@ -133,8 +135,10 @@ class HomePageScreen extends StatelessWidget {
                                       height: double.infinity,
                                       child: Center(
                                         child: Text(
-                                          "List Farmer",
-                                          style: TextStyle(color: Colors.black),
+                                          "Farmer List ",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
                                         ),
                                       ),
                                     ),
@@ -148,33 +152,120 @@ class HomePageScreen extends StatelessWidget {
                           height: 10.0,
                         ),
                         SizedBox(
-                          width: 300,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.addCaneScreen,
-                                arguments:
-                                    const AddCaneScreenArguments(caneId: ""),
-                              );
-                            },
-                            child: const Text("Add new cane registration"),
+                          height: getHeight(context) / 5,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 85, 177, 252),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.addCaneScreen,
+                                        arguments: const AddCaneScreenArguments(
+                                            caneId: ""),
+                                      );
+                                    },
+                                    child: const SizedBox(
+                                      height: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "New Cane Registration",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20.0,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 167, 235, 170),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.listCaneScreen,
+                                      );
+                                    },
+                                    child: const SizedBox(
+                                      height: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "Cane Registration List",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
                         ),
                         SizedBox(
-                          width: 300,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, Routes.listCaneScreen);
-                            },
-                            child: const Text("List Cane Master"),
+                          height: getHeight(context) / 5,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 85, 177, 252),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.addAgriScreen,
+                                      );
+                                    },
+                                    child: const SizedBox(
+                                      height: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "New Agriculture Development",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
- 
                       ],
                     ),
                   ),

@@ -1,12 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/router.router.dart';
-import 'package:sugar_mill_app/views/add_cane_view/add_cane_screen.dart';
 
-import '../../models/cane_list_model.dart';
-import '../../services/list_cane_service.dart';
+import '../../../models/cane_list_model.dart';
+import '../../../services/list_cane_service.dart';
 
 class ListCaneModel extends BaseViewModel {
   TextEditingController idcontroller = TextEditingController();
@@ -15,6 +12,17 @@ class ListCaneModel extends BaseViewModel {
   List<CaneListModel> canefilterList = [];
   String caneNameFilter = "";
   String caneseasonFilter = "";
+
+  Color getTileColor(String? plantationStatus) {
+    switch (plantationStatus) {
+      case 'New':
+        return const Color(0xFFD3E8FD);
+      case 'To Sampling':
+        return const Color(0xFFEAF5EE);
+      default:
+        return const Color(0xFFFFF5F5);
+    }
+  }
 
   initialise(BuildContext context) async {
     setBusy(true);
