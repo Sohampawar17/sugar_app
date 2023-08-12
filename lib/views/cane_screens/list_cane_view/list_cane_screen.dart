@@ -89,53 +89,50 @@ class ListCaneScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  tileColor: Colors.black45,
-                  trailing: const AutoSizeText(
-                    'Village',
-                    maxLines: 2,
-                  ),
-                  leading: SizedBox(
-                    width: getWidth(context) / 5,
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        AutoSizeText(
-                          'Circle Office',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        AutoSizeText(
-                          'Plantation Status',
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontSize: 8,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  title: const Text(
-                    'Name',
-                    style: TextStyle(fontSize: 11),
-                  ),
-                  subtitle: const Row(
+              ListTile(
+                tileColor: Colors.black45,
+                trailing: const AutoSizeText(
+                  'Village',
+                  maxLines: 2,
+                ),
+                leading: SizedBox(
+                  width: getWidth(context) / 5,
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(
-                        'ID',
-                        style: TextStyle(fontSize: 11),
+                      AutoSizeText(
+                        'Circle Office',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(
-                        width: 35,
-                      ),
-                      Text(
-                        'Plantation Date',
-                        style: TextStyle(fontSize: 11),
+                      AutoSizeText(
+                        'Plantation Status',
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 8,
+                        ),
                       ),
                     ],
                   ),
+                ),
+                title: const Text(
+                  'Name',
+                  style: TextStyle(fontSize: 16),
+                ),
+                subtitle: const Row(
+                  children: [
+                    Text(
+                      'ID',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(
+                      width: 35,
+                    ),
+                    Text(
+                      'Plantation Date',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(
@@ -177,13 +174,13 @@ class ListCaneScreen extends StatelessWidget {
                         ),
                         title: Text(
                           model.canefilterList[index].growerName ?? '',
-                          style: const TextStyle(fontSize: 11),
+                          style: const TextStyle(fontSize: 14),
                         ),
                         subtitle: Row(
                           children: [
                             Text(
                               model.canefilterList[index].name.toString(),
-                              style: const TextStyle(fontSize: 8),
+                              style: const TextStyle(fontSize: 14),
                             ),
                             const SizedBox(
                               width: 35,
@@ -192,7 +189,7 @@ class ListCaneScreen extends StatelessWidget {
                               model.canefilterList[index]
                                       .plantattionRatooningDate ??
                                   '',
-                              style: const TextStyle(fontSize: 8),
+                              style: const TextStyle(fontSize: 14),
                             ),
                           ],
                         ),

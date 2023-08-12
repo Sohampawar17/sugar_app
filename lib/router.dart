@@ -1,6 +1,7 @@
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:sugar_mill_app/views/agriculture_screens/add_agri_view/add_agri_screen.dart';
+import 'package:sugar_mill_app/views/agriculture_screens/list_agri_view/list_agri_screen.dart';
 import 'package:sugar_mill_app/views/cane_screens/add_cane_view/add_cane_screen.dart';
 import 'package:sugar_mill_app/views/cane_screens/list_cane_view/list_cane_screen.dart';
 import 'package:sugar_mill_app/views/farmer_screens/add_farmer_view/add_farmer_screen.dart';
@@ -20,6 +21,7 @@ import 'views/farmer_screens/list_farmers_view/list_farmers_screen.dart';
     MaterialRoute(page: AddCaneScreen),
     MaterialRoute(page: ListCaneScreen),
     MaterialRoute(page: AddAgriScreen),
+    MaterialRoute(page: ListAgriScreen),
   ],
   dependencies: [
     Singleton(classType: NavigationService),

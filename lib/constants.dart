@@ -57,7 +57,11 @@ String apifetchsoiltype = 'http://deverpvppl.erpdata.in/api/resource/Soil Type';
 
 ///Agri
 String apifetchcanelistwithfilter =
-    'http://deverpvppl.erpdata.in/api/resource/Cane Master?fields=["vendor_code","grower_name","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name"]&limit_page_length=99999';
+    'http://deverpvppl.erpdata.in/api/resource/Cane Master?fields=["vendor_code","grower_name","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name"]&limit_page_length=99999';
+String apiListagri =
+    'http://deverpvppl.erpdata.in/api/resource/Agriculture Development';
+String apigetagrilist =
+    'http://deverpvppl.erpdata.in/api/resource/Agriculture Development?fields=["crop_type","crop_variety","date","area","village","name"]';
 
 ///functions
 Future<Map<String, String>> getTocken() async {

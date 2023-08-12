@@ -227,6 +227,9 @@ class HomePageScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
                         SizedBox(
                           height: getHeight(context) / 5,
                           child: Row(
@@ -247,6 +250,8 @@ class HomePageScreen extends StatelessWidget {
                                       Navigator.pushNamed(
                                         context,
                                         Routes.addAgriScreen,
+                                        arguments: const AddAgriScreenArguments(
+                                            agriId: ""),
                                       );
                                     },
                                     child: const SizedBox(
@@ -254,6 +259,41 @@ class HomePageScreen extends StatelessWidget {
                                       child: Center(
                                         child: Text(
                                           "New Agriculture Development",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20.0,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 85, 177, 252),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.listAgriScreen,
+                                      );
+                                    },
+                                    child: const SizedBox(
+                                      height: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "List Agriculture Development",
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 25),

@@ -56,7 +56,7 @@ class ListFarmersScreen extends StatelessWidget {
                                         name: value);
                                   },
                                   decoration: const InputDecoration(
-                                    labelText: 'Search by Name',
+                                    labelText: 'Name',
                                   ),
                                 ),
                               ),
@@ -116,11 +116,11 @@ class ListFarmersScreen extends StatelessWidget {
                   ),
                   title: const Text(
                     'Name',
-                    style: TextStyle(fontSize: 11),
+                    style: TextStyle(fontSize: 15),
                   ),
                   subtitle: const Text(
                     'ID',
-                    style: TextStyle(fontSize: 11),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),

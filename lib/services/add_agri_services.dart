@@ -4,8 +4,94 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:sugar_mill_app/models/agri_cane_model.dart';
 import '../constants.dart';
+import '../models/Agri.dart';
 
 class AddAgriServices {
+  Future<bool> updateAgri(Agri agri) async {
+    try {
+      // var data = json.encode({farmer});
+      Logger().i(agri.name.toString());
+      var dio = Dio();
+      var response = await dio.request(
+        'http://deverpvppl.erpdata.in/api/resource/Agriculture Development/${agri.name}',
+        options: Options(
+          method: 'PUT',
+          headers: {'Cookie': await getTocken()},
+        ),
+        data: agri.toJson(),
+      );
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(msg: "Agriculture development Updated");
+        return true;
+      } else {
+        Fluttertoast.showToast(
+            msg: "UNABLE TO UPDATE Agriculture development!");
+        return false;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error accoured $e ");
+      Logger().e(e);
+    }
+    return false;
+  }
+
+  Future<Agri?> getAgri(String id) async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        'http://deverpvppl.erpdata.in/api/resource/Agriculture Development/$id',
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Logger().i(response.data["data"]);
+        return Agri.fromJson(response.data["data"]);
+      } else {
+        // print(response.statusMessage);
+        return null;
+      }
+    } catch (e) {
+      Logger().i(e);
+      Fluttertoast.showToast(msg: "Error while fetching user");
+    }
+    return null;
+  }
+
+  Future<bool> addAgri(Agri agri) async {
+    var data = json.encode({
+      "data": agri,
+    });
+    Logger().i(agri.toString());
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        apiListagri,
+        options: Options(
+          method: 'POST',
+          headers: {'Cookie': await getTocken()},
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: "Agriculture Development Registerted Successfully");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: "UNABLE TO Agriculture Development!");
+        return false;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error accoured $e ");
+      Logger().e(e);
+    }
+    return false;
+  }
+
   Future<List<String>> fetchSeason() async {
     try {
       var dio = Dio();

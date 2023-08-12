@@ -1,7 +1,6 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:logger/logger.dart';
 
 class GeolocationService {
   Future<Position?> determinePosition() async {

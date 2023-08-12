@@ -159,7 +159,7 @@
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart'; // Import for handling gestures
+
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/views/login_view/login_view_model.dart';
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
@@ -210,10 +210,9 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Image.asset(
-                                    'assets/logo.png', // Adjust the path to your logo image
-                                    height: 100,
-                                    width: 100,
+                                  const Icon(
+                                    Icons.person,
+                                    size: 15,
                                   ),
                                   const SizedBox(height: 50.0),
                                   TextFormField(
@@ -227,7 +226,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
-                                      prefixIcon: Icon(Icons
+                                      prefixIcon: const Icon(Icons
                                           .person), // Icon for the username field
                                     ),
                                     validator: (value) =>
@@ -245,7 +244,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
-                                      prefixIcon: Icon(Icons
+                                      prefixIcon: const Icon(Icons
                                           .lock), // Icon for the password field
                                       suffixIcon: InkWell(
                                         onTap: () {
@@ -301,7 +300,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                 throw 'Could not launch $url';
                               }
                             },
-                            child: Text(
+                            child: const Text(
                               'Developed By ©  QuantBit Technologies Pvt. Ltd ',
                               style: TextStyle(
                                 color: Colors.white,

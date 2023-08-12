@@ -154,14 +154,10 @@ class CaneViewModel extends BaseViewModel {
   }
 
   void onplantationdateChanged(String value) {
-    // You can use the value here if needed.
-    // Since we are using a date picker to select DOB, the value will not change through regular typing.
     canedata.plantattionRatooningDate = value;
   }
 
   void onBaseldateChanged(String value) {
-    // You can use the value here if needed.
-    // Since we are using a date picker to select DOB, the value will not change through regular typing.
     canedata.basalDate = value;
   }
 
