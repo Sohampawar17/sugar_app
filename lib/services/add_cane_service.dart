@@ -455,7 +455,7 @@ class AddCaneService {
       Logger().i(cane.name.toString());
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Cane Master/${cane.name.toString()}',
+        '$apiBaseUrl/api/resource/Cane Master/${cane.name.toString()}',
         options: Options(
           method: 'PUT',
           headers: {'Cookie': await getTocken()},
@@ -481,7 +481,7 @@ class AddCaneService {
     try {
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Cane Master/$id',
+        '$apiBaseUrl/api/resource/Cane Master/$id',
         options: Options(
           method: 'GET',
           headers: {'Cookie': await getTocken()},

@@ -14,54 +14,50 @@ const kAadharpdf = "AadharCard";
 const kPanpdf = "PanCard";
 const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
-const BaseUrl = "http://deverpvppl.erpdata.in";
+const apiBaseUrl = "http://deverpvppl.erpdata.in";
 
 // api usrls
 
 String apifetchSeason =
-    'http://deverpvppl.erpdata.in/api/resource/Season?filters=[["disabled","=","0"]]';
-String apifetchPlant = 'http://deverpvppl.erpdata.in/api/resource/Branch';
+    '$apiBaseUrl/api/resource/Season?filters=[["disabled","=","0"]]';
+String apifetchPlant = '$apiBaseUrl/api/resource/Branch';
 //farmer List
-String apiVillageListGet = 'http://deverpvppl.erpdata.in/api/resource/Village';
-String apiBankListGet = 'http://deverpvppl.erpdata.in/api/resource/Bank';
-String apiFarmerListPost =
-    'http://deverpvppl.erpdata.in/api/resource/Farmer List';
-String apiUploadFilePost =
-    'http://deverpvppl.erpdata.in/api/method/upload_file';
+String apiVillageListGet = '$apiBaseUrl/api/resource/Village';
+String apiBankListGet = '$apiBaseUrl/api/resource/Bank';
+String apiFarmerListPost = '$apiBaseUrl/api/resource/Farmer List';
+String apiUploadFilePost = '$apiBaseUrl/api/method/upload_file';
 String apiFarmerAllListGet =
-    "http://deverpvppl.erpdata.in/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"workflow_state\",\"circle_office\"]";
+    "$apiBaseUrl/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"workflow_state\",\"circle_office\"]";
 String apitFilterOnFarmerListGet =
-    "http://deverpvppl.erpdata.in/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"bed%\" ],[\"supplier_name\",  \"like\", \"abhi%\" ]]";
-String apiLoginGet = 'http://deverpvppl.erpdata.in/api/method/login';
+    "$apiBaseUrl/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"bed%\" ],[\"supplier_name\",  \"like\", \"abhi%\" ]]";
+String apiLoginGet = '$apiBaseUrl/api/method/login';
 //Cane Registration
 String apifetchCaneList =
-    'http://deverpvppl.erpdata.in/api/resource/Cane Master?fields=["plantation_status","area","circle_office","name","grower_code","grower_name","plantattion_ratooning_date"]';
+    '$apiBaseUrl/api/resource/Cane Master?fields=["plantation_status","area","circle_office","name","grower_code","grower_name","plantattion_ratooning_date"]';
 String apiFarmerListGetwithfilter =
-    'http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1]]&limit_page_length=999999';
-String apiCaneRegistration =
-    'http://deverpvppl.erpdata.in/api/resource/Cane Master';
+    '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1]]&limit_page_length=999999';
+String apiCaneRegistration = '$apiBaseUrl/api/resource/Cane Master';
 String apifetchroute =
-    'http://deverpvppl.erpdata.in/api/resource/Route?fields=["route","distance_km","name"]&limit_page_length=99999';
+    '$apiBaseUrl/api/resource/Route?fields=["route","distance_km","name"]&limit_page_length=99999';
 String apifetchcanevariety =
-    'http://deverpvppl.erpdata.in/api/resource/Cane Variety?limit_page_length=50';
-String apifetchplantationsystem =
-    'http://deverpvppl.erpdata.in/api/resource/Plantation System';
-String apifetchseedmaterial =
-    'http://deverpvppl.erpdata.in/api/resource/Seed Material Used';
-String apifetchirrigationmethod =
-    'http://deverpvppl.erpdata.in/api/resource/Irrigation Method';
-String apifetchcrptype = 'http://deverpvppl.erpdata.in/api/resource/Crop Type';
-String apifetchirrigationsource =
-    'http://deverpvppl.erpdata.in/api/resource/Irrigation Source';
-String apifetchsoiltype = 'http://deverpvppl.erpdata.in/api/resource/Soil Type';
+    '$apiBaseUrl/api/resource/Cane Variety?limit_page_length=50';
+String apifetchplantationsystem = '$apiBaseUrl/api/resource/Plantation System';
+String apifetchseedmaterial = '$apiBaseUrl/api/resource/Seed Material Used';
+String apifetchirrigationmethod = '$apiBaseUrl/api/resource/Irrigation Method';
+String apifetchcrptype = '$apiBaseUrl/api/resource/Crop Type';
+String apifetchirrigationsource = '$apiBaseUrl/api/resource/Irrigation Source';
+String apifetchsoiltype = '$apiBaseUrl/api/resource/Soil Type';
 
 ///Agri
 String apifetchcanelistwithfilter =
-    'http://deverpvppl.erpdata.in/api/resource/Cane Master?fields=["vendor_code","grower_name","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name"]&limit_page_length=99999';
-String apiListagri =
-    'http://deverpvppl.erpdata.in/api/resource/Agriculture Development';
+    '$apiBaseUrl/api/resource/Cane Master?fields=["vendor_code","grower_name","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name"]&filters=[["season","=",""]]&limit_page_length=99999';
+String apiListagri = '$apiBaseUrl/api/resource/Agriculture Development';
 String apigetagrilist =
-    'http://deverpvppl.erpdata.in/api/resource/Agriculture Development?fields=["crop_type","crop_variety","date","area","village","name"]';
+    '$apiBaseUrl/api/resource/Agriculture Development?fields=["crop_type","crop_variety","date","area","village","name"]';
+////Crop Sampling
+String apiPostCropSampling = "$apiBaseUrl/api/resource/Crop Sampling";
+String apiListSampling =
+    '$apiBaseUrl/api/resource/Crop Sampling?fields=["id","season","plantation_status","plant_name","form_number","name"]';
 
 ///functions
 Future<Map<String, String>> getTocken() async {

@@ -150,7 +150,7 @@ class FarmerService {
     try {
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Farmer List/$id',
+        '$apiBaseUrl/api/resource/Farmer List/$id',
         options: Options(
           method: 'GET',
           headers: {'Cookie': await getTocken()},
@@ -176,7 +176,7 @@ class FarmerService {
 
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Farmer List/${farmer.name}',
+        '$apiBaseUrl/api/resource/Farmer List/${farmer.name}',
         options: Options(
           method: 'PUT',
           headers: {'Cookie': await getTocken()},

@@ -212,7 +212,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                 children: [
                                   const Icon(
                                     Icons.person,
-                                    size: 15,
+                                    size: 150,
                                   ),
                                   const SizedBox(height: 50.0),
                                   TextFormField(

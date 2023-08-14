@@ -12,6 +12,7 @@ class ListFarmersModel extends BaseViewModel {
   List<FarmersListModel> filteredList = [];
   String farmerNameFilter = "";
   String farmerVillageFilter = "";
+
   initialise(BuildContext context) async {
     setBusy(true);
     farmresList = await ListFarmersService().getAllFarmersList();

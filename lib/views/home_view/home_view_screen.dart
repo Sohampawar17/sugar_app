@@ -306,6 +306,83 @@ class HomePageScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                          height: getHeight(context) / 5,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 85, 177, 252),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.addCropSamplingScreen,
+                                      );
+                                    },
+                                    child: const SizedBox(
+                                      height: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "New Crop Sampling",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20.0,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 167, 235, 170),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.listSamplingScreen,
+                                      );
+                                    },
+                                    child: const SizedBox(
+                                      height: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "Crop Smapling List",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),

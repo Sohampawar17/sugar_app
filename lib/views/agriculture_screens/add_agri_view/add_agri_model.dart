@@ -38,7 +38,8 @@ class AgriViewModel extends BaseViewModel {
   initialise(BuildContext context, String agriid) async {
     setBusy(true);
     seasonlist = await AddAgriServices().fetchSeason();
-    canelistwithfilter = await AddAgriServices().fetchcanelistwithfilter();
+    canelistwithfilter =
+        await AddAgriServices().fetchcanelistwithfilter(agridata.season ?? "");
     if (agriid != "") {
       isEdit = true;
       agridata = await AddAgriServices().getAgri(agriid) ?? Agri();
@@ -66,8 +67,10 @@ class AgriViewModel extends BaseViewModel {
     setBusy(false);
   }
 
-  void setSelectedSeason(String? season) {
+  void setSelectedSeason(String? season) async {
     agridata.season = season;
+    canelistwithfilter =
+        await AddAgriServices().fetchcanelistwithfilter(season ?? "");
   }
 
   void setPlotnumber(String? caneRegistrationId) {
@@ -200,8 +203,6 @@ class AgriViewModel extends BaseViewModel {
   }
 
   void ondateChanged(String value) {
-    // You can use the value here if needed.
-    // Since we are using a date picker to select DOB, the value will not change through regular typing.
     agridata.date = value;
     notifyListeners();
   }

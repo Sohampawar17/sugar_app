@@ -1,22 +1,22 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:sugar_mill_app/constants.dart';
-import 'package:sugar_mill_app/views/agriculture_screens/list_agri_view/list_agri_model.dart';
 
-import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
+import '../../../constants.dart';
+import '../../../widgets/full_screen_loader.dart';
+import 'list_sampling_model.dart';
 
-class ListAgriScreen extends StatelessWidget {
-  const ListAgriScreen({super.key});
+class ListSamplingScreen extends StatelessWidget {
+  const ListSamplingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ListAgriModel>.reactive(
-      viewModelBuilder: () => ListAgriModel(),
+    return ViewModelBuilder<ListSamplingModel>.reactive(
+      viewModelBuilder: () => ListSamplingModel(),
       onViewModelReady: (model) => model.initialise(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Agriculture Development'),
+          title: const Text('Crop Sampling'),
         ),
         body: fullScreenLoader(
           child: Column(
@@ -29,12 +29,12 @@ class ListAgriScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       AutoSizeText(
-                        'Crop Type',
+                        'Season',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       AutoSizeText(
-                        'Crop Variety',
+                        'Plant Name',
                         maxLines: 1,
                         style: TextStyle(
                           fontSize: 8,
@@ -48,12 +48,12 @@ class ListAgriScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         AutoSizeText(
-                          'Village',
+                          'Plot No.',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         AutoSizeText(
-                          'Area In Acrs',
+                          'Plantation Status',
                           maxLines: 2,
                           style: TextStyle(
                             fontSize: 8,
@@ -67,17 +67,17 @@ class ListAgriScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 14),
                   ),
                   subtitle: const Text(
-                    'Plantation Date',
+                    'Form Number',
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: model.agriList.length,
+                  itemCount: model.samplingList.length,
                   itemBuilder: (context, index) {
                     return Container(
                       margin: const EdgeInsets.only(
@@ -88,17 +88,18 @@ class ListAgriScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: ListTile(
-                          tileColor: Colors.lightBlueAccent,
+                          tileColor: model.getTileColor(
+                              model.samplingList[index].plantationStatus),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               AutoSizeText(
-                                model.agriList[index].cropType ?? '',
+                                model.samplingList[index].season ?? '',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               AutoSizeText(
-                                model.agriList[index].cropVariety ?? '',
+                                model.samplingList[index].plantName ?? '',
                                 maxLines: 1,
                                 style: const TextStyle(
                                   fontSize: 8,
@@ -112,12 +113,13 @@ class ListAgriScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 AutoSizeText(
-                                  model.agriList[index].village ?? '',
+                                  model.samplingList[index].id ?? '',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 AutoSizeText(
-                                  model.agriList[index].area.toString(),
+                                  model.samplingList[index].plantationStatus ??
+                                      "",
                                   maxLines: 1,
                                   style: const TextStyle(
                                     fontSize: 8,
@@ -127,17 +129,17 @@ class ListAgriScreen extends StatelessWidget {
                             ),
                           ),
                           title: Text(
-                            model.agriList[index].name.toString(),
+                            model.samplingList[index].name.toString(),
                             style: const TextStyle(fontSize: 14),
                           ),
                           subtitle: Text(
-                            model.agriList[index].date ?? '',
+                            model.samplingList[index].formNumber ?? '',
                             style: const TextStyle(fontSize: 12),
                           ),
                           onTap: () {
                             // Handle row click here
                             // _onRowClick(context, filteredList[index]);
-                            model.onRowClick(context, model.agriList[index]);
+                            // model.onRowClick(context, model.agriList[index]);
                           },
                         ),
                       ),

@@ -43,7 +43,7 @@ class ListFarmersService {
 
       var response = await dio.request(
         // "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=['supplier_name','village','name','circle_office']&filters=[['$filter','like','$query'']]",
-        "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]&filters=[[\"$filter\",\"like\",\"$query%\"]]",
+        "$apiBaseUrl/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\"]&filters=[[\"$filter\",\"like\",\"$query%\"]]",
         options: Options(
           method: 'GET',
           headers: headers,
@@ -73,8 +73,7 @@ class ListFarmersService {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        // "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=['supplier_name','village','name','circle_office']&filters=[['$filter','like','$query'']]",
-        "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"$village%\" ],[\"supplier_name\",  \"like\", \"$name%\" ]]",
+        "$apiBaseUrl/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"$village%\" ],[\"supplier_name\",  \"like\", \"$name%\" ]]",
         options: Options(
           method: 'GET',
           headers: headers,
@@ -94,7 +93,6 @@ class ListFarmersService {
     } catch (e) {
       Logger().e(e);
     }
-
     return [];
   }
 }

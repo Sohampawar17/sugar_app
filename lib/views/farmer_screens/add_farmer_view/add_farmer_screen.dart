@@ -189,22 +189,6 @@ class AddFarmerScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-
-                    //supplier code
-                    // TextFormField(
-                    //   decoration: const InputDecoration(
-                    //       labelText: 'Existing vendor Code'),
-                    //   validator: (value) => value!.isEmpty
-                    //       ? 'Please enter an existing suppliervendor code'
-                    //       : null,
-                    //   onChanged: (value) =>
-                    //       model.Farmer!.existingSupplierCode = value,
-                    // ),
-
-                    // const SizedBox(
-                    //   height: 10.0,
-                    // ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

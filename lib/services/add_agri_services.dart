@@ -13,7 +13,7 @@ class AddAgriServices {
       Logger().i(agri.name.toString());
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Agriculture Development/${agri.name}',
+        '$apiBaseUrl/api/resource/Agriculture Development/${agri.name}',
         options: Options(
           method: 'PUT',
           headers: {'Cookie': await getTocken()},
@@ -40,7 +40,7 @@ class AddAgriServices {
     try {
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Agriculture Development/$id',
+        '$apiBaseUrl/api/resource/Agriculture Development/$id',
         options: Options(
           method: 'GET',
           headers: {'Cookie': await getTocken()},
@@ -127,25 +127,26 @@ class AddAgriServices {
     }
   }
 
-  Future<List<AgriCane>> fetchcanelistwithfilter() async {
+  Future<List<AgriCane>> fetchcanelistwithfilter(String season) async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        apifetchcanelistwithfilter,
+        '$apiBaseUrl/api/resource/Cane Master?fields=["vendor_code","grower_name","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name"]&filters=[["season","=","$season"]]&limit_page_length=99999',
         options: Options(
           method: 'GET',
           headers: headers,
         ),
       );
+
       if (response.statusCode == 200) {
         var jsonData = json.encode(response.data);
         Map<String, dynamic> jsonDataMap = json.decode(jsonData);
         List<dynamic> dataList = jsonDataMap['data'];
-        List<AgriCane> Canelistwithfilter =
+        List<AgriCane> canelistwithfilter =
             dataList.map<AgriCane>((data) => AgriCane.fromJson(data)).toList();
-        Logger().i(Canelistwithfilter);
-        return Canelistwithfilter;
+        Logger().i(canelistwithfilter);
+        return canelistwithfilter;
       } else {
         Logger().e(response.statusCode);
         Logger().e(response.statusMessage);

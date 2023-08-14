@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sugar_mill_app/constants.dart';
 
 class ViewImageInternet extends StatefulWidget {
   final String url;
@@ -17,7 +18,7 @@ class _ViewImageInternet extends State<ViewImageInternet> {
   void initState() {
     super.initState();
     _imageResponse = http.get(
-      Uri.parse('http://deverpvppl.erpdata.in/${widget.url}'),
+      Uri.parse('$apiBaseUrl/${widget.url}'),
     );
   }
 
