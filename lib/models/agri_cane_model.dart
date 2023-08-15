@@ -8,6 +8,7 @@ class AgriCane {
   double? areaAcrs;
   String? plantName;
   int? name;
+  String? soilType;
 
   AgriCane(
       {this.vendorCode,
@@ -18,7 +19,8 @@ class AgriCane {
       this.plantattionRatooningDate,
       this.areaAcrs,
       this.plantName,
-      this.name});
+      this.name,
+      this.soilType});
 
   AgriCane.fromJson(Map<String, dynamic> json) {
     vendorCode = json['vendor_code'];
@@ -30,6 +32,7 @@ class AgriCane {
     areaAcrs = json['area_acrs'];
     plantName = json['plant_name'];
     name = json['name'];
+    soilType = json['soil_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +46,7 @@ class AgriCane {
     data['area_acrs'] = this.areaAcrs;
     data['plant_name'] = this.plantName;
     data['name'] = this.name;
+    data['soil_type'] = this.soilType;
     return data;
   }
 }

@@ -312,6 +312,75 @@ class AddAgriScreen extends StatelessWidget {
                             ),
                         ],
                       ),
+                      (model.agricultureDevelopmentItem.isEmpty)
+                          ? const SizedBox()
+                          : SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                columnSpacing: 30.0,
+                                // ignore: deprecated_member_use
+                                dataRowHeight: 40.0,
+                                columns: const [
+                                  DataColumn(
+                                    label: Text('Item Name'),
+                                  ),
+                                  DataColumn(
+                                    label: Text('Basel'),
+                                  ),
+                                  DataColumn(
+                                    label: Text('Pre-Earthing'),
+                                  ),
+                                  DataColumn(
+                                    label: Text('Earth'),
+                                  ),
+                                  DataColumn(
+                                    label: Text('Rainy'),
+                                  ),
+                                  DataColumn(
+                                    label: Text('Ratoon1'),
+                                  ),
+                                  DataColumn(
+                                    label: Text('Ratoon2'),
+                                  ),
+                                ],
+                                rows: List<DataRow>.generate(
+                                  model.agricultureDevelopmentItem.length,
+                                  // Replace 10 with the actual number of rows you want
+                                  (int index) => DataRow(
+                                    cells: [
+                                      DataCell(Text(model
+                                          .agricultureDevelopmentItem[index]
+                                          .itemCode
+                                          .toString())),
+                                      DataCell(Text(model
+                                          .agricultureDevelopmentItem[index]
+                                          .basel
+                                          .toString())),
+                                      DataCell(Text(model
+                                          .agricultureDevelopmentItem[index]
+                                          .preEarthing
+                                          .toString())),
+                                      DataCell(Text(model
+                                          .agricultureDevelopmentItem[index]
+                                          .earth
+                                          .toString())),
+                                      DataCell(Text(model
+                                          .agricultureDevelopmentItem[index]
+                                          .rainy
+                                          .toString())),
+                                      DataCell(Text(model
+                                          .agricultureDevelopmentItem[index]
+                                          .ratoon1
+                                          .toString())),
+                                      DataCell(Text(model
+                                          .agricultureDevelopmentItem[index]
+                                          .ratoon2
+                                          .toString())),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                       const SizedBox(
                         height: 15,
                       ),

@@ -11,6 +11,7 @@ import '../../../services/add_agri_services.dart';
 class AgriViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
   Agri agridata = Agri();
+  List<AgricultureDevelopmentItem> agricultureDevelopmentItem = [];
   final List<String> items = [
     'Basel',
     'Pre-Earthing',
@@ -45,6 +46,8 @@ class AgriViewModel extends BaseViewModel {
       agridata = await AddAgriServices().getAgri(agriid) ?? Agri();
       notifyListeners();
       datecontroller.text = agridata.date ?? '';
+      agricultureDevelopmentItem
+          .addAll(agridata.agricultureDevelopmentItem?.toList() ?? []);
       if (agridata.basel == 1) {
         _selectedItems.add(items[0]);
       }
@@ -52,16 +55,16 @@ class AgriViewModel extends BaseViewModel {
         _selectedItems.add(items[1]);
       }
       if (agridata.earth == 1) {
-        _selectedItems.add(items[1]);
+        _selectedItems.add(items[2]);
       }
       if (agridata.rainy == 1) {
-        _selectedItems.add(items[1]);
+        _selectedItems.add(items[3]);
       }
       if (agridata.ratoon1 == 1) {
-        _selectedItems.add(items[1]);
+        _selectedItems.add(items[4]);
       }
       if (agridata.ratoon2 == 1) {
-        _selectedItems.add(items[1]);
+        _selectedItems.add(items[5]);
       }
     }
     setBusy(false);
