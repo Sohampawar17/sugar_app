@@ -4,7 +4,7 @@ class CropSampling {
   double? brixBottom;
   double? brixMiddle;
   double? brixTop;
-  int? averageBrix;
+  double? averageBrix;
   int? noOfPairs;
   String? season;
   String? plantationStatus;
@@ -25,7 +25,7 @@ class CropSampling {
   String? routeKm;
   String? cropType;
   String? cropVariety;
-  int? areaAcrs;
+  double? areaAcrs;
   String? plantattionRatooningDate;
   String? plantationSystem;
   String? irrigationSource;

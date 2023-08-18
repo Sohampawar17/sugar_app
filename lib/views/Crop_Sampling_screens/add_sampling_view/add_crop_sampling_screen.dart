@@ -6,13 +6,14 @@ import '../../../widgets/full_screen_loader.dart';
 import 'add_crop_sampling_model.dart';
 
 class AddCropSamplingScreen extends StatelessWidget {
-  const AddCropSamplingScreen({super.key});
+  final String samplingId;
+  const AddCropSamplingScreen({super.key, required this.samplingId});
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddCropSmaplingModel>.reactive(
         viewModelBuilder: () => AddCropSmaplingModel(),
-        onViewModelReady: (model) => model.initialise(context),
+        onViewModelReady: (model) => model.initialise(context, samplingId),
         builder: (context, model, child) => Scaffold(
             appBar: AppBar(
               title: const Text('Agriculture development'),

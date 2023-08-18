@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 getHeight(context) => (MediaQuery.of(context).size.height);
-
 getWidth(context) => (MediaQuery.of(context).size.width);
 
 Color lightBlack = Colors.black.withOpacity(0.5);
@@ -17,7 +15,6 @@ const kConcentpdf = "ConcentLetter";
 const apiBaseUrl = "http://deverpvppl.erpdata.in";
 
 // api usrls
-
 String apifetchSeason =
     '$apiBaseUrl/api/resource/Season?filters=[["disabled","=","0"]]';
 String apifetchPlant = '$apiBaseUrl/api/resource/Branch';
@@ -65,7 +62,6 @@ Future<Map<String, String>> getTocken() async {
   final SharedPreferences prefs = await prefs0;
   String cookies = prefs.getString("Cookie") ?? "";
   String fresponse = cookies;
-
   String? sid = getValueFromResponse(fresponse, 'sid');
   String? systemUser = getValueFromResponse(fresponse, 'system_user');
   String? fullName = getValueFromResponse(fresponse, 'full_name');

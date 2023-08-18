@@ -1,14 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../models/List_Crop_sampling_model.dart';
+import '../../../router.router.dart';
 import '../../../services/list_crop_sampling_service.dart';
 
 class ListSamplingModel extends BaseViewModel {
   List<ListSampling> samplingList = [];
+  List<ListSampling> filtersamplingList = [];
 
+  TextEditingController idcontroller = TextEditingController();
   Color getTileColor(String? plantationStatus) {
     switch (plantationStatus) {
+      case 'New':
+        return const Color(0xFFD3E8FD);
       case 'To Sampling':
         return const Color(0xFFEAF5EE);
       case 'To Harvesting':
@@ -21,8 +27,28 @@ class ListSamplingModel extends BaseViewModel {
   initialise(BuildContext context) async {
     setBusy(true);
     samplingList = (await ListCropSamplingServices().getAllCropSamplingList());
-    // filteredagriList = agriList;
+    filtersamplingList = samplingList;
     setBusy(false);
     notifyListeners();
+  }
+
+  void filterList(String filter, int query) async {
+    notifyListeners();
+    filtersamplingList =
+        await ListCropSamplingServices().getAllCropListfilter(filter, query);
+    Logger().i(filter);
+    Logger().i(query);
+    notifyListeners();
+  }
+
+  void onRowClick(BuildContext context, ListSampling? samplingList) {
+    Navigator.pushNamed(
+      context,
+      Routes.addCropSamplingScreen,
+      arguments: AddCropSamplingScreenArguments(
+          samplingId: samplingList?.name.toString() ?? ""),
+    );
+    // Navigator.pushNamed(context, Routes.detailedFarmerScreen,
+    //     arguments: DetailedFarmerScreenArguments(id: farmresList?.name ?? ""));
   }
 }

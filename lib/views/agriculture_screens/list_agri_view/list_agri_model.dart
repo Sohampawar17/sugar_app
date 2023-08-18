@@ -6,8 +6,8 @@ import '../../../router.router.dart';
 import '../../../services/list_agri_services.dart';
 
 class ListAgriModel extends BaseViewModel {
-  TextEditingController villageController = TextEditingController();
-
+  TextEditingController namecontroller = TextEditingController();
+  String caneNameFilter = "";
   List<AgriListModel> agriList = [];
   List<AgriListModel> filteredagriList = [];
 
@@ -16,6 +16,15 @@ class ListAgriModel extends BaseViewModel {
     agriList = (await ListAgriService().getAllCaneList()).cast<AgriListModel>();
     filteredagriList = agriList;
     setBusy(false);
+    notifyListeners();
+  }
+
+  void filterListByNameAndVillage({String? name}) async {
+    caneNameFilter = name ?? caneNameFilter;
+
+    notifyListeners();
+    filteredagriList =
+        await ListAgriService().getAgriListByNameFilter(caneNameFilter);
     notifyListeners();
   }
 

@@ -55,6 +55,7 @@ class ListCaneService {
         List<CaneListModel> caneList = List.from(jsonData['data'])
             .map<CaneListModel>((data) => CaneListModel.fromJson(data))
             .toList();
+        Logger().i(caneList);
         return caneList;
       } else {
         Logger().e(response.statusMessage);
@@ -73,7 +74,6 @@ class ListCaneService {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        // "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=['supplier_name','village','name','circle_office']&filters=[['$filter','like','$query'']]",
         '$apiBaseUrl/api/resource/Cane Master?fields=["plantation_status","area","circle_office","name","grower_code","grower_name","plantattion_ratooning_date"]&filters=[["grower_name","like","$name%"],["season","like","$village%"]]',
         options: Options(
           method: 'GET',

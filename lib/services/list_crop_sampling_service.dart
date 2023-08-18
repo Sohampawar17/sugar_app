@@ -35,4 +35,38 @@ class ListCropSamplingServices {
 
     return [];
   }
+
+  Future<List<ListSampling>> getAllCropListfilter(
+      String query, int filter) async {
+    try {
+      var headers = {'Cookie': await getTocken()};
+
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/resource/Crop Sampling?fields=["id","season","plantation_status","plant_name","form_number","name"]&filters=[["$query","like","$filter%"]]',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      Logger().i(response);
+      Logger().i(query);
+      Logger().i(filter);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
+        List<ListSampling> caneList = List.from(jsonData['data'])
+            .map<ListSampling>((data) => ListSampling.fromJson(data))
+            .toList();
+        Logger().i(caneList);
+        return caneList;
+      } else {
+        Logger().e(response.statusMessage);
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+    }
+
+    return [];
+  }
 }

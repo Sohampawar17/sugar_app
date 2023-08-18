@@ -21,6 +21,42 @@ class ListSamplingScreen extends StatelessWidget {
         body: fullScreenLoader(
           child: Column(
             children: [
+              Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 100,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: getWidth(context) / 1.6,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: getWidth(context) / 4,
+                                child: TextField(
+                                  // controller: model.idcontroller,
+                                  onChanged: (value) {
+                                    model.idcontroller.text = value;
+                                    model.filterList("id", int.parse(value));
+                                  },
+                                  decoration: const InputDecoration(
+                                    labelText: 'ID',
+                                    prefixIcon: Icon(Icons.search),
+                                    // prefixIcon: Icon(Icons.search),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 5.0),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 70,
                 child: ListTile(
@@ -77,29 +113,27 @@ class ListSamplingScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: model.samplingList.length,
+                  itemCount: model.filtersamplingList.length,
                   itemBuilder: (context, index) {
                     return Container(
                       margin: const EdgeInsets.only(
                           bottom: 16.0), // Add margin between containers
-                      decoration: const BoxDecoration(
-                        color: Colors.lightBlueAccent,
-                      ),
+
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: ListTile(
                           tileColor: model.getTileColor(
-                              model.samplingList[index].plantationStatus),
+                              model.filtersamplingList[index].plantationStatus),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               AutoSizeText(
-                                model.samplingList[index].season ?? '',
+                                model.filtersamplingList[index].season ?? '',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               AutoSizeText(
-                                model.samplingList[index].plantName ?? '',
+                                model.filtersamplingList[index].plantName ?? '',
                                 maxLines: 1,
                                 style: const TextStyle(
                                   fontSize: 8,
@@ -113,12 +147,13 @@ class ListSamplingScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 AutoSizeText(
-                                  model.samplingList[index].id ?? '',
+                                  model.filtersamplingList[index].id ?? '',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 AutoSizeText(
-                                  model.samplingList[index].plantationStatus ??
+                                  model.filtersamplingList[index]
+                                          .plantationStatus ??
                                       "",
                                   maxLines: 1,
                                   style: const TextStyle(
@@ -129,17 +164,18 @@ class ListSamplingScreen extends StatelessWidget {
                             ),
                           ),
                           title: Text(
-                            model.samplingList[index].name.toString(),
+                            model.filtersamplingList[index].name.toString(),
                             style: const TextStyle(fontSize: 14),
                           ),
                           subtitle: Text(
-                            model.samplingList[index].formNumber ?? '',
+                            model.filtersamplingList[index].formNumber ?? '',
                             style: const TextStyle(fontSize: 12),
                           ),
                           onTap: () {
                             // Handle row click here
                             // _onRowClick(context, filteredList[index]);
-                            // model.onRowClick(context, model.agriList[index]);
+                            model.onRowClick(
+                                context, model.filtersamplingList[index]);
                           },
                         ),
                       ),

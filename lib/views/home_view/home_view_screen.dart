@@ -327,9 +327,10 @@ class HomePageScreen extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       Navigator.pushNamed(
-                                        context,
-                                        Routes.addCropSamplingScreen,
-                                      );
+                                          context, Routes.addCropSamplingScreen,
+                                          arguments:
+                                              const AddCropSamplingScreenArguments(
+                                                  samplingId: ""));
                                     },
                                     child: const SizedBox(
                                       height: double.infinity,

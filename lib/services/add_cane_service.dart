@@ -455,7 +455,7 @@ class AddCaneService {
       Logger().i(cane.name.toString());
       var dio = Dio();
       var response = await dio.request(
-        '$apiBaseUrl/api/resource/Cane Master/${cane.name.toString()}',
+        '$apiBaseUrl/api/resource/Crop Sampling/${cane.name.toString()}',
         options: Options(
           method: 'PUT',
           headers: {'Cookie': await getTocken()},
@@ -464,10 +464,10 @@ class AddCaneService {
       );
 
       if (response.statusCode == 200) {
-        Fluttertoast.showToast(msg: "FARMER Updated");
+        Fluttertoast.showToast(msg: "Crop Sampling Updated");
         return true;
       } else {
-        Fluttertoast.showToast(msg: "UNABLE TO UPDATE FARMER!");
+        Fluttertoast.showToast(msg: "UNABLE TO UPDATE Crop Sampling!");
         return false;
       }
     } catch (e) {

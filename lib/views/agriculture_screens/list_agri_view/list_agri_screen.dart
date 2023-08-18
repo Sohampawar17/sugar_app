@@ -21,6 +21,39 @@ class ListAgriScreen extends StatelessWidget {
         body: fullScreenLoader(
           child: Column(
             children: [
+              Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 100,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: getWidth(context) / 1.6,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  onChanged: (value) {
+                                    model.namecontroller.text = value;
+                                    model.filterListByNameAndVillage(
+                                        name: value);
+                                  },
+                                  decoration: const InputDecoration(
+                                    labelText: 'Plot No',
+                                    prefixIcon: Icon(Icons.search),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 70,
                 child: ListTile(
@@ -77,7 +110,7 @@ class ListAgriScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: model.agriList.length,
+                  itemCount: model.filteredagriList.length,
                   itemBuilder: (context, index) {
                     return Container(
                       margin: const EdgeInsets.only(
@@ -93,12 +126,12 @@ class ListAgriScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               AutoSizeText(
-                                model.agriList[index].cropType ?? '',
+                                model.filteredagriList[index].cropType ?? '',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               AutoSizeText(
-                                model.agriList[index].cropVariety ?? '',
+                                model.filteredagriList[index].cropVariety ?? '',
                                 maxLines: 1,
                                 style: const TextStyle(
                                   fontSize: 8,
@@ -112,12 +145,12 @@ class ListAgriScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 AutoSizeText(
-                                  model.agriList[index].village ?? '',
+                                  model.filteredagriList[index].village ?? '',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 AutoSizeText(
-                                  model.agriList[index].area.toString(),
+                                  model.filteredagriList[index].area.toString(),
                                   maxLines: 1,
                                   style: const TextStyle(
                                     fontSize: 8,
@@ -127,17 +160,18 @@ class ListAgriScreen extends StatelessWidget {
                             ),
                           ),
                           title: Text(
-                            model.agriList[index].name.toString(),
+                            model.filteredagriList[index].name.toString(),
                             style: const TextStyle(fontSize: 14),
                           ),
                           subtitle: Text(
-                            model.agriList[index].date ?? '',
+                            model.filteredagriList[index].date ?? '',
                             style: const TextStyle(fontSize: 12),
                           ),
                           onTap: () {
                             // Handle row click here
                             // _onRowClick(context, filteredList[index]);
-                            model.onRowClick(context, model.agriList[index]);
+                            model.onRowClick(
+                                context, model.filteredagriList[index]);
                           },
                         ),
                       ),
@@ -150,57 +184,6 @@ class ListAgriScreen extends StatelessWidget {
           context: context,
           loader: model.isBusy,
         ),
-
-        // body: fullScreenLoader(
-        //   context: context,
-        //   loader: model.isBusy,
-        //   child: Column(
-        //     children: [
-        //       Padding(
-        //         padding: const EdgeInsets.all(8.0),
-        //         child: TextField(
-        //           onChanged: model.filterList,
-        //           decoration: const InputDecoration(
-        //             labelText: 'Search',
-        //             prefixIcon: Icon(Icons.search),
-        //           ),
-        //         ),
-        //       ),
-        //       Expanded(
-        //         child: ListView.separated(
-        //           itemCount: model.filteredList.length,
-        //           itemBuilder: (context, index) {
-        //             return ListTile(
-        //               leading: SizedBox(
-        //                 width: 120,
-        //                 child: AutoSizeText(
-        //                   model.filteredList[index].village ?? '',
-        //                   maxLines: 2,
-        //                 ),
-        //               ),
-        //               title: Text(
-        //                 model.filteredList[index].supplierName ?? '',
-        //                 style: const TextStyle(fontSize: 11),
-        //               ),
-        //               subtitle: Text(
-        //                 model.filteredList[index].name ?? '',
-        //                 style: const TextStyle(fontSize: 8),
-        //               ),
-        //               onTap: () {
-        //                 // Handle row click here
-        //                 // _onRowClick(context, filteredList[index]);
-        //                 model.onRowClick(context, model.filteredList[index]);
-        //               },
-        //             );
-        //           },
-        //           separatorBuilder: (context, index) {
-        //             return const Divider();
-        //           },
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }

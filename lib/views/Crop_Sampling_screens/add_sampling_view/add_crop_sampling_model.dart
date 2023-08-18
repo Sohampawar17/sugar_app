@@ -11,13 +11,21 @@ class AddCropSmaplingModel extends BaseViewModel {
   CropSampling cropsamplingdata = CropSampling();
   List<AgriCane> plotList = [];
   String? selectedPlot;
-
-  initialise(BuildContext context) async {
+  late String samplingId;
+  bool isEdit = false;
+  initialise(BuildContext context, String samplingId) async {
     plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter());
     cropsamplingdata.brixBottom = 0.0; // Set your desired initial value
     cropsamplingdata.brixMiddle = 0.0; // Set your desired initial value
     cropsamplingdata.brixTop = 0.0; // Set your desired initial value
     cropsamplingdata.noOfPairs = 0; // Set your desired initial value
+    if (samplingId != "") {
+      isEdit = true;
+      cropsamplingdata =
+          await AddCropSmaplingServices().getCropSampling(samplingId) ??
+              CropSampling();
+      notifyListeners();
+    }
   }
 
   void onSavePressed(BuildContext context) async {
@@ -25,12 +33,24 @@ class AddCropSmaplingModel extends BaseViewModel {
     if (formKey.currentState!.validate()) {
       bool res = false;
       Logger().i(cropsamplingdata.toJson().toString());
-      res = await AddCropSmaplingServices().addCropsampling(cropsamplingdata);
-      if (res) {
-        if (context.mounted) {
-          setBusy(false);
-          setBusy(false);
-          Navigator.pop(context);
+      if (isEdit == true) {
+        res = await AddCropSmaplingServices()
+            .updateCropSampling(cropsamplingdata);
+        if (res) {
+          if (context.mounted) {
+            setBusy(false);
+            setBusy(false);
+            Navigator.pop(context);
+          }
+        }
+      } else {
+        res = await AddCropSmaplingServices().addCropsampling(cropsamplingdata);
+        if (res) {
+          if (context.mounted) {
+            setBusy(false);
+            setBusy(false);
+            Navigator.pop(context);
+          }
         }
       }
     }

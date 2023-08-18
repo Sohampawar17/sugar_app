@@ -39,6 +39,59 @@ class AddCropSmaplingServices {
     return false;
   }
 
+  Future<bool> updateCropSampling(CropSampling cropsample) async {
+    try {
+      // var data = json.encode({farmer});
+      Logger().i(cropsample.name.toString());
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/resource/Crop Sampling/${cropsample.name}',
+        options: Options(
+          method: 'PUT',
+          headers: {'Cookie': await getTocken()},
+        ),
+        data: cropsample.toJson(),
+      );
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(msg: "Crop Smapling Updated");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: "UNABLE TO UPDATE Crop Smapling!");
+        return false;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error accoured $e ");
+      Logger().e(e);
+    }
+    return false;
+  }
+
+  Future<CropSampling?> getCropSampling(String id) async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/resource/Crop Sampling/$id',
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Logger().i(response.data["data"]);
+        return CropSampling.fromJson(response.data["data"]);
+      } else {
+        // print(response.statusMessage);
+        return null;
+      }
+    } catch (e) {
+      Logger().i(e);
+      Fluttertoast.showToast(msg: "Error while fetching user");
+    }
+    return null;
+  }
+
   Future<List<AgriCane>> fetchcanelistwithfilter() async {
     try {
       var headers = {'Cookie': await getTocken()};

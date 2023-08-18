@@ -178,8 +178,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i11.AddCropSamplingScreen: (data) {
+      final args = data.getArgs<AddCropSamplingScreenArguments>(nullOk: false);
       return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i11.AddCropSamplingScreen(),
+        builder: (context) => _i11.AddCropSamplingScreen(
+            key: args.key, samplingId: args.samplingId),
         settings: data,
       );
     },
@@ -275,6 +277,33 @@ class AddAgriScreenArguments {
   @override
   int get hashCode {
     return key.hashCode ^ agriId.hashCode;
+  }
+}
+
+class AddCropSamplingScreenArguments {
+  const AddCropSamplingScreenArguments({
+    this.key,
+    required this.samplingId,
+  });
+
+  final _i13.Key? key;
+
+  final String samplingId;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "samplingId": "$samplingId"}';
+  }
+
+  @override
+  bool operator ==(covariant AddCropSamplingScreenArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.samplingId == samplingId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ samplingId.hashCode;
   }
 }
 
@@ -414,14 +443,18 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToAddCropSamplingScreen([
+  Future<dynamic> navigateToAddCropSamplingScreen({
+    _i13.Key? key,
+    required String samplingId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.addCropSamplingScreen,
+        arguments:
+            AddCropSamplingScreenArguments(key: key, samplingId: samplingId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -577,14 +610,18 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithAddCropSamplingScreen([
+  Future<dynamic> replaceWithAddCropSamplingScreen({
+    _i13.Key? key,
+    required String samplingId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.addCropSamplingScreen,
+        arguments:
+            AddCropSamplingScreenArguments(key: key, samplingId: samplingId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
