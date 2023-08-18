@@ -115,13 +115,11 @@ class ListAgriScreen extends StatelessWidget {
                     return Container(
                       margin: const EdgeInsets.only(
                           bottom: 16.0), // Add margin between containers
-                      decoration: const BoxDecoration(
-                        color: Colors.lightBlueAccent,
-                      ),
+
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: ListTile(
-                          tileColor: Colors.lightBlueAccent,
+                          tileColor: Color(0xFFD3E8FD),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [

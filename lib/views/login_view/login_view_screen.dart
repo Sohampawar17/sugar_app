@@ -159,7 +159,6 @@
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
-
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/views/login_view/login_view_model.dart';
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
@@ -210,10 +209,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  const Icon(
-                                    Icons.person,
-                                    size: 150,
-                                  ),
+                                  const Icon(Icons.person, size: 100),
                                   const SizedBox(height: 50.0),
                                   TextFormField(
                                     controller: model.usernameController,
@@ -226,7 +222,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
-                                      prefixIcon: const Icon(Icons
+                                      prefixIcon: Icon(Icons
                                           .person), // Icon for the username field
                                     ),
                                     validator: (value) =>
@@ -244,7 +240,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
-                                      prefixIcon: const Icon(Icons
+                                      prefixIcon: Icon(Icons
                                           .lock), // Icon for the password field
                                       suffixIcon: InkWell(
                                         onTap: () {
@@ -285,27 +281,23 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                        color: Colors.transparent,
-                        padding: const EdgeInsets.all(16.0),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: InkWell(
-                            onTap: () async {
-                              const url =
-                                  'https://erpdata.in/'; // Replace with your actual website URL
-                              if (await canLaunchUrl(url as Uri)) {
-                                await launchUrl(url as Uri);
-                              } else {
-                                throw 'Could not launch $url';
-                              }
-                            },
-                            child: const Text(
-                              'Developed By ©  QuantBit Technologies Pvt. Ltd ',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () async {
+                            const url =
+                                'https://erpdata.in/'; // Replace with your actual website URL
+                            if (await canLaunchUrl(url as Uri)) {
+                              await launchUrl(url as Uri);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
+                          },
+                          child: Text(
+                            'Developed By ©  QuantBit Technologies Pvt. Ltd ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
                             ),
                           ),
                         ),

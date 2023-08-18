@@ -89,15 +89,15 @@ class ListCaneScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              ListTile(
+              const ListTile(
                 tileColor: Colors.black45,
-                trailing: const AutoSizeText(
+                trailing: AutoSizeText(
                   'Village',
                   maxLines: 2,
                 ),
                 leading: SizedBox(
-                  width: getWidth(context) / 5,
-                  child: const Column(
+                  // width: getWidth(context) / 5,
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       AutoSizeText(
@@ -115,11 +115,11 @@ class ListCaneScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                title: const Text(
+                title: Text(
                   'Name',
                   style: TextStyle(fontSize: 16),
                 ),
-                subtitle: const Row(
+                subtitle: Row(
                   children: [
                     Text(
                       'ID',

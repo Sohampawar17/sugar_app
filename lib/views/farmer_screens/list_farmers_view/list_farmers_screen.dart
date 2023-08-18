@@ -86,42 +86,38 @@ class ListFarmersScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  tileColor: Colors.black45,
-                  trailing: const AutoSizeText(
-                    'Village',
-                    maxLines: 2,
-                  ),
-                  leading: SizedBox(
-                    width: getWidth(context) / 5,
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        AutoSizeText(
-                          'Circle Office',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+              const ListTile(
+                tileColor: Colors.black45,
+                trailing: AutoSizeText(
+                  'Village',
+                  maxLines: 2,
+                ),
+                leading: SizedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      AutoSizeText(
+                        'Circle Office',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      AutoSizeText(
+                        'WorkFlow Status',
+                        maxLines: 3,
+                        style: TextStyle(
+                          fontSize: 8,
                         ),
-                        AutoSizeText(
-                          'WorkFlow Status',
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontSize: 8,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  title: const Text(
-                    'Name',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  subtitle: const Text(
-                    'ID',
-                    style: TextStyle(fontSize: 15),
-                  ),
+                ),
+                title: Text(
+                  'Name',
+                  style: TextStyle(fontSize: 15),
+                ),
+                subtitle: Text(
+                  'ID',
+                  style: TextStyle(fontSize: 15),
                 ),
               ),
               const SizedBox(

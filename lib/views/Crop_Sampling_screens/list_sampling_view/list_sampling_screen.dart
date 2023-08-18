@@ -57,11 +57,11 @@ class ListSamplingScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 70,
                 child: ListTile(
                   tileColor: Colors.black45,
-                  trailing: const Column(
+                  trailing: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       AutoSizeText(
@@ -79,8 +79,8 @@ class ListSamplingScreen extends StatelessWidget {
                     ],
                   ),
                   leading: SizedBox(
-                    width: getWidth(context) / 5,
-                    child: const Column(
+                    // width: getWidth(context) / 5,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         AutoSizeText(
@@ -98,11 +98,11 @@ class ListSamplingScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  title: const Text(
+                  title: Text(
                     'Name',
                     style: TextStyle(fontSize: 14),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Form Number',
                     style: TextStyle(fontSize: 14),
                   ),

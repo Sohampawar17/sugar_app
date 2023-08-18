@@ -277,7 +277,7 @@ class HomePageScreen extends StatelessWidget {
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color.fromARGB(
-                                          255, 85, 177, 252),
+                                          255, 167, 235, 170),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10.0),
@@ -293,7 +293,7 @@ class HomePageScreen extends StatelessWidget {
                                       height: double.infinity,
                                       child: Center(
                                         child: Text(
-                                          "List Agriculture Development",
+                                          "Agriculture Development List",
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 25),
@@ -372,6 +372,84 @@ class HomePageScreen extends StatelessWidget {
                                       child: Center(
                                         child: Text(
                                           "Crop Smapling List",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SizedBox(
+                          height: getHeight(context) / 5,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 85, 177, 252),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, Routes.addTripsheetScreen,
+                                          arguments:
+                                              const AddTripsheetScreenArguments(
+                                                  tripId: ""));
+                                    },
+                                    child: const SizedBox(
+                                      height: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "Trip Sheet",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 25),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20.0,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 167, 235, 170),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.tripsheetMaster,
+                                      );
+                                    },
+                                    child: const SizedBox(
+                                      height: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          "Trip Sheet List",
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 25),

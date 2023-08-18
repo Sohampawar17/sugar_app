@@ -56,6 +56,18 @@ String apiPostCropSampling = "$apiBaseUrl/api/resource/Crop Sampling";
 String apiListSampling =
     '$apiBaseUrl/api/resource/Crop Sampling?fields=["id","season","plantation_status","plant_name","form_number","name"]';
 
+///TripSheet
+String apifetchplotnumber =
+    'http://deverpvppl.erpdata.in/api/resource/Crop Harvesting?fields=["id","grower_code","grower_name","area","crop_variety","plantattion_ratooning_date","survey_number","area_acrs","name"]';
+String apifetchtransportinfo =
+    'http://deverpvppl.erpdata.in/api/resource/H and T Contract?fields=["name","transporter_name","transporter_code","harvester_code","harvester_name","vehicle_type","vehicle_no","trolly_1","trolly_2","gang_type"]&limit_page_length=99999';
+String apifetchFarList =
+    'http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=["name","supplier_name"]';
+String apifetchtripsheetData =
+    'http://deverpvppl.erpdata.in/api/resource/Trip Sheet';
+String apifetchtripsheetsearch =
+    'http://deverpvppl.erpdata.in/api/resource/Trip Sheet?fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]';
+
 ///functions
 Future<Map<String, String>> getTocken() async {
   final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();

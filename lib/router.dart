@@ -10,6 +10,8 @@ import 'package:sugar_mill_app/views/farmer_screens/add_farmer_view/add_farmer_s
 import 'package:sugar_mill_app/views/home_view/home_view_screen.dart';
 import 'package:sugar_mill_app/views/login_view/login_view_screen.dart';
 import 'package:sugar_mill_app/views/splash_screen_view/splash_screen.dart';
+import 'package:sugar_mill_app/views/tripsheet_screen/add_tripsheet_list/add_tripsheet_list_screen.dart';
+import 'package:sugar_mill_app/views/tripsheet_screen/add_tripsheet_view/add_tripsheet_screen.dart';
 import 'views/farmer_screens/list_farmers_view/list_farmers_screen.dart';
 
 @StackedApp(
@@ -25,7 +27,10 @@ import 'views/farmer_screens/list_farmers_view/list_farmers_screen.dart';
     MaterialRoute(page: AddAgriScreen),
     MaterialRoute(page: ListAgriScreen),
     MaterialRoute(page: AddCropSamplingScreen),
-    MaterialRoute(page: ListSamplingScreen)
+    MaterialRoute(page: ListSamplingScreen),
+    //Tripsheet Screen
+    MaterialRoute(page: AddTripsheetScreen),
+    MaterialRoute(page: TripsheetMaster),
   ],
   dependencies: [
     Singleton(classType: NavigationService),
