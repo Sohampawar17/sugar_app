@@ -16,7 +16,7 @@ class AddTripSheetServices {
     try {
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Trip Sheet/$id',
+        '$apiBaseUrl/api/resource/Trip Sheet/$id',
         options: Options(
           method: 'GET',
           headers: {'Cookie': await getTocken()},
@@ -43,7 +43,7 @@ class AddTripSheetServices {
       Logger().i(trip.name.toString());
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Trip Sheet/${trip.name.toString()}',
+        '$apiBaseUrl/api/resource/Trip Sheet/${trip.name.toString()}',
         options: Options(
           method: 'PUT',
           headers: {'Cookie': await getTocken()},

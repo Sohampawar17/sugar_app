@@ -10,6 +10,7 @@ Color lightBlack = Colors.black.withOpacity(0.5);
 String name = "Quant Sugar";
 const kAadharpdf = "AadharCard";
 const kPanpdf = "PanCard";
+
 const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
 const apiBaseUrl = "http://deverpvppl.erpdata.in";
@@ -19,7 +20,8 @@ String apifetchSeason =
     '$apiBaseUrl/api/resource/Season?filters=[["disabled","=","0"]]';
 String apifetchPlant = '$apiBaseUrl/api/resource/Branch';
 //farmer List
-String apiVillageListGet = '$apiBaseUrl/api/resource/Village';
+String apiVillageListGet =
+    '$apiBaseUrl/api/resource/Village?limit_page_length=999999&&fields=["name","circle_office"]';
 String apiBankListGet = '$apiBaseUrl/api/resource/Bank';
 String apiFarmerListPost = '$apiBaseUrl/api/resource/Farmer List';
 String apiUploadFilePost = '$apiBaseUrl/api/method/upload_file';
@@ -51,22 +53,22 @@ String apifetchcanelistwithfilter =
 String apiListagri = '$apiBaseUrl/api/resource/Agriculture Development';
 String apigetagrilist =
     '$apiBaseUrl/api/resource/Agriculture Development?fields=["crop_type","crop_variety","date","area","village","name"]';
-////Crop Sampling
+
+///Crop Sampling
 String apiPostCropSampling = "$apiBaseUrl/api/resource/Crop Sampling";
 String apiListSampling =
     '$apiBaseUrl/api/resource/Crop Sampling?fields=["id","season","plantation_status","plant_name","form_number","name"]';
 
 ///TripSheet
 String apifetchplotnumber =
-    'http://deverpvppl.erpdata.in/api/resource/Crop Harvesting?fields=["id","grower_code","grower_name","area","crop_variety","plantattion_ratooning_date","survey_number","area_acrs","name"]';
+    '$apiBaseUrl/api/resource/Crop Harvesting?fields=["id","grower_code","grower_name","area","crop_variety","plantattion_ratooning_date","survey_number","area_acrs","name"]';
 String apifetchtransportinfo =
-    'http://deverpvppl.erpdata.in/api/resource/H and T Contract?fields=["name","transporter_name","transporter_code","harvester_code","harvester_name","vehicle_type","vehicle_no","trolly_1","trolly_2","gang_type"]&limit_page_length=99999';
+    '$apiBaseUrl/api/resource/H and T Contract?fields=["name","transporter_name","transporter_code","harvester_code","harvester_name","vehicle_type","vehicle_no","trolly_1","trolly_2","gang_type"]&limit_page_length=99999';
 String apifetchFarList =
-    'http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=["name","supplier_name"]';
-String apifetchtripsheetData =
-    'http://deverpvppl.erpdata.in/api/resource/Trip Sheet';
+    '$apiBaseUrl/api/resource/Farmer List?fields=["name","supplier_name"]';
+String apifetchtripsheetData = '$apiBaseUrl/api/resource/Trip Sheet';
 String apifetchtripsheetsearch =
-    'http://deverpvppl.erpdata.in/api/resource/Trip Sheet?fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]';
+    '$apiBaseUrl/api/resource/Trip Sheet?fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]';
 
 ///functions
 Future<Map<String, String>> getTocken() async {

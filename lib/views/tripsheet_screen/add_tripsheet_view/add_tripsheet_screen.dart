@@ -84,7 +84,8 @@ class AddTripsheetScreen extends StatelessWidget {
                             child: TextFormField(
                                 key: Key(model.tripSheetData.slipNo.toString()),
                                 initialValue:
-                                    model.tripSheetData.slipNo.toString(),
+                                    model.tripSheetData.slipNo?.toString() ??
+                                        "",
                                 decoration:
                                     const InputDecoration(labelText: 'Slip No'),
                                 validator: (value) => value!.isEmpty
@@ -146,12 +147,18 @@ class AddTripsheetScreen extends StatelessWidget {
                                             (BuildContext context, int index) {
                                           final String option =
                                               options.elementAt(index);
+                                          final routeData = model.plotList
+                                              .firstWhere((route) =>
+                                                  route.id.toString() ==
+                                                  option);
                                           return GestureDetector(
                                             onTap: () {
                                               onSelected(option);
                                             },
                                             child: ListTile(
                                               title: Text(option),
+                                              subtitle:
+                                                  Text(routeData.growerName!),
                                             ),
                                           );
                                         },
@@ -268,7 +275,8 @@ class AddTripsheetScreen extends StatelessWidget {
                             child: TextFormField(
                               key: Key(model.tripSheetData.areaAcre.toString()),
                               initialValue:
-                                  model.tripSheetData.areaAcre.toString(),
+                                  model.tripSheetData.areaAcre?.toString() ??
+                                      "",
                               decoration:
                                   const InputDecoration(labelText: 'Area Acre'),
                               validator: (value) => value!.isEmpty
@@ -356,7 +364,8 @@ class AddTripsheetScreen extends StatelessWidget {
                             child: TextFormField(
                               key: Key(model.tripSheetData.distance.toString()),
                               initialValue:
-                                  model.tripSheetData.distance.toString(),
+                                  model.tripSheetData.distance?.toString() ??
+                                      "",
                               decoration:
                                   const InputDecoration(labelText: 'Distance'),
                               onChanged: model.setSelectedDistance,
@@ -397,7 +406,8 @@ class AddTripsheetScreen extends StatelessWidget {
                               key:
                                   Key(model.tripSheetData.deduction.toString()),
                               initialValue:
-                                  model.tripSheetData.deduction.toString(),
+                                  model.tripSheetData.deduction?.toString() ??
+                                      "",
                               // onTap: () => model.selectDate(context),
                               decoration: const InputDecoration(
                                 labelText: 'Deduction %',
@@ -463,12 +473,18 @@ class AddTripsheetScreen extends StatelessWidget {
                                             (BuildContext context, int index) {
                                           final String option =
                                               options.elementAt(index);
+                                          final routeData = model.transportList
+                                              .firstWhere((route) =>
+                                                  route.name.toString() ==
+                                                  option);
                                           return GestureDetector(
                                             onTap: () {
                                               onSelected(option);
                                             },
                                             child: ListTile(
                                               title: Text(option),
+                                              subtitle: Text(
+                                                  routeData.transporterName!),
                                             ),
                                           );
                                         },
@@ -506,7 +522,8 @@ class AddTripsheetScreen extends StatelessWidget {
                             child: TextFormField(
                                 key: Key(model.tripSheetData.cartno.toString()),
                                 initialValue:
-                                    model.tripSheetData.cartno.toString(),
+                                    model.tripSheetData.cartno?.toString() ??
+                                        "",
                                 decoration: const InputDecoration(
                                   labelText: 'Cart Number',
                                 ),
@@ -716,12 +733,17 @@ class AddTripsheetScreen extends StatelessWidget {
                                             (BuildContext context, int index) {
                                           final String option =
                                               options.elementAt(index);
+                                          final routeData = model.waterSupplier
+                                              .firstWhere((route) =>
+                                                  route.name == option);
                                           return GestureDetector(
                                             onTap: () {
                                               onSelected(option);
                                             },
                                             child: ListTile(
                                               title: Text(option),
+                                              subtitle:
+                                                  Text(routeData.supplierName!),
                                             ),
                                           );
                                         },
@@ -758,8 +780,9 @@ class AddTripsheetScreen extends StatelessWidget {
                             child: TextFormField(
                                 key: Key(
                                     model.tripSheetData.waterShare.toString()),
-                                initialValue:
-                                    model.tripSheetData.waterShare.toString(),
+                                initialValue: model.tripSheetData.waterShare
+                                        ?.toString() ??
+                                    "",
                                 decoration: const InputDecoration(
                                   labelText: 'Water Share(%)',
                                 ),

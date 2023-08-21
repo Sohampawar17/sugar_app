@@ -16,7 +16,7 @@ class AddCropSamplingScreen extends StatelessWidget {
         onViewModelReady: (model) => model.initialise(context, samplingId),
         builder: (context, model, child) => Scaffold(
             appBar: AppBar(
-              title: const Text('Agriculture development'),
+              title: const Text('Crop Sampling'),
             ),
             body: fullScreenLoader(
               child: SingleChildScrollView(
@@ -82,6 +82,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                                       },
                                       child: ListTile(
                                         title: Text(option),
+                                        subtitle: Text(routeData.growerName!),
                                       ),
                                     );
                                   },
@@ -101,8 +102,9 @@ class AddCropSamplingScreen extends StatelessWidget {
                             child: TextFormField(
                               key: Key(
                                   model.cropsamplingdata.brixBottom.toString()),
-                              initialValue:
-                                  model.cropsamplingdata.brixBottom.toString(),
+                              initialValue: model.cropsamplingdata.brixBottom
+                                      ?.toString() ??
+                                  "",
                               decoration: const InputDecoration(
                                 labelText: 'Brix Bottom',
                               ),
@@ -117,8 +119,9 @@ class AddCropSamplingScreen extends StatelessWidget {
                             child: TextFormField(
                               key: Key(
                                   model.cropsamplingdata.brixMiddle.toString()),
-                              initialValue:
-                                  model.cropsamplingdata.brixMiddle.toString(),
+                              initialValue: model.cropsamplingdata.brixMiddle
+                                      ?.toString() ??
+                                  "",
                               decoration: const InputDecoration(
                                 labelText: 'Brix Middle',
                               ),
@@ -137,7 +140,8 @@ class AddCropSamplingScreen extends StatelessWidget {
                               key: Key(
                                   model.cropsamplingdata.brixTop.toString()),
                               initialValue:
-                                  model.cropsamplingdata.brixTop.toString(),
+                                  model.cropsamplingdata.brixTop?.toString() ??
+                                      "",
                               decoration: const InputDecoration(
                                 labelText: 'Brix Top',
                               ),
@@ -151,8 +155,9 @@ class AddCropSamplingScreen extends StatelessWidget {
                             child: TextFormField(
                               key: Key(
                                   model.cropsamplingdata.noOfPairs.toString()),
-                              initialValue:
-                                  model.cropsamplingdata.noOfPairs.toString(),
+                              initialValue: model.cropsamplingdata.noOfPairs
+                                      ?.toString() ??
+                                  "",
                               decoration: const InputDecoration(
                                 labelText: 'No. of  Pairs',
                               ),
@@ -165,134 +170,149 @@ class AddCropSamplingScreen extends StatelessWidget {
                       const SizedBox(
                         height: 15,
                       ),
-                      TextFormField(
-                        key: Key(
-                            model.cropsamplingdata.growerCode ?? "supplier"),
-                        readOnly: true,
-                        initialValue: model.cropsamplingdata.growerCode ?? "",
-                        decoration: const InputDecoration(
-                          labelText: 'Grower Code',
-                        ),
-                        onChanged: model.setSelectedVendor,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        key: Key(
-                            model.cropsamplingdata.growerName ?? "growerName"),
-                        readOnly: true,
-                        initialValue: model.cropsamplingdata.growerName ?? "",
-                        decoration: const InputDecoration(
-                          labelText: 'Farmer Name',
-                        ),
-                        onChanged: model.setSelectedfarmername,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              key: Key(
-                                  model.cropsamplingdata.plantName ?? "branch"),
-                              readOnly: true,
-                              initialValue:
-                                  model.cropsamplingdata.plantName ?? "",
-                              decoration: const InputDecoration(
-                                labelText: 'Plant',
+                      Visibility(
+                          visible: model.cropsamplingdata.id != null,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                key: Key(model.cropsamplingdata.growerCode ??
+                                    "supplier"),
+                                readOnly: true,
+                                initialValue:
+                                    model.cropsamplingdata.growerCode ?? "",
+                                decoration: const InputDecoration(
+                                  labelText: 'Grower Code',
+                                ),
+                                onChanged: model.setSelectedVendor,
                               ),
-                              onChanged: model.setSelectedPlantName,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 25,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              key:
-                                  Key(model.cropsamplingdata.area ?? "village"),
-                              readOnly: true,
-                              initialValue: model.cropsamplingdata.area ?? "",
-                              decoration: const InputDecoration(
-                                labelText: 'Village',
+                              const SizedBox(
+                                height: 15,
                               ),
-                              onChanged: model.setSelectedvillage,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              key: Key(model.cropsamplingdata.cropVariety ??
-                                  "cropVariety"),
-                              readOnly: true,
-                              initialValue:
-                                  model.cropsamplingdata.cropVariety ?? "",
-                              decoration: const InputDecoration(
-                                labelText: 'Crop Variety',
+                              TextFormField(
+                                key: Key(model.cropsamplingdata.growerName ??
+                                    "growerName"),
+                                readOnly: true,
+                                initialValue:
+                                    model.cropsamplingdata.growerName ?? "",
+                                decoration: const InputDecoration(
+                                  labelText: 'Farmer Name',
+                                ),
+                                onChanged: model.setSelectedfarmername,
                               ),
-                              onChanged: model.setSelectedcropvariety,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 25,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              key: Key(model.cropsamplingdata.cropType ??
-                                  "cropType"),
-                              readOnly: true,
-                              initialValue:
-                                  model.cropsamplingdata.cropType ?? "",
-                              decoration: const InputDecoration(
-                                labelText: 'Crop Type',
+                              const SizedBox(
+                                height: 15,
                               ),
-                              onChanged: model.setSelectedcroptype,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              key: Key(model.cropsamplingdata.area.toString()),
-                              readOnly: true,
-                              initialValue:
-                                  model.cropsamplingdata.area.toString(),
-                              decoration: const InputDecoration(
-                                labelText: 'Soil Type',
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      key: Key(
+                                          model.cropsamplingdata.plantName ??
+                                              "branch"),
+                                      readOnly: true,
+                                      initialValue:
+                                          model.cropsamplingdata.plantName ??
+                                              "",
+                                      decoration: const InputDecoration(
+                                        labelText: 'Plant',
+                                      ),
+                                      onChanged: model.setSelectedPlantName,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 25,
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(
+                                      key: Key(model.cropsamplingdata.area ??
+                                          "village"),
+                                      readOnly: true,
+                                      initialValue:
+                                          model.cropsamplingdata.area ?? "",
+                                      decoration: const InputDecoration(
+                                        labelText: 'Village',
+                                      ),
+                                      onChanged: model.setSelectedvillage,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              onChanged: model.setSelectedSoilType,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 25,
-                          ),
-                          // Expanded(
-                          //   child: TextFormField(
-                          //     controller: model.datecontroller,
-                          //     onTap: () => model.selectDate(context),
-                          //     decoration: const InputDecoration(
-                          //       labelText: 'Plantation Date',
-                          //       hintText: 'Select Plantation Date',
-                          //     ),
-                          //     // validator: model.validateplantationdate,
-                          //     onChanged: model.ondateChanged,
-                          //   ),
-                          // ),
-                        ],
-                      ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      key: Key(
+                                          model.cropsamplingdata.cropVariety ??
+                                              "cropVariety"),
+                                      readOnly: true,
+                                      initialValue:
+                                          model.cropsamplingdata.cropVariety ??
+                                              "",
+                                      decoration: const InputDecoration(
+                                        labelText: 'Crop Variety',
+                                      ),
+                                      onChanged: model.setSelectedcropvariety,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 25,
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(
+                                      key: Key(
+                                          model.cropsamplingdata.cropType ??
+                                              "cropType"),
+                                      readOnly: true,
+                                      initialValue:
+                                          model.cropsamplingdata.cropType ?? "",
+                                      decoration: const InputDecoration(
+                                        labelText: 'Crop Type',
+                                      ),
+                                      onChanged: model.setSelectedcroptype,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      key: Key(model.cropsamplingdata.area
+                                          .toString()),
+                                      readOnly: true,
+                                      initialValue: model.cropsamplingdata.area
+                                          .toString(),
+                                      decoration: const InputDecoration(
+                                        labelText: 'Soil Type',
+                                      ),
+                                      onChanged: model.setSelectedSoilType,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 25,
+                                  ),
+                                  // Expanded(
+                                  //   child: TextFormField(
+                                  //     controller: model.datecontroller,
+                                  //     onTap: () => model.selectDate(context),
+                                  //     decoration: const InputDecoration(
+                                  //       labelText: 'Plantation Date',
+                                  //       hintText: 'Select Plantation Date',
+                                  //     ),
+                                  //     // validator: model.validateplantationdate,
+                                  //     onChanged: model.ondateChanged,
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                            ],
+                          )),
                       const SizedBox(
                         height: 15,
                       ),

@@ -10,6 +10,7 @@ import 'package:sugar_mill_app/models/CaneRoute.dart';
 import 'package:sugar_mill_app/services/add_cane_service.dart';
 import 'package:sugar_mill_app/services/geolocation_service.dart';
 import '../../../models/Cane.dart';
+import '../../../models/village_model.dart';
 import '../../../router.router.dart';
 
 class CaneViewModel extends BaseViewModel {
@@ -35,7 +36,7 @@ class CaneViewModel extends BaseViewModel {
   ];
   final List<String> seedType = ["Regular", "Foundation"];
   List<caneFarmer> farmerList = [];
-  List<String> villageList = [""];
+  List<villagemodel> villageList = [];
   List<String> canevarietyList = [""];
   List<String> plantationsystemList = [""];
   List<String> seedmaterialList = [""];
@@ -56,6 +57,7 @@ class CaneViewModel extends BaseViewModel {
   String? selectedRoute;
   String? selectedPlantationSystem;
   double? selectedDistance;
+  String? selectedvillage;
   DateTime? selectedDate;
   DateTime? selectedBaselDate;
 
@@ -68,7 +70,7 @@ class CaneViewModel extends BaseViewModel {
     plantationsystemList = await AddCaneService().fetchplantationsystem();
     seedmaterialList = await AddCaneService().fetchseedMaterial();
     croptypeList = await AddCaneService().fetchCropType();
-    routeList = (await AddCaneService().fetchroute());
+    // routeList = (await AddCaneService().fetchroute(canedata.area ?? ""));
     irrigationmethodList = await AddCaneService().fetchirrigationmethod();
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
     soilTypeList = await AddCaneService().fetchSoilType();
@@ -207,6 +209,20 @@ class CaneViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void setSelectedVillage(String? village) async {
+    selectedVillage = village;
+    canedata.area = selectedVillage;
+    final selectedRouteData =
+        villageList.firstWhere((routeData) => routeData.name == village);
+    selectedvillage = selectedRouteData.circleOffice;
+    Logger().i(selectedvillage);
+    canedata.circleOffice = selectedvillage;
+    Logger().i(canedata.circleOffice);
+    routeList = (await AddCaneService().fetchroute(
+        canedata.area ?? "")); // Set th distance in the kmController
+    notifyListeners();
+  }
+
   void setselectedRoute(String? route) {
     selectedRoute = route;
     canedata.route = selectedRoute;
@@ -238,9 +254,9 @@ class CaneViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedVillage(String? village) {
-    selectedVillage = village;
-    canedata.area = selectedVillage;
+  void setSelectedcircleoffice(String? office) {
+    selectedvillage = office;
+    canedata.circleOffice = selectedvillage;
     notifyListeners();
   }
 

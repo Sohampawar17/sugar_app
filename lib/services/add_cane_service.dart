@@ -7,6 +7,7 @@ import 'package:sugar_mill_app/models/Cane.dart';
 import 'package:sugar_mill_app/models/CaneFarmer.dart';
 import 'package:sugar_mill_app/models/CaneRoute.dart';
 import '../constants.dart';
+import '../models/village_model.dart';
 
 class AddCaneService {
   Future<bool> addCane(Cane cane) async {
@@ -39,12 +40,12 @@ class AddCaneService {
     return false;
   }
 
-  Future<List<caneRoute>> fetchroute() async {
+  Future<List<caneRoute>> fetchroute(String village) async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        apifetchroute,
+        '$apiBaseUrl/api/resource/Route?fields=["route","distance_km","name"]&limit_page_length=99999&filters=[["village","like","$village%"]]',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -134,7 +135,7 @@ class AddCaneService {
     }
   }
 
-  Future<List<String>> fetchVillages() async {
+  Future<List<villagemodel>> fetchVillages() async {
     try {
       var dio = Dio();
       var response = await dio.request(
@@ -146,18 +147,12 @@ class AddCaneService {
       );
 
       if (response.statusCode == 200) {
-        var jsonData = json.encode(response.data);
-        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
-        List<dynamic> dataList = jsonDataMap["data"];
-        Logger().i(dataList);
-        List<String> namesList =
-            dataList.map((item) => item["name"].toString()).toList();
-        return namesList;
-      }
+        Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
+        List<villagemodel> dataList = List.from(jsonData['data'])
+            .map<villagemodel>((data) => villagemodel.fromJson(data))
+            .toList();
 
-      if (response.statusCode == 401) {
-        Fluttertoast.showToast(msg: "Unauthorized Access!");
-        return ["401"];
+        return dataList;
       } else {
         Fluttertoast.showToast(msg: "Unable to fetch Villages");
         return [];
@@ -194,7 +189,7 @@ class AddCaneService {
         Fluttertoast.showToast(msg: "Unauthorized Access!");
         return ["401"];
       } else {
-        Fluttertoast.showToast(msg: "Unable to fetch Villages");
+        Fluttertoast.showToast(msg: "Unable to fetch plant");
         return [];
       }
     } catch (e) {

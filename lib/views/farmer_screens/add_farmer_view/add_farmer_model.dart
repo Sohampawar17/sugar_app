@@ -36,6 +36,9 @@ class FarmerViewModel extends BaseViewModel {
   late String branchifscCode;
   late String bankName;
   late String farmerId;
+  late String branch;
+  late String passbookattch;
+
   bool isEdit = false;
 
   final List<String> _selectedItems = [];
@@ -94,6 +97,7 @@ class FarmerViewModel extends BaseViewModel {
       // Fluttertoast.showToast(msg: "Farmer Added");
       await uploadFiles();
       farmerData.bankDetails = bankAccounts;
+      Logger().i(farmerData.toJson());
       bool res = false;
       if (isEdit == true) {
         res = await FarmerService().updateFarmer(farmerData);
@@ -220,9 +224,19 @@ class FarmerViewModel extends BaseViewModel {
   //////////////////////////////////////////////////////////////////////////
 
   ///////////////////////////////// /for dob////////////////////////////////
+  bool isValidDateFormat(String input) {
+    // Implement your validation logic here, for example using regular expressions
+    // This is a simplified example; you might want to use a more robust validation approach
+    RegExp dateRegExp = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+    return dateRegExp.hasMatch(input);
+  }
+
   String? validateDob(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please select Date of Birth';
+    }
+    if (!isValidDateFormat(value)) {
+      return 'Invalid date format';
     }
     return null;
   }
@@ -231,6 +245,9 @@ class FarmerViewModel extends BaseViewModel {
     // You can use the value here if needed.
     // Since we are using a date picker to select DOB, the value will not change through regular typing.
     farmerData.dateOfBirth = value;
+    dobController.text = DateFormat('yyyy-MM-dd').format(value as DateTime);
+    farmerData.dateOfBirth = dobController.text;
+    _calculateAge();
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -415,10 +432,10 @@ class FarmerViewModel extends BaseViewModel {
     if (aadharUrl == "" && isEdit == false) {
       Fluttertoast.showToast(msg: "Failed to upload Aadhar");
     }
-    String panUrl = await FarmerService().uploadDocs(files.panCard);
-    if (panUrl == "" && isEdit == false) {
-      Fluttertoast.showToast(msg: "Failed to upload Pan");
-    }
+    // String panUrl = await FarmerService().uploadDocs(files.panCard);
+    // if (panUrl == "" && isEdit == false) {
+    //   Fluttertoast.showToast(msg: "Failed to upload Pan");
+    // }
     String bankUrl = await FarmerService().uploadDocs(files.bankPassbook);
     if (bankUrl == "" && isEdit == false) {
       Fluttertoast.showToast(msg: "Failed to upload Bank");
@@ -430,8 +447,9 @@ class FarmerViewModel extends BaseViewModel {
 
     farmerData.aadhaarCard =
         aadharUrl == "" ? farmerData.aadhaarCard : aadharUrl;
-    farmerData.panCard = panUrl == "" ? farmerData.panCard : panUrl;
-    farmerData.bankPassbook = bankUrl == "" ? farmerData.bankPassbook : bankUrl;
+    // farmerData.panCard = panUrl == "" ? farmerData.panCard : panUrl;
+    passbookattch = bankUrl == "" ? passbookattch : bankUrl;
+    Logger().i(passbookattch);
     farmerData.consentLetter =
         letterUrl == "" ? farmerData.consentLetter : letterUrl;
   }
@@ -512,17 +530,20 @@ class FarmerViewModel extends BaseViewModel {
       bankAccounts[index].bankName = bankName;
       bankAccounts[index].branchifscCode = branchifscCode;
       bankAccounts[index].accountNumber = accountNumber;
+      bankAccounts[index].bankAndBranch = branch;
+      bankAccounts[index].bankPassbook = passbookattch;
       notifyListeners();
       return;
     }
     bankAccounts.add(BankDetails(
-      farmer: selectedRole == "Farmer" ? 1 : 0,
-      harvester: selectedRole == "Harvester" ? 1 : 0,
-      transporter: selectedRole == "Transporter" ? 1 : 0,
-      bankName: bankName,
-      branchifscCode: branchifscCode,
-      accountNumber: accountNumber,
-    ));
+        farmer: selectedRole == "Farmer" ? 1 : 0,
+        harvester: selectedRole == "Harvester" ? 1 : 0,
+        transporter: selectedRole == "Transporter" ? 1 : 0,
+        bankName: bankName,
+        branchifscCode: branchifscCode,
+        accountNumber: accountNumber,
+        bankAndBranch: branch,
+        bankPassbook: passbookattch));
     notifyListeners();
   }
 
@@ -542,6 +563,8 @@ class FarmerViewModel extends BaseViewModel {
       bankName = bankAccounts[index].bankName!;
       branchifscCode = bankAccounts[index].branchifscCode!;
       accountNumber = bankAccounts[index].accountNumber!;
+      branch = bankAccounts[index].bankAndBranch!;
+      passbookattch = bankAccounts[index].bankPassbook!;
     }
     notifyListeners();
   }
@@ -569,6 +592,13 @@ class FarmerViewModel extends BaseViewModel {
   String? validateBankName(String? value) {
     if (value!.isEmpty) {
       return 'Please enter a bank name';
+    }
+    return null;
+  }
+
+  String? validateBranch(String? value) {
+    if (value!.isEmpty) {
+      return 'Please enter a bank branch';
     }
     return null;
   }
@@ -606,15 +636,15 @@ class FarmerViewModel extends BaseViewModel {
 
   String? getFileFromFarmer(String filetype) {
     if (filetype == kAadharpdf) return farmerData.aadhaarCard;
-    if (filetype == kPanpdf) return farmerData.panCard;
-    if (filetype == kBankpdf) return farmerData.bankPassbook;
+    // if (filetype == kPanpdf) return farmerData.panCard;
+    if (filetype == kBankpdf) return passbookattch;
     if (filetype == kConcentpdf) return farmerData.consentLetter;
     return null;
   }
 
   File? getFileFromFileType(String filetype) {
     if (filetype == kAadharpdf) return files.adharCard;
-    if (filetype == kPanpdf) return files.panCard;
+    // if (filetype == kPanpdf) return files.panCard;
     if (filetype == kBankpdf) return files.bankPassbook;
     if (filetype == kConcentpdf) return files.consentLetter;
     return null;
@@ -633,15 +663,15 @@ class UppercaseTextFormatter extends TextInputFormatter {
 class Files {
   File? adharCard;
   File? bankPassbook;
-  File? panCard;
+  // File? panCard;
   File? consentLetter;
   File? getFile(String fileType) {
     if (fileType == kAadharpdf) {
       return adharCard;
     }
-    if (fileType == kPanpdf) {
-      return panCard;
-    }
+    // if (fileType == kPanpdf) {
+    //   return panCard;
+    // }
     if (fileType == kBankpdf) {
       return bankPassbook;
     }
@@ -655,9 +685,9 @@ class Files {
     if (fileType == kAadharpdf) {
       adharCard = file;
     }
-    if (fileType == kPanpdf) {
-      panCard = file;
-    }
+    // if (fileType == kPanpdf) {
+    //   panCard = file;
+    // }
     if (fileType == kBankpdf) {
       bankPassbook = file;
     }

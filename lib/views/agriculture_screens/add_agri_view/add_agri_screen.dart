@@ -116,6 +116,8 @@ class AddAgriScreen extends StatelessWidget {
                                             },
                                             child: ListTile(
                                               title: Text(option),
+                                              subtitle:
+                                                  Text(routeData.growerName!),
                                             ),
                                           );
                                         },
@@ -229,7 +231,8 @@ class AddAgriScreen extends StatelessWidget {
                             child: TextFormField(
                               key: Key(model.agridata.area.toString()),
                               readOnly: true,
-                              initialValue: model.agridata.area.toString(),
+                              initialValue:
+                                  model.agridata.area?.toString() ?? "",
                               decoration: const InputDecoration(
                                 labelText: 'Area in Acrs',
                               ),
@@ -264,7 +267,8 @@ class AddAgriScreen extends StatelessWidget {
                               key: Key(
                                   model.agridata.developmentArea.toString()),
                               initialValue:
-                                  model.agridata.developmentArea.toString(),
+                                  model.agridata.developmentArea?.toString() ??
+                                      "",
                               decoration: const InputDecoration(
                                 labelText: 'Developement Area',
                               ),

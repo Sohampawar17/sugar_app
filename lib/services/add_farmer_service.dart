@@ -80,6 +80,7 @@ class FarmerService {
     var data = json.encode({
       "data": farmer,
     });
+
     try {
       var dio = Dio();
       var response = await dio.request(

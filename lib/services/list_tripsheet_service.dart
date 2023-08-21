@@ -43,7 +43,7 @@ class ListTripshhetService {
 
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Trip Sheet?fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]&filters=[["$query","like","$filter%"]]',
+        '$apiBaseUrl/api/resource/Trip Sheet?fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]&filters=[["$query","like","$filter%"]]',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -75,7 +75,7 @@ class ListTripshhetService {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        'http://deverpvppl.erpdata.in/api/resource/Trip Sheet?fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]&filters=[["transporter_name","like","$trsname%"],["field_village","like","$village%"],["season","like","$season%"]]',
+        '$apiBaseUrl/api/resource/Trip Sheet?fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]&filters=[["transporter_name","like","$trsname%"],["field_village","like","$village%"],["season","like","$season%"]]',
         options: Options(
           method: 'GET',
           headers: headers,

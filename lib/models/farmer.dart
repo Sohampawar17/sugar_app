@@ -7,6 +7,7 @@ class Farmer {
   int? docstatus;
   int? idx;
   String? workflowState;
+  String? namingSeries;
   String? supplierName;
   String? supplierType;
   String? branch;
@@ -30,7 +31,6 @@ class Farmer {
   String? state;
   String? aadhaarCard;
   String? bankPassbook;
-  String? panCard;
   String? consentLetter;
   int? isInternalSupplier;
   String? language;
@@ -44,174 +44,166 @@ class Farmer {
   int? preventPos;
   int? onHold;
   String? holdType;
-  String? doctype;
-  List<dynamic>? accounts;
-  List<dynamic>? companies;
   List<BankDetails>? bankDetails;
 
-  Farmer({
-    this.name,
-    this.owner,
-    this.creation,
-    this.modified,
-    this.modifiedBy,
-    this.docstatus,
-    this.idx,
-    this.workflowState,
-    this.supplierName,
-    this.supplierType,
-    this.branch,
-    this.aadhaarNumber,
-    this.panNumber,
-    this.mobileNumber,
-    this.dateOfBirth,
-    this.existingSupplierCode,
-    this.gender,
-    this.age,
-    this.country,
-    this.supplierGroup,
-    this.isTransporter,
-    this.isHarvester,
-    this.isFarmer,
-    this.isMember,
-    this.village,
-    this.circleOffice,
-    this.taluka,
-    this.pinCode,
-    this.state,
-    this.aadhaarCard,
-    this.bankPassbook,
-    this.panCard,
-    this.consentLetter,
-    this.isInternalSupplier,
-    this.language,
-    this.allowPurchaseInvoiceCreationWithoutPurchaseOrder,
-    this.allowPurchaseInvoiceCreationWithoutPurchaseReceipt,
-    this.isFrozen,
-    this.disabled,
-    this.warnRfqs,
-    this.warnPos,
-    this.preventRfqs,
-    this.preventPos,
-    this.onHold,
-    this.holdType,
-    this.doctype,
-    this.accounts,
-    this.companies,
-    this.bankDetails,
-  });
+  Farmer(
+      {this.name,
+      this.owner,
+      this.creation,
+      this.modified,
+      this.modifiedBy,
+      this.docstatus,
+      this.idx,
+      this.workflowState,
+      this.namingSeries,
+      this.supplierName,
+      this.supplierType,
+      this.branch,
+      this.aadhaarNumber,
+      this.panNumber,
+      this.mobileNumber,
+      this.dateOfBirth,
+      this.existingSupplierCode,
+      this.gender,
+      this.age,
+      this.country,
+      this.supplierGroup,
+      this.isTransporter,
+      this.isHarvester,
+      this.isFarmer,
+      this.isMember,
+      this.village,
+      this.circleOffice,
+      this.taluka,
+      this.pinCode,
+      this.state,
+      this.aadhaarCard,
+      this.bankPassbook,
+      this.consentLetter,
+      this.isInternalSupplier,
+      this.language,
+      this.allowPurchaseInvoiceCreationWithoutPurchaseOrder,
+      this.allowPurchaseInvoiceCreationWithoutPurchaseReceipt,
+      this.isFrozen,
+      this.disabled,
+      this.warnRfqs,
+      this.warnPos,
+      this.preventRfqs,
+      this.preventPos,
+      this.onHold,
+      this.holdType,
+      this.bankDetails});
 
-  Farmer.fromJson(Map<String, dynamic> json)
-      : name = json['name'] as String?,
-        owner = json['owner'] as String?,
-        creation = json['creation'] as String?,
-        modified = json['modified'] as String?,
-        modifiedBy = json['modified_by'] as String?,
-        docstatus = json['docstatus'] as int?,
-        idx = json['idx'] as int?,
-        workflowState = json['workflow_state'] as String?,
-        supplierName = json['supplier_name'] as String?,
-        supplierType = json['supplier_type'] as String?,
-        branch = json['branch'] as String?,
-        aadhaarNumber = json['aadhaar_number'] as String?,
-        panNumber = json['pan_number'] as String?,
-        mobileNumber = json['mobile_number'] as String?,
-        dateOfBirth = json['date_of_birth'] as String?,
-        existingSupplierCode = json['existing_supplier_code'] as String?,
-        gender = json['gender'] as String?,
-        age = json['age'] as String?,
-        country = json['country'] as String?,
-        supplierGroup = json['supplier_group'] as String?,
-        isTransporter = json['is_transporter'] as int?,
-        isHarvester = json['is_harvester'] as int?,
-        isFarmer = json['is_farmer'] as int?,
-        isMember = json['is_member'] as int?,
-        village = json['village'] as String?,
-        circleOffice = json['circle_office'] as String?,
-        taluka = json['taluka'] as String?,
-        pinCode = json['pin_code'] as String?,
-        state = json['state'] as String?,
-        aadhaarCard = json['aadhaar_card'] as String?,
-        bankPassbook = json['bank_passbook'] as String?,
-        panCard = json['pan_card'] as String?,
-        consentLetter = json['consent_letter'] as String?,
-        isInternalSupplier = json['is_internal_supplier'] as int?,
-        language = json['language'] as String?,
-        allowPurchaseInvoiceCreationWithoutPurchaseOrder =
-            json['allow_purchase_invoice_creation_without_purchase_order']
-                as int?,
-        allowPurchaseInvoiceCreationWithoutPurchaseReceipt =
-            json['allow_purchase_invoice_creation_without_purchase_receipt']
-                as int?,
-        isFrozen = json['is_frozen'] as int?,
-        disabled = json['disabled'] as int?,
-        warnRfqs = json['warn_rfqs'] as int?,
-        warnPos = json['warn_pos'] as int?,
-        preventRfqs = json['prevent_rfqs'] as int?,
-        preventPos = json['prevent_pos'] as int?,
-        onHold = json['on_hold'] as int?,
-        holdType = json['hold_type'] as String?,
-        doctype = json['doctype'] as String?,
-        accounts = json['accounts'] as List?,
-        companies = json['companies'] as List?,
-        bankDetails = (json['bank_details'] as List?)
-            ?.map(
-                (dynamic e) => BankDetails.fromJson(e as Map<String, dynamic>))
-            .toList();
+  Farmer.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    owner = json['owner'];
+    creation = json['creation'];
+    modified = json['modified'];
+    modifiedBy = json['modified_by'];
+    docstatus = json['docstatus'];
+    idx = json['idx'];
+    workflowState = json['workflow_state'];
+    namingSeries = json['naming_series'];
+    supplierName = json['supplier_name'];
+    supplierType = json['supplier_type'];
+    branch = json['branch'];
+    aadhaarNumber = json['aadhaar_number'];
+    panNumber = json['pan_number'];
+    mobileNumber = json['mobile_number'];
+    dateOfBirth = json['date_of_birth'];
+    existingSupplierCode = json['existing_supplier_code'];
+    gender = json['gender'];
+    age = json['age'];
+    country = json['country'];
+    supplierGroup = json['supplier_group'];
+    isTransporter = json['is_transporter'];
+    isHarvester = json['is_harvester'];
+    isFarmer = json['is_farmer'];
+    isMember = json['is_member'];
+    village = json['village'];
+    circleOffice = json['circle_office'];
+    taluka = json['taluka'];
+    pinCode = json['pin_code'];
+    state = json['state'];
+    aadhaarCard = json['aadhaar_card'];
+    bankPassbook = json['bank_passbook'];
+    consentLetter = json['consent_letter'];
+    isInternalSupplier = json['is_internal_supplier'];
+    language = json['language'];
+    allowPurchaseInvoiceCreationWithoutPurchaseOrder =
+        json['allow_purchase_invoice_creation_without_purchase_order'];
+    allowPurchaseInvoiceCreationWithoutPurchaseReceipt =
+        json['allow_purchase_invoice_creation_without_purchase_receipt'];
+    isFrozen = json['is_frozen'];
+    disabled = json['disabled'];
+    warnRfqs = json['warn_rfqs'];
+    warnPos = json['warn_pos'];
+    preventRfqs = json['prevent_rfqs'];
+    preventPos = json['prevent_pos'];
+    onHold = json['on_hold'];
+    holdType = json['hold_type'];
+    if (json['bank_details'] != null) {
+      bankDetails = <BankDetails>[];
+      json['bank_details'].forEach((v) {
+        bankDetails!.add(new BankDetails.fromJson(v));
+      });
+    }
+  }
 
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'owner': owner,
-        'creation': creation,
-        'modified': modified,
-        'modified_by': modifiedBy,
-        'docstatus': docstatus,
-        'idx': idx,
-        'workflow_state': workflowState,
-        'supplier_name': supplierName,
-        'supplier_type': supplierType,
-        'branch': branch,
-        'aadhaar_number': aadhaarNumber,
-        'pan_number': panNumber,
-        'mobile_number': mobileNumber,
-        'date_of_birth': dateOfBirth,
-        'existing_supplier_code': existingSupplierCode,
-        'gender': gender,
-        'age': age,
-        'country': country,
-        'supplier_group': supplierGroup,
-        'is_transporter': isTransporter,
-        'is_harvester': isHarvester,
-        'is_farmer': isFarmer,
-        'is_member': isMember,
-        'village': village,
-        'circle_office': circleOffice,
-        'taluka': taluka,
-        'pin_code': pinCode,
-        'state': state,
-        'aadhaar_card': aadhaarCard,
-        'bank_passbook': bankPassbook,
-        'pan_card': panCard,
-        'consent_letter': consentLetter,
-        'is_internal_supplier': isInternalSupplier,
-        'language': language,
-        'allow_purchase_invoice_creation_without_purchase_order':
-            allowPurchaseInvoiceCreationWithoutPurchaseOrder,
-        'allow_purchase_invoice_creation_without_purchase_receipt':
-            allowPurchaseInvoiceCreationWithoutPurchaseReceipt,
-        'is_frozen': isFrozen,
-        'disabled': disabled,
-        'warn_rfqs': warnRfqs,
-        'warn_pos': warnPos,
-        'prevent_rfqs': preventRfqs,
-        'prevent_pos': preventPos,
-        'on_hold': onHold,
-        'hold_type': holdType,
-        'doctype': doctype,
-        'accounts': accounts,
-        'companies': companies,
-        'bank_details': bankDetails?.map((e) => e.toJson()).toList()
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['owner'] = this.owner;
+    data['creation'] = this.creation;
+    data['modified'] = this.modified;
+    data['modified_by'] = this.modifiedBy;
+    data['docstatus'] = this.docstatus;
+    data['idx'] = this.idx;
+    data['workflow_state'] = this.workflowState;
+    data['naming_series'] = this.namingSeries;
+    data['supplier_name'] = this.supplierName;
+    data['supplier_type'] = this.supplierType;
+    data['branch'] = this.branch;
+    data['aadhaar_number'] = this.aadhaarNumber;
+    data['pan_number'] = this.panNumber;
+    data['mobile_number'] = this.mobileNumber;
+    data['date_of_birth'] = this.dateOfBirth;
+    data['existing_supplier_code'] = this.existingSupplierCode;
+    data['gender'] = this.gender;
+    data['age'] = this.age;
+    data['country'] = this.country;
+    data['supplier_group'] = this.supplierGroup;
+    data['is_transporter'] = this.isTransporter;
+    data['is_harvester'] = this.isHarvester;
+    data['is_farmer'] = this.isFarmer;
+    data['is_member'] = this.isMember;
+    data['village'] = this.village;
+    data['circle_office'] = this.circleOffice;
+    data['taluka'] = this.taluka;
+    data['pin_code'] = this.pinCode;
+    data['state'] = this.state;
+    data['aadhaar_card'] = this.aadhaarCard;
+    data['bank_passbook'] = this.bankPassbook;
+    data['consent_letter'] = this.consentLetter;
+    data['is_internal_supplier'] = this.isInternalSupplier;
+    data['language'] = this.language;
+    data['allow_purchase_invoice_creation_without_purchase_order'] =
+        this.allowPurchaseInvoiceCreationWithoutPurchaseOrder;
+    data['allow_purchase_invoice_creation_without_purchase_receipt'] =
+        this.allowPurchaseInvoiceCreationWithoutPurchaseReceipt;
+    data['is_frozen'] = this.isFrozen;
+    data['disabled'] = this.disabled;
+    data['warn_rfqs'] = this.warnRfqs;
+    data['warn_pos'] = this.warnPos;
+    data['prevent_rfqs'] = this.preventRfqs;
+    data['prevent_pos'] = this.preventPos;
+    data['on_hold'] = this.onHold;
+    data['hold_type'] = this.holdType;
+    if (this.bankDetails != null) {
+      data['bank_details'] = this.bankDetails!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
 class BankDetails {
@@ -231,76 +223,82 @@ class BankDetails {
   String? status;
   String? isActive;
   String? bankAndBranch;
+  String? bankPassbook;
   String? parent;
   String? parentfield;
   String? parenttype;
   String? doctype;
 
-  BankDetails({
-    this.name,
-    this.owner,
-    this.creation,
-    this.modified,
-    this.modifiedBy,
-    this.docstatus,
-    this.idx,
-    this.farmer,
-    this.harvester,
-    this.transporter,
-    this.bankName,
-    this.branchifscCode,
-    this.accountNumber,
-    this.status,
-    this.isActive,
-    this.bankAndBranch,
-    this.parent,
-    this.parentfield,
-    this.parenttype,
-    this.doctype,
-  });
+  BankDetails(
+      {this.name,
+      this.owner,
+      this.creation,
+      this.modified,
+      this.modifiedBy,
+      this.docstatus,
+      this.idx,
+      this.farmer,
+      this.harvester,
+      this.transporter,
+      this.bankName,
+      this.branchifscCode,
+      this.accountNumber,
+      this.status,
+      this.isActive,
+      this.bankAndBranch,
+      this.bankPassbook,
+      this.parent,
+      this.parentfield,
+      this.parenttype,
+      this.doctype});
 
-  BankDetails.fromJson(Map<String, dynamic> json)
-      : name = json['name'] as String?,
-        owner = json['owner'] as String?,
-        creation = json['creation'] as String?,
-        modified = json['modified'] as String?,
-        modifiedBy = json['modified_by'] as String?,
-        docstatus = json['docstatus'] as int?,
-        idx = json['idx'] as int?,
-        farmer = json['farmer'] as int?,
-        harvester = json['harvester'] as int?,
-        transporter = json['transporter'] as int?,
-        bankName = json['bank_name'] as String?,
-        branchifscCode = json['branchifsc_code'] as String?,
-        accountNumber = json['account_number'] as String?,
-        status = json['status'] as String?,
-        isActive = json['is_active'] as String?,
-        bankAndBranch = json['bank_and_branch'] as String?,
-        parent = json['parent'] as String?,
-        parentfield = json['parentfield'] as String?,
-        parenttype = json['parenttype'] as String?,
-        doctype = json['doctype'] as String?;
+  BankDetails.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    owner = json['owner'];
+    creation = json['creation'];
+    modified = json['modified'];
+    modifiedBy = json['modified_by'];
+    docstatus = json['docstatus'];
+    idx = json['idx'];
+    farmer = json['farmer'];
+    harvester = json['harvester'];
+    transporter = json['transporter'];
+    bankName = json['bank_name'];
+    branchifscCode = json['branchifsc_code'];
+    accountNumber = json['account_number'];
+    status = json['status'];
+    isActive = json['is_active'];
+    bankAndBranch = json['bank_and_branch'];
+    bankPassbook = json['bank_passbook'];
+    parent = json['parent'];
+    parentfield = json['parentfield'];
+    parenttype = json['parenttype'];
+    doctype = json['doctype'];
+  }
 
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'owner': owner,
-        'creation': creation,
-        'modified': modified,
-        'modified_by': modifiedBy,
-        'docstatus': docstatus,
-        'idx': idx,
-        'farmer': farmer,
-        'harvester': harvester,
-        'transporter': transporter,
-        'bank_name': bankName,
-        'branchifsc_code': branchifscCode,
-        'account_number': accountNumber,
-        'status': status,
-        'is_active': isActive,
-        'bank_and_branch': bankAndBranch,
-        'parent': parent,
-        'parentfield': parentfield,
-        'parenttype': parenttype,
-        'doctype': doctype
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['owner'] = this.owner;
+    data['creation'] = this.creation;
+    data['modified'] = this.modified;
+    data['modified_by'] = this.modifiedBy;
+    data['docstatus'] = this.docstatus;
+    data['idx'] = this.idx;
+    data['farmer'] = this.farmer;
+    data['harvester'] = this.harvester;
+    data['transporter'] = this.transporter;
+    data['bank_name'] = this.bankName;
+    data['branchifsc_code'] = this.branchifscCode;
+    data['account_number'] = this.accountNumber;
+    data['status'] = this.status;
+    data['is_active'] = this.isActive;
+    data['bank_and_branch'] = this.bankAndBranch;
+    data['bank_passbook'] = this.bankPassbook;
+    data['parent'] = this.parent;
+    data['parentfield'] = this.parentfield;
+    data['parenttype'] = this.parenttype;
+    data['doctype'] = this.doctype;
+    return data;
+  }
 }

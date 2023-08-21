@@ -134,26 +134,26 @@ class AddFarmerScreen extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(
-                          width: 20.0,
-                        ),
-                        //for pan card
-                        Expanded(
-                          child: TextFormField(
-                            controller: model.panNumberController,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(11),
-                              UppercaseTextFormatter()
-                            ],
-                            keyboardType: TextInputType.text,
-                            decoration: const InputDecoration(
-                              labelText: 'PAN Number',
-                              hintText: 'Enter 10-character PAN number',
-                            ),
-                            validator: model.validatePanNumber,
-                            onChanged: model.onPanNumberChanged,
-                          ),
-                        ),
+                        // const SizedBox(
+                        //   width: 20.0,
+                        // ),
+                        // //for pan card
+                        // Expanded(
+                        //   child: TextFormField(
+                        //     controller: model.panNumberController,
+                        //     inputFormatters: [
+                        //       LengthLimitingTextInputFormatter(11),
+                        //       UppercaseTextFormatter()
+                        //     ],
+                        //     keyboardType: TextInputType.text,
+                        //     decoration: const InputDecoration(
+                        //       labelText: 'PAN Number',
+                        //       hintText: 'Enter 10-character PAN number',
+                        //     ),
+                        //     validator: model.validatePanNumber,
+                        //     onChanged: model.onPanNumberChanged,
+                        //   ),
+                        // ),
                       ],
                     ),
 
@@ -163,8 +163,8 @@ class AddFarmerScreen extends StatelessWidget {
                           //for dob
                           child: TextFormField(
                             controller: model.dobController,
-                            onTap: () => model.selectDate(context),
-                            readOnly: true,
+                            // onTap: () => model.selectDate(context),
+
                             decoration: const InputDecoration(
                               labelText: 'Date of Birth',
                               hintText: 'Select Date of Birth',
@@ -221,12 +221,10 @@ class AddFarmerScreen extends StatelessWidget {
                           child: model.isEdit == true
                               ? TextFormField(
                                   readOnly: true,
-                                  initialValue: model.farmerData.name,
+                                  initialValue:
+                                      model.farmerData.existingSupplierCode,
                                   decoration: const InputDecoration(
-                                      labelText: 'Vendror Code'),
-                                  // validator: (value) =>
-                                  //     value!.isEmpty ? 'Please enter an age' : null,
-                                  // onChanged: (value) => model.Farmer.age = value,
+                                      labelText: 'Vendor Code'),
                                 )
                               : Autocomplete<String>(
                                   key: Key(model.farmerData.village ?? ""),
@@ -250,8 +248,6 @@ class AddFarmerScreen extends StatelessWidget {
                                       FocusNode focusNode,
                                       VoidCallback onFieldSubmitted) {
                                     return TextFormField(
-                                      // key: Key(model.farmerData.village ?? ""),
-                                      // initialValue: model.farmerData.village,
                                       controller: textEditingController,
                                       focusNode: focusNode,
                                       decoration: const InputDecoration(
@@ -485,23 +481,23 @@ class AddFarmerScreen extends StatelessWidget {
                         ),
 
                         //for pand card
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () => pickDoc(kPanpdf, context, model),
-                            // model.selectPdf(kPanpdf, ImageSource.camera),
-                            child: model.farmerData.panCard != null
-                                ? Text(
-                                    'Pan File: ${model.farmerData.panCard?.split("/").last}',
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : model.isFileSelected(kPanpdf)
-                                    ? Text(
-                                        'Pan File: ${model.files.getFile(kPanpdf)?.path.split("/").last}',
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    : const Text('Attach PAN'),
-                          ),
-                        ),
+                        // Expanded(
+                        //   child: ElevatedButton(
+                        //     onPressed: () => pickDoc(kPanpdf, context, model),
+                        //     // model.selectPdf(kPanpdf, ImageSource.camera),
+                        //     child: model.farmerData.panCard != null
+                        //         ? Text(
+                        //             'Pan File: ${model.farmerData.panCard?.split("/").last}',
+                        //             overflow: TextOverflow.ellipsis,
+                        //           )
+                        //         : model.isFileSelected(kPanpdf)
+                        //             ? Text(
+                        //                 'Pan File: ${model.files.getFile(kPanpdf)?.path.split("/").last}',
+                        //                 overflow: TextOverflow.ellipsis,
+                        //               )
+                        //             : const Text('Attach PAN'),
+                        //   ),
+                        // ),
                         const SizedBox(width: 10),
                       ],
                     ),
@@ -513,23 +509,23 @@ class AddFarmerScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         //for bank passbook card
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () => pickDoc(kBankpdf, context, model),
-                            // model.selectPdf(kBankpdf, ImageSource.camera),
-                            child: model.farmerData.bankPassbook != null
-                                ? Text(
-                                    'Bank  File: ${model.farmerData.bankPassbook?.split("/").last}',
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : model.isFileSelected(kBankpdf)
-                                    ? Text(
-                                        'Bank Passbook: ${model.files.getFile(kBankpdf)?.path.split("/").last}',
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    : const Text('Attach Passbook'),
-                          ),
-                        ),
+                        // Expanded(
+                        //   child: ElevatedButton(
+                        //     onPressed: () => pickDoc(kBankpdf, context, model),
+                        //     // model.selectPdf(kBankpdf, ImageSource.camera),
+                        //     child: model.farmerData.bankPassbook != null
+                        //         ? Text(
+                        //             'Bank  File: ${model.farmerData.bankPassbook?.split("/").last}',
+                        //             overflow: TextOverflow.ellipsis,
+                        //           )
+                        //         : model.isFileSelected(kBankpdf)
+                        //             ? Text(
+                        //                 'Bank Passbook: ${model.files.getFile(kBankpdf)?.path.split("/").last}',
+                        //                 overflow: TextOverflow.ellipsis,
+                        //               )
+                        //             : const Text('Attach Passbook'),
+                        //   ),
+                        // ),
                         const SizedBox(
                           width: 10.0,
                         ),
@@ -589,6 +585,12 @@ class AddFarmerScreen extends StatelessWidget {
                                   label: Text('Acc. Number'),
                                 ),
                                 DataColumn(
+                                  label: Text('Branch'),
+                                ),
+                                DataColumn(
+                                  label: Text('Bank Passbook'),
+                                ),
+                                DataColumn(
                                   label: Text('Action'),
                                   // Add a new DataColumn for the button
                                   numeric: false,
@@ -602,12 +604,7 @@ class AddFarmerScreen extends StatelessWidget {
                                     // DataCell(Text(model
                                     //     .bankAccounts[index].farmer
                                     //     .toString())),
-                                    // DataCell(Text(model
-                                    //     .bankAccounts[index].harvester
-                                    //     .toString())),
-                                    // DataCell(Text(model
-                                    //     .bankAccounts[index].transporter
-                                    //     .toString())),
+
                                     DataCell(Text(model
                                         .bankAccounts[index].bankName
                                         .toString())),
@@ -617,6 +614,15 @@ class AddFarmerScreen extends StatelessWidget {
                                     DataCell(Text(model
                                         .bankAccounts[index].accountNumber
                                         .toString())),
+                                    DataCell(Text(model
+                                        .bankAccounts[index].bankAndBranch
+                                        .toString())),
+                                    DataCell(Text(model
+                                        .bankAccounts[index].bankPassbook
+                                        .toString())),
+                                    // DataCell(Text(model
+                                    //     .bankAccounts[index].
+                                    //     .toString())),
                                     DataCell(
                                       SizedBox(
                                         height: 24.0,
@@ -782,6 +788,39 @@ class AddFarmerScreen extends StatelessWidget {
                           validator: model.validateAccountNumber,
                         ),
                       ),
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: index == -1 ? null : model.branch,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                            UppercaseTextFormatter()
+                          ],
+                          decoration: const InputDecoration(
+                            labelText: 'Branch',
+                          ),
+                          onChanged: (value) {
+                            model.branch = value;
+                          },
+                          validator: model.validateBranch,
+                        ),
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => pickDoc(kBankpdf, context, model),
+                          // model.selectPdf(kPanpdf, ImageSource.camera),
+                          child: model.passbookattch != null
+                              ? Text(
+                                  'passbook File: ${model.passbookattch.split("/").last}',
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : model.isFileSelected(kBankpdf)
+                                  ? Text(
+                                      'Bank passbook: ${model.files.getFile(kBankpdf)?.path.split("/").last}',
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  : const Text('Attach passbook'),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -853,8 +892,7 @@ class AddFarmerScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     ViewImageInternet(
-                                  url: model.getFileFromFarmer(filetype) ??
-                                      "http://deverpvppl.erpdata.in/files/1691065818762.jpg",
+                                  url: model.getFileFromFarmer(filetype) ?? "",
                                 ),
                               ),
                             );

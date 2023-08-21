@@ -138,12 +138,17 @@ class AddCaneScreen extends StatelessWidget {
                                               int index) {
                                             final String option =
                                                 options.elementAt(index);
+                                            final routeData = model.farmerList
+                                                .firstWhere((route) =>
+                                                    route.name == option);
                                             return GestureDetector(
                                               onTap: () {
                                                 onSelected(option);
                                               },
                                               child: ListTile(
                                                 title: Text(option),
+                                                subtitle: Text(
+                                                    routeData.supplierName!),
                                               ),
                                             );
                                           },
@@ -188,6 +193,31 @@ class AddCaneScreen extends StatelessWidget {
                                   : null,
                               onChanged: model.setSelectedgrowername),
                           //mobile number
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CdropDown(
+                                  dropdownButton:
+                                      DropdownButtonFormField<String>(
+                                    value: model.canedata.developmentPlot,
+                                    // Replace null with the selected value if needed
+                                    decoration: const InputDecoration(
+                                      labelText: 'Development Plot',
+                                    ),
+                                    hint: const Text('Select Development Plot'),
+                                    items: model.yesno.map((val) {
+                                      return DropdownMenuItem<String>(
+                                        value: val,
+                                        child: Text(val),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) =>
+                                        model.setSelectedDevelopmentplot(value),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -242,86 +272,103 @@ class AddCaneScreen extends StatelessWidget {
                                   ),
                                 )
                               : Container(),
-                          Autocomplete<String>(
-                            key: Key(model.canedata.area ?? "03"),
-                            initialValue: TextEditingValue(
-                              text: model.canedata.area ?? "",
-                            ),
-                            optionsBuilder:
-                                (TextEditingValue textEditingValue) {
-                              if (textEditingValue.text.isEmpty) {
-                                return const Iterable<String>.empty();
-                              }
-                              return model.villageList.where((area) => area
-                                  .toLowerCase()
-                                  .contains(
-                                      textEditingValue.text.toLowerCase()));
-                            },
-                            onSelected: model.setSelectedVillage,
-                            fieldViewBuilder: (BuildContext context,
-                                TextEditingController textEditingController,
-                                FocusNode focusNode,
-                                VoidCallback onFieldSubmitted) {
-                              return TextFormField(
-                                // key: Key(model.farmerData.village ?? ""),
-                                // initialValue: model.farmerData.village,
-                                controller: textEditingController,
-                                focusNode: focusNode,
-                                decoration: const InputDecoration(
-                                  labelText: 'Village',
-                                ),
-                                onChanged: (String value) {},
-                                validator: model.validateVillage,
-                              );
-                            },
-                            optionsViewBuilder: (BuildContext contpext,
-                                AutocompleteOnSelected<String> onSelected,
-                                Iterable<String> options) {
-                              return Align(
-                                alignment: Alignment.topLeft,
-                                child: Material(
-                                  elevation: 4.0,
-                                  child: Container(
-                                    constraints:
-                                        const BoxConstraints(maxHeight: 200),
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: options.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        final String option =
-                                            options.elementAt(index);
-                                        return GestureDetector(
-                                          onTap: () {
-                                            onSelected(option);
-                                          },
-                                          child: ListTile(
-                                            title: Text(option),
+
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Autocomplete<String>(
+                                  key: Key(model.canedata.area ?? "03"),
+                                  initialValue: TextEditingValue(
+                                    text: model.canedata.area ?? "",
+                                  ),
+                                  optionsBuilder:
+                                      (TextEditingValue textEditingValue) {
+                                    if (textEditingValue.text.isEmpty) {
+                                      return const Iterable<String>.empty();
+                                    }
+                                    return model.villageList
+                                        .map((route) => route.name!)
+                                        .toList()
+                                        .where((route) => route
+                                            .toLowerCase()
+                                            .contains(textEditingValue.text
+                                                .toLowerCase()));
+                                  },
+                                  onSelected: (String routeName) {
+                                    // Find the corresponding route object
+                                    final routeData = model.villageList
+                                        .firstWhere(
+                                            (route) => route.name == routeName);
+                                    model.setSelectedVillage(
+                                        routeData.name); // Pass the route
+                                  },
+                                  fieldViewBuilder: (BuildContext context,
+                                      TextEditingController
+                                          textEditingController,
+                                      FocusNode focusNode,
+                                      VoidCallback onFieldSubmitted) {
+                                    return TextFormField(
+                                      // key: Key(model.farmerData.village ?? ""),
+                                      // initialValue: model.farmerData.village,
+                                      controller: textEditingController,
+                                      focusNode: focusNode,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Village',
+                                      ),
+                                      onChanged: (String value) {},
+                                      validator: model.validateVillage,
+                                    );
+                                  },
+                                  optionsViewBuilder: (BuildContext contpext,
+                                      AutocompleteOnSelected<String> onSelected,
+                                      Iterable<String> options) {
+                                    return Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Material(
+                                        elevation: 4.0,
+                                        child: Container(
+                                          constraints: const BoxConstraints(
+                                              maxHeight: 200),
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: options.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final String option =
+                                                  options.elementAt(index);
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  onSelected(option);
+                                                },
+                                                child: ListTile(
+                                                  title: Text(option),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
-                                    ),
-                                  ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  optionsMaxHeight: 200,
                                 ),
-                              );
-                            },
-                            optionsMaxHeight: 200,
-                          ),
-                          Visibility(
-                            visible: model.isEdit,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    initialValue: model.canedata.circleOffice,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Circle Office',
-                                    ),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  key: Key(model.canedata.circleOffice ??
+                                      "circleoffice"),
+                                  readOnly: true,
+                                  initialValue: model.canedata.circleOffice,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Circle Office',
                                   ),
+                                  onChanged: model.setSelectedcircleoffice,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           Visibility(
                             visible: model.isEdit,
@@ -356,7 +403,7 @@ class AddCaneScreen extends StatelessWidget {
                                 child: Autocomplete<String>(
                                   key: Key(model.canedata.route ?? "02"),
                                   initialValue: TextEditingValue(
-                                    text: model.canedata.route ?? " ",
+                                    text: model.canedata.route ?? "",
                                   ),
                                   optionsBuilder:
                                       (TextEditingValue textEditingValue) {
@@ -446,7 +493,8 @@ class AddCaneScreen extends StatelessWidget {
                                 readOnly: true,
                                 decoration:
                                     const InputDecoration(labelText: 'KM'),
-                                initialValue: model.canedata.routeKm.toString(),
+                                initialValue:
+                                    model.canedata.routeKm?.toString() ?? "",
                                 onChanged: (newValue) {
                                   // Handle the newValue here, you can update the routeKm value
                                   // using the setroutekm function with the new value.
@@ -643,16 +691,12 @@ class AddCaneScreen extends StatelessWidget {
                                 child: TextFormField(
                                   key: Key(model.canedata.areaAcrs.toString()),
                                   initialValue:
-                                      model.canedata.areaAcrs.toString(),
+                                      model.canedata.areaAcrs?.toString() ?? "",
                                   decoration: const InputDecoration(
                                     labelText: 'Area In Acrs',
                                   ),
                                   validator: model.validateAreaInAcrs,
-                                  onChanged: (newValue) {
-                                    if (newValue != null) {
-                                      model.setSelectedareainacrs(newValue);
-                                    }
-                                  },
+                                  onChanged: model.setSelectedareainacrs,
                                 ),
                               ),
                             ],
@@ -787,31 +831,6 @@ class AddCaneScreen extends StatelessWidget {
                             ],
                           ),
 
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CdropDown(
-                                  dropdownButton:
-                                      DropdownButtonFormField<String>(
-                                    value: model.canedata.developmentPlot,
-                                    // Replace null with the selected value if needed
-                                    decoration: const InputDecoration(
-                                      labelText: 'Development Plot',
-                                    ),
-                                    hint: const Text('Select Development Plot'),
-                                    items: model.yesno.map((val) {
-                                      return DropdownMenuItem<String>(
-                                        value: val,
-                                        child: Text(val),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) =>
-                                        model.setSelectedDevelopmentplot(value),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
