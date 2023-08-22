@@ -706,10 +706,12 @@ class AddCaneScreen extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: model.plantationdateController,
-                                  onTap: () => model.selectDate(context),
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     labelText: 'Plantation Date',
-                                    hintText: 'Select Plantation Date',
+                                    hintText: 'YYYY-MM-DD',
+                                    errorText: model.errorMessage.isNotEmpty
+                                        ? model.errorMessage
+                                        : null,
                                   ),
                                   validator: model.validateplantationdate,
                                   onChanged: model.onplantationdateChanged,
@@ -719,17 +721,18 @@ class AddCaneScreen extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: model.baselDateController,
-                                  onTap: () => model.selectBaselDate(context),
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     labelText: 'Basel Date',
-                                    hintText: 'Select Basel Date',
+                                    hintText: 'YYYY-MM-DD',
+                                    errorText: model.errorMessage.isNotEmpty
+                                        ? model.errorMessage
+                                        : null,
                                   ),
                                   onChanged: model.onBaseldateChanged,
                                 ),
                               ),
                             ],
                           ),
-
                           Row(
                             children: [
                               Expanded(

@@ -8,9 +8,12 @@ import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmer.dart';
-import 'package:intl/intl.dart';
+
 import 'package:sugar_mill_app/router.router.dart';
 import 'package:sugar_mill_app/services/add_farmer_service.dart';
+
+import '../../../models/bank_model.dart';
+import '../../../widgets/cdate_custom.dart';
 
 class FarmerViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
@@ -28,16 +31,16 @@ class FarmerViewModel extends BaseViewModel {
   final List<String> plantlist = ['Bedkihal', 'Nagpur'];
   final List<String> vendorGroupList = ['Cane'];
   List<String> villageList = [""];
-  List<String> bankList = [];
+  List<BankMaster> bankList = [];
 
   DateTime? selectedDate;
   Farmer farmerData = Farmer();
   late String accountNumber;
-  late String branchifscCode;
+  late String branchifscCode = "";
   late String bankName;
   late String farmerId;
-  late String branch;
-  late String passbookattch;
+  late String branch = "";
+  late String passbookattch = "";
 
   bool isEdit = false;
 
@@ -49,6 +52,7 @@ class FarmerViewModel extends BaseViewModel {
     setBusy(true);
     villageList = await FarmerService().fetchVillages();
     bankList = await FarmerService().fetchBanks();
+    Logger().i(bankList.toString());
     farmerId = farmerid;
     //setting aleardy available data
     if (farmerId != "") {
@@ -72,7 +76,7 @@ class FarmerViewModel extends BaseViewModel {
       }
     }
 
-    if (villageList.length == 1 && villageList[0] == "401") {
+    if (villageList.length == 1 && villageList[0] == "403") {
       if (context.mounted) {
         setBusy(false);
         Navigator.popAndPushNamed(context, Routes.loginViewScreen);
@@ -235,36 +239,48 @@ class FarmerViewModel extends BaseViewModel {
     if (value == null || value.isEmpty) {
       return 'Please select Date of Birth';
     }
-    if (!isValidDateFormat(value)) {
-      return 'Invalid date format';
+    if (errorMessage.isNotEmpty) {
+      Text(
+        errorMessage,
+        style: TextStyle(color: Colors.red),
+      );
     }
     return null;
   }
 
   void onDobChanged(String value) {
-    // You can use the value here if needed.
-    // Since we are using a date picker to select DOB, the value will not change through regular typing.
-    farmerData.dateOfBirth = value;
-    dobController.text = DateFormat('yyyy-MM-dd').format(value as DateTime);
-    farmerData.dateOfBirth = dobController.text;
-    _calculateAge();
-  }
-
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+    String formattedDate = DateInputHelper.formatInput(value);
+    bool isValidDate = DateInputHelper.isValidDate(formattedDate);
+    dobController.value = dobController.value.copyWith(
+      text: formattedDate,
+      selection: TextSelection.collapsed(offset: formattedDate.length),
     );
-
-    if (picked != null && picked != selectedDate) {
-      selectedDate = picked;
-      dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-      farmerData.dateOfBirth = dobController.text;
+    if (isValidDate) {
+      errorMessage = '';
+      farmerData.dateOfBirth = formattedDate;
       _calculateAge();
+    } else {
+      errorMessage = 'Invalid date';
     }
   }
+
+  String errorMessage = '';
+
+  // Future<void> selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate ?? DateTime.now(),
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime.now(),
+  //   );
+  //
+  //   if (picked != null && picked != selectedDate) {
+  //     selectedDate = picked;
+  //     dobController.text = DateFormat('yyyy-MM-dd').format(picked);
+  //     farmerData.dateOfBirth = dobController.text;
+  //     _calculateAge();
+  //   }
+  // }
 
   void _calculateAge() {
     if (selectedDate != null) {
@@ -316,7 +332,6 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   String? selectedVillage;
-
   void setSelectedVillage(String? village) {
     selectedVillage = village;
     farmerData.village = selectedVillage;
@@ -325,6 +340,12 @@ class FarmerViewModel extends BaseViewModel {
 
   void setSelectedBank(String? bank) {
     bankName = bank ?? "";
+    final selectedRouteData =
+        bankList.firstWhere((bankData) => bankData.bankName == bank);
+    branchifscCode = selectedRouteData.ifscCode ?? "";
+    branch = selectedRouteData.branch ?? "";
+    Logger().i(branch);
+    Logger().i(branchifscCode);
     notifyListeners();
   }
 
@@ -436,10 +457,7 @@ class FarmerViewModel extends BaseViewModel {
     // if (panUrl == "" && isEdit == false) {
     //   Fluttertoast.showToast(msg: "Failed to upload Pan");
     // }
-    String bankUrl = await FarmerService().uploadDocs(files.bankPassbook);
-    if (bankUrl == "" && isEdit == false) {
-      Fluttertoast.showToast(msg: "Failed to upload Bank");
-    }
+
     String letterUrl = await FarmerService().uploadDocs(files.consentLetter);
     if (letterUrl == "" && isEdit == false) {
       Fluttertoast.showToast(msg: "Failed to upload Letter");
@@ -448,10 +466,21 @@ class FarmerViewModel extends BaseViewModel {
     farmerData.aadhaarCard =
         aadharUrl == "" ? farmerData.aadhaarCard : aadharUrl;
     // farmerData.panCard = panUrl == "" ? farmerData.panCard : panUrl;
-    passbookattch = bankUrl == "" ? passbookattch : bankUrl;
+
     Logger().i(passbookattch);
     farmerData.consentLetter =
         letterUrl == "" ? farmerData.consentLetter : letterUrl;
+  }
+
+  Future<void> uploadpassbook() async {
+    String bankUrl = await FarmerService().uploadDocs(files.bankPassbook);
+    if (bankUrl == "" && isEdit == false) {
+      Fluttertoast.showToast(msg: "Failed to upload Bank");
+    }
+    if (bankUrl.isNotEmpty) {
+      passbookattch = bankUrl;
+    }
+    passbookattch = bankUrl.isNotEmpty ? bankUrl : passbookattch;
   }
 
   // Function to check if a PDF file is selected
@@ -498,7 +527,7 @@ class FarmerViewModel extends BaseViewModel {
     return null;
   }
 
-  void validateForm(BuildContext context, int index) {
+  void validateForm(BuildContext context, int index) async {
     if (farmerData.workflowState == "Approved") {
       Fluttertoast.showToast(msg: "Can not edit Approved document");
       return;
@@ -514,6 +543,7 @@ class FarmerViewModel extends BaseViewModel {
           return;
         }
       }
+      await uploadpassbook();
       submitBankAccount(index);
       Navigator.pop(context);
     } else {
@@ -531,7 +561,9 @@ class FarmerViewModel extends BaseViewModel {
       bankAccounts[index].branchifscCode = branchifscCode;
       bankAccounts[index].accountNumber = accountNumber;
       bankAccounts[index].bankAndBranch = branch;
-      bankAccounts[index].bankPassbook = passbookattch;
+      if (passbookattch.isNotEmpty) {
+        bankAccounts[index].bankPassbook = passbookattch;
+      }
       notifyListeners();
       return;
     }
@@ -564,7 +596,9 @@ class FarmerViewModel extends BaseViewModel {
       branchifscCode = bankAccounts[index].branchifscCode!;
       accountNumber = bankAccounts[index].accountNumber!;
       branch = bankAccounts[index].bankAndBranch!;
-      passbookattch = bankAccounts[index].bankPassbook!;
+      if (passbookattch.isNotEmpty) {
+        passbookattch = bankAccounts[index].bankPassbook!;
+      }
     }
     notifyListeners();
   }
@@ -678,6 +712,7 @@ class Files {
     if (fileType == kConcentpdf) {
       return consentLetter;
     }
+
     return null;
   }
 

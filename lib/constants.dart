@@ -22,7 +22,8 @@ String apifetchPlant = '$apiBaseUrl/api/resource/Branch';
 //farmer List
 String apiVillageListGet =
     '$apiBaseUrl/api/resource/Village?limit_page_length=999999&&fields=["name","circle_office"]';
-String apiBankListGet = '$apiBaseUrl/api/resource/Bank';
+String apiBankListGet =
+    '$apiBaseUrl/api/resource/Bank Master?fields=["bank_name","branch","ifsc_code"]&limit_page_length=9999';
 String apiFarmerListPost = '$apiBaseUrl/api/resource/Farmer List';
 String apiUploadFilePost = '$apiBaseUrl/api/method/upload_file';
 String apiFarmerAllListGet =

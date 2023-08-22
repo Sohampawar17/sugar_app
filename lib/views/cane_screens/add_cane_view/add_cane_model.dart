@@ -12,6 +12,7 @@ import 'package:sugar_mill_app/services/geolocation_service.dart';
 import '../../../models/Cane.dart';
 import '../../../models/village_model.dart';
 import '../../../router.router.dart';
+import '../../../widgets/cdate_custom.dart';
 
 class CaneViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
@@ -75,6 +76,7 @@ class CaneViewModel extends BaseViewModel {
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
     soilTypeList = await AddCaneService().fetchSoilType();
     farmerList = await AddCaneService().fetchfarmerListwithfilter();
+    canedata.plantationStatus = "New";
     Logger().i(caneId);
     if (caneId != "") {
       isEdit = true;
@@ -155,12 +157,36 @@ class CaneViewModel extends BaseViewModel {
     setBusy(false);
   }
 
+  String errorMessage = '';
+
   void onplantationdateChanged(String value) {
-    canedata.plantattionRatooningDate = value;
+    String formattedDate = DateInputHelper.formatInput(value);
+    bool isValidDate = DateInputHelper.isValidDate(formattedDate);
+    plantationdateController.value = plantationdateController.value.copyWith(
+      text: formattedDate,
+      selection: TextSelection.collapsed(offset: formattedDate.length),
+    );
+    if (isValidDate) {
+      errorMessage = '';
+      canedata.plantattionRatooningDate = formattedDate;
+    } else {
+      errorMessage = 'Invalid date';
+    }
   }
 
   void onBaseldateChanged(String value) {
-    canedata.basalDate = value;
+    String formattedDate = DateInputHelper.formatInput(value);
+    bool isValidDate = DateInputHelper.isValidDate(formattedDate);
+    baselDateController.value = baselDateController.value.copyWith(
+      text: formattedDate,
+      selection: TextSelection.collapsed(offset: formattedDate.length),
+    );
+    if (isValidDate) {
+      errorMessage = '';
+      canedata.basalDate = formattedDate;
+    } else {
+      errorMessage = 'Invalid date';
+    }
   }
 
   Future<void> selectDate(BuildContext context) async {

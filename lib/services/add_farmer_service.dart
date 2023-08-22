@@ -7,6 +7,8 @@ import 'package:logger/logger.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmer.dart';
 
+import '../models/bank_model.dart';
+
 class FarmerService {
   Future<List<String>> fetchVillages() async {
     try {
@@ -42,7 +44,7 @@ class FarmerService {
     }
   }
 
-  Future<List<String>> fetchBanks() async {
+  Future<List<BankMaster>> fetchBanks() async {
     try {
       var dio = Dio();
       var response = await dio.request(
@@ -54,17 +56,12 @@ class FarmerService {
       );
 
       if (response.statusCode == 200) {
-        var jsonData = json.encode(response.data);
-        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
-        List<dynamic> dataList = jsonDataMap["data"];
-        List<String> namesList =
-            dataList.map((item) => item["name"].toString()).toList();
-        return namesList;
-      }
+        Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
+        List<BankMaster> dataList = List.from(jsonData['data'])
+            .map<BankMaster>((data) => BankMaster.fromJson(data))
+            .toList();
 
-      if (response.statusCode == 401) {
-        Fluttertoast.showToast(msg: "Unauthorized Access!");
-        return ["401"];
+        return dataList;
       } else {
         Fluttertoast.showToast(msg: "Unable to fetch Villages");
         return [];
@@ -135,7 +132,6 @@ class FarmerService {
 
 // Extract the "file_url" from the jsonResponse
         String fileUrl = jsonResponse["message"]["file_url"];
-
         return fileUrl;
       } else {
         Logger().i(response.statusMessage);

@@ -155,7 +155,7 @@ class ListFarmersScreen extends StatelessWidget {
                                 model.filteredList[index].workflowState ?? '',
                                 maxLines: 1,
                                 style: const TextStyle(
-                                  fontSize: 8,
+                                  fontSize: 10,
                                 ),
                               ),
                             ],
@@ -163,11 +163,11 @@ class ListFarmersScreen extends StatelessWidget {
                         ),
                         title: Text(
                           model.filteredList[index].supplierName ?? '',
-                          style: const TextStyle(fontSize: 11),
+                          style: const TextStyle(fontSize: 15),
                         ),
                         subtitle: Text(
                           model.filteredList[index].name ?? '',
-                          style: const TextStyle(fontSize: 8),
+                          style: const TextStyle(fontSize: 13),
                         ),
                         onTap: () {
                           // Handle row click here

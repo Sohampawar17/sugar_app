@@ -163,11 +163,13 @@ class AddFarmerScreen extends StatelessWidget {
                           //for dob
                           child: TextFormField(
                             controller: model.dobController,
-                            // onTap: () => model.selectDate(context),
-
-                            decoration: const InputDecoration(
+                            keyboardType: TextInputType.datetime,
+                            decoration: InputDecoration(
                               labelText: 'Date of Birth',
-                              hintText: 'Select Date of Birth',
+                              hintText: 'YYYY-MM-DD',
+                              errorText: model.errorMessage.isNotEmpty
+                                  ? model.errorMessage
+                                  : null,
                             ),
                             validator: model.validateDob,
                             onChanged: model.onDobChanged,
@@ -601,10 +603,6 @@ class AddFarmerScreen extends StatelessWidget {
                                 // Replace 10 with the actual number of rows you want
                                 (int index) => DataRow(
                                   cells: [
-                                    // DataCell(Text(model
-                                    //     .bankAccounts[index].farmer
-                                    //     .toString())),
-
                                     DataCell(Text(model
                                         .bankAccounts[index].bankName
                                         .toString())),
@@ -703,11 +701,19 @@ class AddFarmerScreen extends StatelessWidget {
                             if (textEditingValue.text.isEmpty) {
                               return const Iterable<String>.empty();
                             }
-                            return model.bankList.where((bank) => bank
-                                .toLowerCase()
-                                .contains(textEditingValue.text.toLowerCase()));
+                            return model.bankList
+                                .map((bank) => bank.bankName ?? "")
+                                .toList()
+                                .where((bank) => bank.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase()));
                           },
-                          onSelected: model.setSelectedBank,
+                          onSelected: (String routeName) {
+                            // Find the corresponding route object
+                            final bankData = model.bankList.firstWhere(
+                                (bank) => bank.bankName == routeName);
+                            model.setSelectedBank(
+                                bankData.bankName); // Pass the route
+                          },
                           fieldViewBuilder: (BuildContext context,
                               TextEditingController textEditingController,
                               FocusNode focusNode,
@@ -757,19 +763,17 @@ class AddFarmerScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextFormField(
-                            initialValue:
-                                index == -1 ? null : model.branchifscCode,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(11),
-                              UppercaseTextFormatter()
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'Branch IFSC Code',
-                            ),
-                            onChanged: (value) {
-                              model.branchifscCode = value;
-                            },
-                            validator: model.validateBranchIfscCode),
+                          controller:
+                              TextEditingController(text: model.branchifscCode),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(11),
+                            UppercaseTextFormatter(),
+                          ],
+                          decoration: const InputDecoration(
+                            labelText: 'Branch IFSC Code',
+                          ),
+                          validator: model.validateBranchIfscCode,
+                        ),
                       ),
                       Expanded(
                         child: TextFormField(
@@ -790,35 +794,32 @@ class AddFarmerScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextFormField(
-                          initialValue: index == -1 ? null : model.branch,
+                          controller: TextEditingController(text: model.branch),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(15),
-                            UppercaseTextFormatter()
+                            LengthLimitingTextInputFormatter(50),
+                            UppercaseTextFormatter(),
                           ],
                           decoration: const InputDecoration(
                             labelText: 'Branch',
                           ),
-                          onChanged: (value) {
-                            model.branch = value;
-                          },
                           validator: model.validateBranch,
                         ),
                       ),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () => pickDoc(kBankpdf, context, model),
-                          // model.selectPdf(kPanpdf, ImageSource.camera),
-                          child: model.passbookattch != null
+                          // model.selectPdf(kBankpdf, ImageSource.camera),
+                          child: model.passbookattch.isNotEmpty
                               ? Text(
-                                  'passbook File: ${model.passbookattch.split("/").last}',
+                                  'Bank File: ${model.passbookattch.split("/").last}',
                                   overflow: TextOverflow.ellipsis,
                                 )
                               : model.isFileSelected(kBankpdf)
                                   ? Text(
-                                      'Bank passbook: ${model.files.getFile(kBankpdf)?.path.split("/").last}',
+                                      'Bank Passbook: ${model.files.getFile(kBankpdf)?.path.split("/").last}',
                                       overflow: TextOverflow.ellipsis,
                                     )
-                                  : const Text('Attach passbook'),
+                                  : const Text('Attach Passbook'),
                         ),
                       ),
                     ],
