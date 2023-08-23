@@ -168,12 +168,14 @@ class CaneViewModel extends BaseViewModel {
     );
     if (isValidDate) {
       errorMessage = '';
-      canedata.plantattionRatooningDate = formattedDate;
+      DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(formattedDate);
+      canedata.plantattionRatooningDate = parsedDate.toString();
     } else {
       errorMessage = 'Invalid date';
     }
   }
 
+  String errorMessageforbasel = '';
   void onBaseldateChanged(String value) {
     String formattedDate = DateInputHelper.formatInput(value);
     bool isValidDate = DateInputHelper.isValidDate(formattedDate);
@@ -182,42 +184,43 @@ class CaneViewModel extends BaseViewModel {
       selection: TextSelection.collapsed(offset: formattedDate.length),
     );
     if (isValidDate) {
-      errorMessage = '';
-      canedata.basalDate = formattedDate;
+      errorMessageforbasel = '';
+      DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(formattedDate);
+      canedata.basalDate = parsedDate.toString();
     } else {
-      errorMessage = 'Invalid date';
+      errorMessageforbasel = 'Invalid date';
     }
   }
 
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null && picked != selectedDate) {
-      selectedDate = picked;
-      plantationdateController.text = DateFormat('yyyy-MM-dd').format(picked);
-      canedata.plantattionRatooningDate = plantationdateController.text;
-    }
-  }
-
-  Future<void> selectBaselDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedBaselDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null && picked != selectedBaselDate) {
-      selectedBaselDate = picked;
-      baselDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-      canedata.basalDate = baselDateController.text;
-    }
-  }
+  // Future<void> selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate ?? DateTime.now(),
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime(2100),
+  //   );
+  //
+  //   if (picked != null && picked != selectedDate) {
+  //     selectedDate = picked;
+  //     plantationdateController.text = DateFormat('yyyy-MM-dd').format(picked);
+  //     canedata.plantattionRatooningDate = plantationdateController.text;
+  //   }
+  // }
+  //
+  // Future<void> selectBaselDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedBaselDate ?? DateTime.now(),
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime(2100),
+  //   );
+  //
+  //   if (picked != null && picked != selectedBaselDate) {
+  //     selectedBaselDate = picked;
+  //     baselDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+  //     canedata.basalDate = baselDateController.text;
+  //   }
+  // }
 
   void setSelectedseedType(String? seedType) {
     canedata.seedType = seedType;

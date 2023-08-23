@@ -87,7 +87,15 @@ class AddFarmerScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-
+                    Visibility(
+                      visible: model.isEdit == true,
+                      child: TextFormField(
+                        readOnly: true,
+                        initialValue: model.farmerData.existingSupplierCode,
+                        decoration:
+                            const InputDecoration(labelText: 'Vendor Code'),
+                      ),
+                    ),
                     TextFormField(
                         key: Key(model.farmerData.supplierName ?? ""),
                         initialValue: model.farmerData.supplierName,
@@ -166,7 +174,7 @@ class AddFarmerScreen extends StatelessWidget {
                             keyboardType: TextInputType.datetime,
                             decoration: InputDecoration(
                               labelText: 'Date of Birth',
-                              hintText: 'YYYY-MM-DD',
+                              hintText: 'DD-MM-YYYY',
                               errorText: model.errorMessage.isNotEmpty
                                   ? model.errorMessage
                                   : null,
@@ -216,181 +224,111 @@ class AddFarmerScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 20.0,
-                        ),
-                        Expanded(
-                          child: model.isEdit == true
-                              ? TextFormField(
-                                  readOnly: true,
-                                  initialValue:
-                                      model.farmerData.existingSupplierCode,
-                                  decoration: const InputDecoration(
-                                      labelText: 'Vendor Code'),
-                                )
-                              : Autocomplete<String>(
-                                  key: Key(model.farmerData.village ?? ""),
-                                  initialValue: TextEditingValue(
-                                    text: model.farmerData.village ?? "",
-                                  ),
-                                  optionsBuilder:
-                                      (TextEditingValue textEditingValue) {
-                                    if (textEditingValue.text.isEmpty) {
-                                      return const Iterable<String>.empty();
-                                    }
-                                    return model.villageList.where((village) =>
-                                        village.toLowerCase().contains(
-                                            textEditingValue.text
-                                                .toLowerCase()));
-                                  },
-                                  onSelected: model.setSelectedVillage,
-                                  fieldViewBuilder: (BuildContext context,
-                                      TextEditingController
-                                          textEditingController,
-                                      FocusNode focusNode,
-                                      VoidCallback onFieldSubmitted) {
-                                    return TextFormField(
-                                      controller: textEditingController,
-                                      focusNode: focusNode,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Village',
-                                      ),
-                                      onChanged: (String value) {},
-                                    );
-                                  },
-                                  optionsViewBuilder: (BuildContext contpext,
-                                      AutocompleteOnSelected<String> onSelected,
-                                      Iterable<String> options) {
-                                    return Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Material(
-                                        elevation: 4.0,
-                                        child: Container(
-                                          constraints: const BoxConstraints(
-                                              maxHeight: 200),
-                                          child: ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: options.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final String option =
-                                                  options.elementAt(index);
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  onSelected(option);
-                                                },
-                                                child: ListTile(
-                                                  title: Text(option),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  optionsMaxHeight: 200,
-                                ),
-                        )
                       ],
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-
-                    model.isEdit
-                        ? const Text(
-                            "Address",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300,
+                    const Text(
+                      "Address",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Autocomplete<String>(
+                            key: Key(model.farmerData.village ?? ""),
+                            initialValue: TextEditingValue(
+                              text: model.farmerData.village ?? "",
                             ),
-                          )
-                        : Container(),
-
-                    Visibility(
-                      visible: model.isEdit,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Autocomplete<String>(
-                              key: Key(model.farmerData.village ?? ""),
-                              initialValue: TextEditingValue(
-                                text: model.farmerData.village ?? "",
-                              ),
-                              optionsBuilder:
-                                  (TextEditingValue textEditingValue) {
-                                if (textEditingValue.text.isEmpty) {
-                                  return const Iterable<String>.empty();
-                                }
-                                return model.villageList.where((village) =>
-                                    village.toLowerCase().contains(
-                                        textEditingValue.text.toLowerCase()));
-                              },
-                              onSelected: model.setSelectedVillage,
-                              fieldViewBuilder: (BuildContext context,
-                                  TextEditingController textEditingController,
-                                  FocusNode focusNode,
-                                  VoidCallback onFieldSubmitted) {
-                                return TextFormField(
-                                  // key: Key(model.farmerData.village ?? ""),
-                                  // initialValue: model.farmerData.village,
-                                  controller: textEditingController,
-                                  focusNode: focusNode,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Village',
-                                  ),
-                                  onChanged: (String value) {},
-                                );
-                              },
-                              optionsViewBuilder: (BuildContext contpext,
-                                  AutocompleteOnSelected<String> onSelected,
-                                  Iterable<String> options) {
-                                return Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Material(
-                                    elevation: 4.0,
-                                    child: Container(
-                                      constraints:
-                                          const BoxConstraints(maxHeight: 200),
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: options.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          final String option =
-                                              options.elementAt(index);
-                                          return GestureDetector(
-                                            onTap: () {
-                                              onSelected(option);
-                                            },
-                                            child: ListTile(
-                                              title: Text(option),
-                                            ),
-                                          );
-                                        },
-                                      ),
+                            optionsBuilder:
+                                (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text.isEmpty) {
+                                return const Iterable<String>.empty();
+                              }
+                              return model.villageList
+                                  .map((route) => route.name!)
+                                  .toList()
+                                  .where((route) => route
+                                      .toLowerCase()
+                                      .contains(
+                                          textEditingValue.text.toLowerCase()));
+                            },
+                            onSelected: (String routeName) {
+                              // Find the corresponding route object
+                              final routeData = model.villageList.firstWhere(
+                                  (route) => route.name == routeName);
+                              model.setSelectedVillage(
+                                  routeData.name); // Pass the route
+                            },
+                            fieldViewBuilder: (BuildContext context,
+                                TextEditingController textEditingController,
+                                FocusNode focusNode,
+                                VoidCallback onFieldSubmitted) {
+                              return TextFormField(
+                                // key: Key(model.farmerData.village ?? ""),
+                                // initialValue: model.farmerData.village,
+                                controller: textEditingController,
+                                focusNode: focusNode,
+                                decoration: const InputDecoration(
+                                  labelText: 'Village',
+                                ),
+                                onChanged: (String value) {},
+                              );
+                            },
+                            optionsViewBuilder: (BuildContext contpext,
+                                AutocompleteOnSelected<String> onSelected,
+                                Iterable<String> options) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  elevation: 4.0,
+                                  child: Container(
+                                    constraints:
+                                        const BoxConstraints(maxHeight: 200),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: options.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        final String option =
+                                            options.elementAt(index);
+                                        return GestureDetector(
+                                          onTap: () {
+                                            onSelected(option);
+                                          },
+                                          child: ListTile(
+                                            title: Text(option),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
-                                );
-                              },
-                              optionsMaxHeight: 200,
+                                ),
+                              );
+                            },
+                            optionsMaxHeight: 200,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            key: Key(model.farmerData.circleOffice ??
+                                "circleoffice"),
+                            readOnly: true,
+                            initialValue: model.farmerData.circleOffice,
+                            decoration: const InputDecoration(
+                              labelText: 'Circle Office',
                             ),
+                            // onChanged: model.setSelectedcircleoffice,
                           ),
-                          const SizedBox(
-                            width: 20.0,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              readOnly: true,
-                              initialValue: model.farmerData.circleOffice,
-                              decoration: const InputDecoration(
-                                labelText: 'Circle Office',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     Visibility(
                       visible: model.isEdit,
@@ -401,7 +339,7 @@ class AddFarmerScreen extends StatelessWidget {
                               readOnly: true,
                               initialValue: model.farmerData.taluka,
                               decoration:
-                                  const InputDecoration(labelText: 'taluka'),
+                                  const InputDecoration(labelText: 'Taluka'),
                             ),
                           ),
                           const SizedBox(
@@ -500,6 +438,24 @@ class AddFarmerScreen extends StatelessWidget {
                         //             : const Text('Attach PAN'),
                         //   ),
                         // ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () =>
+                                pickDoc(kConcentpdf, context, model),
+                            //  model.selectPdf( kConcentpdf, ImageSource.camera),
+                            child: model.farmerData.consentLetter != null
+                                ? Text(
+                                    'Bank  File: ${model.farmerData.consentLetter?.split("/").last}',
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : model.isFileSelected(kConcentpdf)
+                                    ? Text(
+                                        'Concent Letter: ${model.files.getFile(kConcentpdf)?.path.split("/").last}',
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    : const Text('Attach Letter'),
+                          ),
+                        ),
                         const SizedBox(width: 10),
                       ],
                     ),
@@ -507,7 +463,7 @@ class AddFarmerScreen extends StatelessWidget {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         //for bank passbook card
@@ -528,30 +484,30 @@ class AddFarmerScreen extends StatelessWidget {
                         //             : const Text('Attach Passbook'),
                         //   ),
                         // ),
-                        const SizedBox(
+                        SizedBox(
                           width: 10.0,
                         ),
 
                         //for concent latter
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () =>
-                                pickDoc(kConcentpdf, context, model),
-                            //  model.selectPdf( kConcentpdf, ImageSource.camera),
-                            child: model.farmerData.consentLetter != null
-                                ? Text(
-                                    'Bank  File: ${model.farmerData.consentLetter?.split("/").last}',
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : model.isFileSelected(kConcentpdf)
-                                    ? Text(
-                                        'Concent Letter: ${model.files.getFile(kConcentpdf)?.path.split("/").last}',
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    : const Text('Attach Letter'),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
+                        // Expanded(
+                        //   child: ElevatedButton(
+                        //     onPressed: () =>
+                        //         pickDoc(kConcentpdf, context, model),
+                        //     //  model.selectPdf( kConcentpdf, ImageSource.camera),
+                        //     child: model.farmerData.consentLetter != null
+                        //         ? Text(
+                        //             'Bank  File: ${model.farmerData.consentLetter?.split("/").last}',
+                        //             overflow: TextOverflow.ellipsis,
+                        //           )
+                        //         : model.isFileSelected(kConcentpdf)
+                        //             ? Text(
+                        //                 'Concent Letter: ${model.files.getFile(kConcentpdf)?.path.split("/").last}',
+                        //                 overflow: TextOverflow.ellipsis,
+                        //               )
+                        //             : const Text('Attach Letter'),
+                        //   ),
+                        // ),
+                        SizedBox(width: 10),
                       ],
                     ),
 
@@ -674,7 +630,11 @@ class AddFarmerScreen extends StatelessWidget {
   }
 
   getBankDetails(BuildContext context, FarmerViewModel model, int index) {
-    model.setValuesToBankVaribles(index);
+    if (index == -1) {
+      model.resetBankVariables(); // Add this function to reset variables
+    } else {
+      model.setValuesToBankVaribles(index);
+    }
     SchedulerBinding.instance.addPostFrameCallback(
       (_) {
         showDialog(
@@ -763,16 +723,15 @@ class AddFarmerScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextFormField(
-                          controller:
-                              TextEditingController(text: model.branchifscCode),
+                          controller: TextEditingController(text: model.branch),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(11),
+                            LengthLimitingTextInputFormatter(50),
                             UppercaseTextFormatter(),
                           ],
                           decoration: const InputDecoration(
-                            labelText: 'Branch IFSC Code',
+                            labelText: 'Branch',
                           ),
-                          validator: model.validateBranchIfscCode,
+                          validator: model.validateBranch,
                         ),
                       ),
                       Expanded(
@@ -794,34 +753,34 @@ class AddFarmerScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextFormField(
-                          controller: TextEditingController(text: model.branch),
+                          controller:
+                              TextEditingController(text: model.branchifscCode),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(50),
+                            LengthLimitingTextInputFormatter(11),
                             UppercaseTextFormatter(),
                           ],
                           decoration: const InputDecoration(
-                            labelText: 'Branch',
+                            labelText: 'Branch IFSC Code',
                           ),
-                          validator: model.validateBranch,
+                          validator: model.validateBranchIfscCode,
                         ),
                       ),
                       Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => pickDoc(kBankpdf, context, model),
-                          // model.selectPdf(kBankpdf, ImageSource.camera),
-                          child: model.passbookattch.isNotEmpty
-                              ? Text(
-                                  'Bank File: ${model.passbookattch.split("/").last}',
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              : model.isFileSelected(kBankpdf)
-                                  ? Text(
-                                      'Bank Passbook: ${model.files.getFile(kBankpdf)?.path.split("/").last}',
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  : const Text('Attach Passbook'),
-                        ),
-                      ),
+                          child: ElevatedButton(
+                        onPressed: () => pickDoc(kBankpdf, context, model),
+                        child: model.passbookattch.isNotEmpty
+                            ? Text(
+                                'Bank File: ${model.passbookattch.split("/").last}',
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            // : model.isFileSelected(kBankpdf) &&
+                            //         model.files.getFile(kBankpdf) != null
+                            //     ? Text(
+                            //         'Bank Passbook: ${model.files.getFile(kBankpdf)!.path.split("/").last}',
+                            //         overflow: TextOverflow.ellipsis,
+                            //       )
+                            : const Text('Attach Passbook'),
+                      )),
                     ],
                   ),
                 ),

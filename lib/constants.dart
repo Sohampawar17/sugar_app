@@ -88,7 +88,6 @@ Future<Map<String, String>> getTocken() async {
       'system_user=$systemUser; '
       'user_id=$userId; '
       'user_image=$userImage';
-
   return {'Cookie': formattedString};
 }
 

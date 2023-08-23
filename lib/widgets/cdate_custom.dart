@@ -2,11 +2,12 @@ class DateInputHelper {
   static String formatInput(String input) {
     String formatted = input.replaceAll(RegExp(r'[^0-9]'), '');
 
-    if (formatted.length > 4) {
-      formatted = formatted.substring(0, 4) +
+    if (formatted.length >= 8) {
+      formatted = formatted.substring(0, 2) +
           '-' +
-          formatted.substring(4, 6) +
-          (formatted.length > 6 ? '-' + formatted.substring(6, 8) : '');
+          formatted.substring(2, 4) +
+          '-' +
+          formatted.substring(4, 8);
     }
 
     return formatted;
@@ -14,9 +15,9 @@ class DateInputHelper {
 
   static bool isValidDate(String date) {
     if (date.length >= 10) {
-      int year = int.tryParse(date.substring(0, 4)) ?? 0;
-      int month = int.tryParse(date.substring(5, 7)) ?? 0;
-      int day = int.tryParse(date.substring(8, 10)) ?? 0;
+      int day = int.tryParse(date.substring(0, 2)) ?? 0;
+      int month = int.tryParse(date.substring(3, 5)) ?? 0;
+      int year = int.tryParse(date.substring(6, 10)) ?? 0;
 
       if (year >= 1900 &&
           year <= 2100 &&

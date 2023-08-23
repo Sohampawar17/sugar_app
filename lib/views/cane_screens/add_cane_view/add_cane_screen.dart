@@ -379,7 +379,7 @@ class AddCaneScreen extends StatelessWidget {
                                     readOnly: true,
                                     initialValue: model.canedata.taluka,
                                     decoration: const InputDecoration(
-                                        labelText: 'taluka'),
+                                        labelText: 'Taluka'),
                                   ),
                                 ),
                                 const SizedBox(
@@ -708,7 +708,7 @@ class AddCaneScreen extends StatelessWidget {
                                   controller: model.plantationdateController,
                                   decoration: InputDecoration(
                                     labelText: 'Plantation Date',
-                                    hintText: 'YYYY-MM-DD',
+                                    hintText: 'DD-MM-YYYY',
                                     errorText: model.errorMessage.isNotEmpty
                                         ? model.errorMessage
                                         : null,
@@ -723,10 +723,11 @@ class AddCaneScreen extends StatelessWidget {
                                   controller: model.baselDateController,
                                   decoration: InputDecoration(
                                     labelText: 'Basel Date',
-                                    hintText: 'YYYY-MM-DD',
-                                    errorText: model.errorMessage.isNotEmpty
-                                        ? model.errorMessage
-                                        : null,
+                                    hintText: 'DD-MM-YYYY',
+                                    errorText:
+                                        model.errorMessageforbasel.isNotEmpty
+                                            ? model.errorMessageforbasel
+                                            : null,
                                   ),
                                   onChanged: model.onBaseldateChanged,
                                 ),

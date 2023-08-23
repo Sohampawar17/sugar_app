@@ -8,9 +8,10 @@ import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmer.dart';
 
 import '../models/bank_model.dart';
+import '../models/village_model.dart';
 
 class FarmerService {
-  Future<List<String>> fetchVillages() async {
+  Future<List<villagemodel>> fetchVillages() async {
     try {
       var dio = Dio();
       var response = await dio.request(
@@ -22,17 +23,12 @@ class FarmerService {
       );
 
       if (response.statusCode == 200) {
-        var jsonData = json.encode(response.data);
-        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
-        List<dynamic> dataList = jsonDataMap["data"];
-        List<String> namesList =
-            dataList.map((item) => item["name"].toString()).toList();
-        return namesList;
-      }
+        Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
+        List<villagemodel> dataList = List.from(jsonData['data'])
+            .map<villagemodel>((data) => villagemodel.fromJson(data))
+            .toList();
 
-      if (response.statusCode == 401) {
-        Fluttertoast.showToast(msg: "Unauthorized Access!");
-        return ["401"];
+        return dataList;
       } else {
         Fluttertoast.showToast(msg: "Unable to fetch Villages");
         return [];

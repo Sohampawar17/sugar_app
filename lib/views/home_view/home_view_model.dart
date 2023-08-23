@@ -7,9 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/router.router.dart';
 import 'package:sugar_mill_app/services/geolocation_service.dart';
+import '../../services/login_success.dart';
 
 class HomeViewModel extends BaseViewModel {
-  initialise() {}
+  List<String> villageList = [""];
+  initialise() async {
+    villageList = await login().fetchVillages();
+  }
 
   void getGeoLocation() async {
     setBusy(true);

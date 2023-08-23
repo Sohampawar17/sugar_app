@@ -1,18 +1,18 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmer.dart';
-
 import 'package:sugar_mill_app/router.router.dart';
 import 'package:sugar_mill_app/services/add_farmer_service.dart';
-
 import '../../../models/bank_model.dart';
+import '../../../models/village_model.dart';
 import '../../../widgets/cdate_custom.dart';
 
 class FarmerViewModel extends BaseViewModel {
@@ -30,9 +30,8 @@ class FarmerViewModel extends BaseViewModel {
   final List<String> items = ['Farmer', 'Member'];
   final List<String> plantlist = ['Bedkihal', 'Nagpur'];
   final List<String> vendorGroupList = ['Cane'];
-  List<String> villageList = [""];
+  List<villagemodel> villageList = [];
   List<BankMaster> bankList = [];
-
   DateTime? selectedDate;
   Farmer farmerData = Farmer();
   late String accountNumber;
@@ -50,9 +49,9 @@ class FarmerViewModel extends BaseViewModel {
 
   initialise(BuildContext context, String farmerid) async {
     setBusy(true);
-    villageList = await FarmerService().fetchVillages();
+    villageList = (await FarmerService().fetchVillages());
     bankList = await FarmerService().fetchBanks();
-    Logger().i(bankList.toString());
+    Logger().i(villageList.toString());
     farmerId = farmerid;
     //setting aleardy available data
     if (farmerId != "") {
@@ -75,11 +74,14 @@ class FarmerViewModel extends BaseViewModel {
         _selectedItems.add(items[1]);
       }
     }
-
-    if (villageList.length == 1 && villageList[0] == "403") {
+    if (villageList.isEmpty) {
+      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await prefs0;
+      prefs.clear();
       if (context.mounted) {
         setBusy(false);
         Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+        Logger().i('logged out success');
       }
     }
     farmerData.supplierGroup = "CANE";
@@ -91,11 +93,11 @@ class FarmerViewModel extends BaseViewModel {
       Fluttertoast.showToast(msg: "Can not edit approved document!");
       return;
     }
-    if (!villageList.contains(farmerData.village)) {
-      Fluttertoast.showToast(
-          msg: "Invalid Village", toastLength: Toast.LENGTH_LONG);
-      return;
-    }
+    // if (!villageList.contains(farmerData.village)) {
+    //   Fluttertoast.showToast(
+    //       msg: "Invalid Village", toastLength: Toast.LENGTH_LONG);
+    //   return;
+    // }
     setBusy(true);
     if (formKey.currentState!.validate()) {
       // Fluttertoast.showToast(msg: "Farmer Added");
@@ -257,52 +259,46 @@ class FarmerViewModel extends BaseViewModel {
     );
     if (isValidDate) {
       errorMessage = '';
-      farmerData.dateOfBirth = formattedDate;
-      _calculateAge();
+      // Parse the formatted date using "dd-MM-yyyy" format
+      DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(formattedDate);
+
+// Format the parsed date into "yyyy-MM-dd" format
+      String formattedDateInDesiredFormat =
+          DateFormat('yyyy-MM-dd').format(parsedDate);
+
+      Logger().i(formattedDateInDesiredFormat);
+      selectedDate = DateTime.parse(formattedDateInDesiredFormat);
+      farmerData.dateOfBirth =
+          DateFormat('yyyy-MM-dd').format(selectedDate ?? DateTime.now());
+      // Format selectedDate as "YYYY-MM-DD" string
+
+      if (selectedDate != null) {
+        DateTime currentDate = DateTime.now();
+        // Logger().i(currentDate);
+        num age = currentDate.year - selectedDate!.year;
+        if (currentDate.month < selectedDate!.month ||
+            (currentDate.month == selectedDate!.month &&
+                currentDate.day < selectedDate!.day)) {
+          age--;
+        }
+
+        ageController.value = TextEditingValue(
+          text: age.toString(),
+        );
+        farmerData.age = age.toString();
+        notifyListeners();
+      } else {
+        ageController.value = const TextEditingValue(
+          text: "0",
+        );
+      }
     } else {
       errorMessage = 'Invalid date';
+      ageController.text = '0';
     }
   }
 
   String errorMessage = '';
-
-  // Future<void> selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate ?? DateTime.now(),
-  //     firstDate: DateTime(1900),
-  //     lastDate: DateTime.now(),
-  //   );
-  //
-  //   if (picked != null && picked != selectedDate) {
-  //     selectedDate = picked;
-  //     dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-  //     farmerData.dateOfBirth = dobController.text;
-  //     _calculateAge();
-  //   }
-  // }
-
-  void _calculateAge() {
-    if (selectedDate != null) {
-      DateTime currentDate = DateTime.now();
-      int age = currentDate.year - selectedDate!.year;
-      if (currentDate.month < selectedDate!.month ||
-          (currentDate.month == selectedDate!.month &&
-              currentDate.day < selectedDate!.day)) {
-        age--;
-      }
-
-      ageController.value = TextEditingValue(
-        text: age.toString(),
-      );
-      farmerData.age = age.toString();
-      notifyListeners();
-    } else {
-      ageController.value = const TextEditingValue(
-        text: "0",
-      );
-    }
-  }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// for gender //////////////////////////////////////////////////
@@ -332,9 +328,22 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   String? selectedVillage;
+  String? selectedoffice;
   void setSelectedVillage(String? village) {
     selectedVillage = village;
     farmerData.village = selectedVillage;
+    final selectedRouteData =
+        villageList.firstWhere((routeData) => routeData.name == village);
+    selectedoffice = selectedRouteData.circleOffice;
+    Logger().i(selectedVillage);
+    farmerData.circleOffice = selectedoffice;
+    Logger().i(farmerData.circleOffice);
+    notifyListeners();
+  }
+
+  void setSelectedcircleoffice(String? office) {
+    selectedoffice = office;
+    farmerData.circleOffice = selectedoffice;
     notifyListeners();
   }
 
@@ -467,7 +476,6 @@ class FarmerViewModel extends BaseViewModel {
         aadharUrl == "" ? farmerData.aadhaarCard : aadharUrl;
     // farmerData.panCard = panUrl == "" ? farmerData.panCard : panUrl;
 
-    Logger().i(passbookattch);
     farmerData.consentLetter =
         letterUrl == "" ? farmerData.consentLetter : letterUrl;
   }
@@ -603,6 +611,15 @@ class FarmerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void resetBankVariables() {
+    selectedRole = ""; // Reset selectedRole
+    bankName = "";
+    branchifscCode = "";
+    accountNumber = "";
+    branch = "";
+    passbookattch = "";
+  }
+
   bool isRoleAlreadyPresent(String field) {
     for (var i in bankAccounts) {
       Logger().i(i.transporter);
@@ -699,6 +716,7 @@ class Files {
   File? bankPassbook;
   // File? panCard;
   File? consentLetter;
+
   File? getFile(String fileType) {
     if (fileType == kAadharpdf) {
       return adharCard;
