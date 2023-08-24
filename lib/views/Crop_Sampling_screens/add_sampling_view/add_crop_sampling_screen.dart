@@ -16,7 +16,9 @@ class AddCropSamplingScreen extends StatelessWidget {
         onViewModelReady: (model) => model.initialise(context, samplingId),
         builder: (context, model, child) => Scaffold(
             appBar: AppBar(
-              title: const Text('Crop Sampling'),
+              title: model.isEdit == true
+                  ? Text(model.cropsamplingdata.name ?? "")
+                  : const Text('Crop Sampling'),
             ),
             body: fullScreenLoader(
               child: SingleChildScrollView(

@@ -57,6 +57,7 @@ class ListFarmersScreen extends StatelessWidget {
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'Name',
+                                    prefixIcon: Icon(Icons.search),
                                   ),
                                 ),
                               ),
@@ -73,6 +74,7 @@ class ListFarmersScreen extends StatelessWidget {
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'ID',
+                                    prefixIcon: Icon(Icons.search),
                                     // prefixIcon: Icon(Icons.search),
                                   ),
                                 ),
@@ -86,38 +88,50 @@ class ListFarmersScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const ListTile(
-                tileColor: Colors.black45,
-                trailing: AutoSizeText(
-                  'Village',
-                  maxLines: 2,
-                ),
-                leading: SizedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      AutoSizeText(
-                        'Circle Office',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      AutoSizeText(
-                        'WorkFlow Status',
-                        maxLines: 3,
-                        style: TextStyle(
-                          fontSize: 8,
-                        ),
-                      ),
-                    ],
+              Container(
+                padding: const EdgeInsets.all(10),
+                color: Colors.grey,
+                child: const ListTile(
+                  trailing: AutoSizeText(
+                    'Village',
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: Colors.white), // Set text color to white
                   ),
-                ),
-                title: Text(
-                  'Name',
-                  style: TextStyle(fontSize: 15),
-                ),
-                subtitle: Text(
-                  'ID',
-                  style: TextStyle(fontSize: 15),
+                  leading: SizedBox(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        AutoSizeText(
+                          'Circle Office',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: Colors.white), // Set text color to white
+                        ),
+                        AutoSizeText(
+                          'WorkFlow Status',
+                          maxLines: 3,
+                          style: TextStyle(
+                            fontSize: 8,
+                            color: Colors.white, // Set text color to white
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  title: Text(
+                    'Name',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white), // Set text color to white
+                  ),
+                  subtitle: Text(
+                    'ID',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white), // Set text color to white
+                  ),
                 ),
               ),
               const SizedBox(

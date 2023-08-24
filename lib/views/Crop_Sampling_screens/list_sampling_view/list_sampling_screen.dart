@@ -57,57 +57,66 @@ class ListSamplingScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 70,
-                child: ListTile(
-                  tileColor: Colors.black45,
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      AutoSizeText(
-                        'Season',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      AutoSizeText(
-                        'Plant Name',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 8,
-                        ),
-                      ),
-                    ],
-                  ),
-                  leading: SizedBox(
-                    // width: getWidth(context) / 5,
-                    child: Column(
+              Container(
+                  padding: const EdgeInsets.all(10),
+                  color: Colors.grey,
+                  child: const ListTile(
+                    trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         AutoSizeText(
-                          'Plot No.',
+                          'Season',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: Colors.white), // Set text color to white
                         ),
                         AutoSizeText(
-                          'Plantation Status',
-                          maxLines: 2,
+                          'Plant Name',
+                          maxLines: 1,
                           style: TextStyle(
                             fontSize: 8,
+                            color: Colors.white, // Set text color to white
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  title: Text(
-                    'Name',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  subtitle: Text(
-                    'Form Number',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ),
-              ),
+                    leading: SizedBox(
+                      // width: getWidth(context) / 5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          AutoSizeText(
+                            'Plot No.',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white), // Set text color to white
+                          ),
+                          AutoSizeText(
+                            'Plantation Status',
+                            maxLines: 2,
+                            style: TextStyle(
+                              fontSize: 8,
+                              color: Colors.white, // Set text color to white
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    title: Text(
+                      'Name',
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white), // Set text color to white
+                    ),
+                    subtitle: Text(
+                      'Form Number',
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white), // Set text color to white
+                    ),
+                  )),
               const SizedBox(
                 height: 25,
               ),

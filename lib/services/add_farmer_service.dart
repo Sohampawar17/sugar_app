@@ -40,11 +40,11 @@ class FarmerService {
     }
   }
 
-  Future<List<BankMaster>> fetchBanks() async {
+  Future<List<BankMaster>> fetchBanks(String bank) async {
     try {
       var dio = Dio();
       var response = await dio.request(
-        apiBankListGet,
+        '$apiBaseUrl/api/resource/Bank Master?fields=["bank_name","branch","ifsc_code"]&filters=[["bank_name","like","$bank%"]]&limit_page_length=9999',
         options: Options(
           method: 'GET',
           headers: {'Cookie': await getTocken()},

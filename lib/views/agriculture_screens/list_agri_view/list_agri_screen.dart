@@ -54,54 +54,58 @@ class ListAgriScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 70,
-                child: ListTile(
-                  tileColor: Colors.black45,
-                  trailing: const Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      AutoSizeText(
-                        'Crop Type',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      AutoSizeText(
-                        'Crop Variety',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 8,
-                        ),
-                      ),
-                    ],
-                  ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                color: Colors.grey,
+                child: const ListTile(
                   leading: SizedBox(
-                    width: getWidth(context) / 5,
-                    child: const Column(
+                    // width: getWidth(context) / 5,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         AutoSizeText(
                           'Village',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
+                          style:
+                              TextStyle(color: Colors.white), // Set text color
                         ),
                         AutoSizeText(
-                          'Area In Acrs',
+                          'Area In Acres',
                           maxLines: 2,
                           style: TextStyle(
-                            fontSize: 8,
-                          ),
+                              fontSize: 8,
+                              color: Colors.white), // Set text color
                         ),
                       ],
                     ),
                   ),
-                  title: const Text(
+                  title: Text(
                     'Name',
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(
+                        fontSize: 14, color: Colors.white), // Set text color
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Plantation Date',
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(
+                        fontSize: 14, color: Colors.white), // Set text color
+                  ),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      AutoSizeText(
+                        'Crop Type',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white), // Set text color
+                      ),
+                      AutoSizeText(
+                        'Crop Variety',
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 8, color: Colors.white), // Set text color
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -5,11 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmer.dart';
-import 'package:sugar_mill_app/router.router.dart';
+
 import 'package:sugar_mill_app/services/add_farmer_service.dart';
 import '../../../models/bank_model.dart';
 import '../../../models/village_model.dart';
@@ -50,7 +50,7 @@ class FarmerViewModel extends BaseViewModel {
   initialise(BuildContext context, String farmerid) async {
     setBusy(true);
     villageList = (await FarmerService().fetchVillages());
-    bankList = await FarmerService().fetchBanks();
+    bankList = await FarmerService().fetchBanks("");
     Logger().i(villageList.toString());
     farmerId = farmerid;
     //setting aleardy available data
@@ -74,16 +74,7 @@ class FarmerViewModel extends BaseViewModel {
         _selectedItems.add(items[1]);
       }
     }
-    if (villageList.isEmpty) {
-      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
-      final SharedPreferences prefs = await prefs0;
-      prefs.clear();
-      if (context.mounted) {
-        setBusy(false);
-        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
-        Logger().i('logged out success');
-      }
-    }
+
     farmerData.supplierGroup = "CANE";
     setBusy(false);
   }
@@ -230,12 +221,12 @@ class FarmerViewModel extends BaseViewModel {
   //////////////////////////////////////////////////////////////////////////
 
   ///////////////////////////////// /for dob////////////////////////////////
-  bool isValidDateFormat(String input) {
-    // Implement your validation logic here, for example using regular expressions
-    // This is a simplified example; you might want to use a more robust validation approach
-    RegExp dateRegExp = RegExp(r'^\d{4}-\d{2}-\d{2}$');
-    return dateRegExp.hasMatch(input);
-  }
+  // bool isValidDateFormat(String input) {
+  //   // Implement your validation logic here, for example using regular expressions
+  //   // This is a simplified example; you might want to use a more robust validation approach
+  //   RegExp dateRegExp = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+  //   return dateRegExp.hasMatch(input);
+  // }
 
   String? validateDob(String? value) {
     if (value == null || value.isEmpty) {
@@ -329,6 +320,7 @@ class FarmerViewModel extends BaseViewModel {
 
   String? selectedVillage;
   String? selectedoffice;
+
   void setSelectedVillage(String? village) {
     selectedVillage = village;
     farmerData.village = selectedVillage;
@@ -347,15 +339,20 @@ class FarmerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedBank(String? bank) {
+  void setSelectedBank(String? bank) async {
     bankName = bank ?? "";
-    final selectedRouteData =
-        bankList.firstWhere((bankData) => bankData.bankName == bank);
-    branchifscCode = selectedRouteData.ifscCode ?? "";
-    branch = selectedRouteData.branch ?? "";
-    Logger().i(branch);
-    Logger().i(branchifscCode);
+    bankList = await FarmerService().fetchBanks(bank ?? "");
     notifyListeners();
+  }
+
+  void setSelectedBranch(String? bankbranch) {
+    branch = bankbranch ?? "";
+    Logger().i(bankbranch);
+    final selectedRouteData =
+        bankList.firstWhere((bankData) => bankData.branch == bankbranch);
+    Logger().i(selectedRouteData);
+    branchifscCode = selectedRouteData.ifscCode ?? "";
+    Logger().i(branchifscCode);
   }
 
   String? selectedRole;

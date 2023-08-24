@@ -16,7 +16,9 @@ class AddTripsheetScreen extends StatelessWidget {
       onViewModelReady: (model) => model.initialise(context, tripId),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Trip Sheet Form'),
+          title: model.isEdit == true
+              ? Text(model.tripSheetData.name.toString())
+              : const Text('Trip Sheet Form'),
         ),
         body: fullScreenLoader(
             child: SingleChildScrollView(

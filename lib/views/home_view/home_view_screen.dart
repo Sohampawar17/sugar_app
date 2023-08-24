@@ -472,7 +472,7 @@ class HomePageScreen extends StatelessWidget {
         ),
       ),
       viewModelBuilder: () => HomeViewModel(),
-      onViewModelReady: (model) => model.initialise(),
+      onViewModelReady: (model) => model.initialise(context),
     );
   }
 }

@@ -33,7 +33,7 @@ String apitFilterOnFarmerListGet =
 String apiLoginGet = '$apiBaseUrl/api/method/login';
 //Cane Registration
 String apifetchCaneList =
-    '$apiBaseUrl/api/resource/Cane Master?fields=["plantation_status","area","circle_office","name","grower_code","grower_name","plantattion_ratooning_date"]';
+    '$apiBaseUrl/api/resource/Cane Master?order_by=creation desc&fields=["plantation_status","area","circle_office","name","grower_code","grower_name","plantattion_ratooning_date"]';
 String apiFarmerListGetwithfilter =
     '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1]]&limit_page_length=999999';
 String apiCaneRegistration = '$apiBaseUrl/api/resource/Cane Master';
@@ -58,7 +58,7 @@ String apigetagrilist =
 ///Crop Sampling
 String apiPostCropSampling = "$apiBaseUrl/api/resource/Crop Sampling";
 String apiListSampling =
-    '$apiBaseUrl/api/resource/Crop Sampling?fields=["id","season","plantation_status","plant_name","form_number","name"]';
+    '$apiBaseUrl/api/resource/Crop Sampling?order_by=creation desc&fields=["id","season","plantation_status","plant_name","form_number","name"]';
 
 ///TripSheet
 String apifetchplotnumber =
@@ -69,7 +69,7 @@ String apifetchFarList =
     '$apiBaseUrl/api/resource/Farmer List?fields=["name","supplier_name"]';
 String apifetchtripsheetData = '$apiBaseUrl/api/resource/Trip Sheet';
 String apifetchtripsheetsearch =
-    '$apiBaseUrl/api/resource/Trip Sheet?fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]';
+    '$apiBaseUrl/api/resource/Trip Sheet?order_by=creation desc&fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]';
 
 ///functions
 Future<Map<String, String>> getTocken() async {

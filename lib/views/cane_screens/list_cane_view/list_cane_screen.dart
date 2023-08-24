@@ -89,50 +89,53 @@ class ListCaneScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const ListTile(
-                tileColor: Colors.black45,
-                trailing: AutoSizeText(
-                  'Village',
-                  maxLines: 2,
-                ),
-                leading: SizedBox(
-                  // width: getWidth(context) / 5,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      AutoSizeText(
-                        'Circle Office',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      AutoSizeText(
-                        'Plantation Status',
-                        maxLines: 2,
-                        style: TextStyle(
-                          fontSize: 8,
+              Container(
+                padding: const EdgeInsets.all(10),
+                color: Colors.grey,
+                child: const ListTile(
+                  trailing: AutoSizeText(
+                    'Village',
+                    maxLines: 2,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  leading: SizedBox(
+                    // width: getWidth(context) / 5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        AutoSizeText(
+                          'Circle Office',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.white),
                         ),
+                        AutoSizeText(
+                          'Plantation Status',
+                          maxLines: 2,
+                          style: TextStyle(fontSize: 8, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  title: Text(
+                    'Name',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                  subtitle: Row(
+                    children: [
+                      Text(
+                        'ID',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                      SizedBox(
+                        width: 35,
+                      ),
+                      Text(
+                        'Plantation Date',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ],
                   ),
-                ),
-                title: Text(
-                  'Name',
-                  style: TextStyle(fontSize: 16),
-                ),
-                subtitle: Row(
-                  children: [
-                    Text(
-                      'ID',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(
-                      width: 35,
-                    ),
-                    Text(
-                      'Plantation Date',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
                 ),
               ),
               const SizedBox(

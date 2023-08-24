@@ -17,7 +17,9 @@ class AddAgriScreen extends StatelessWidget {
         onViewModelReady: (model) => model.initialise(context, agriId),
         builder: (context, model, child) => Scaffold(
             appBar: AppBar(
-              title: const Text('Agriculture development'),
+              title: model.isEdit == true
+                  ? Text(model.agridata.name ?? "")
+                  : const Text('Agriculture development'),
             ),
             body: fullScreenLoader(
               child: SingleChildScrollView(

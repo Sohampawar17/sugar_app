@@ -25,7 +25,9 @@ class AddFarmerScreen extends StatelessWidget {
       onViewModelReady: (model) => model.initialise(context, farmerid),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Farmer Form'),
+          title: model.isEdit == true
+              ? Text(model.farmerData.supplierName ?? "")
+              : const Text('Farmer Form'),
         ),
         body: fullScreenLoader(
           child: SingleChildScrollView(
@@ -445,7 +447,7 @@ class AddFarmerScreen extends StatelessWidget {
                             //  model.selectPdf( kConcentpdf, ImageSource.camera),
                             child: model.farmerData.consentLetter != null
                                 ? Text(
-                                    'Bank  File: ${model.farmerData.consentLetter?.split("/").last}',
+                                    'Concent Letter File: ${model.farmerData.consentLetter?.split("/").last}',
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : model.isFileSelected(kConcentpdf)
@@ -722,16 +724,77 @@ class AddFarmerScreen extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: TextFormField(
-                          controller: TextEditingController(text: model.branch),
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(50),
-                            UppercaseTextFormatter(),
-                          ],
-                          decoration: const InputDecoration(
-                            labelText: 'Branch',
-                          ),
-                          validator: model.validateBranch,
+                        child: Autocomplete<String>(
+                          key: Key(index == -1
+                              ? ""
+                              : model.bankAccounts[index].bankAndBranch ?? ""),
+                          initialValue: TextEditingValue(
+                              text: index == -1
+                                  ? ""
+                                  : model.bankAccounts[index].bankAndBranch ??
+                                      ""),
+                          optionsBuilder: (TextEditingValue textEditingValue) {
+                            if (textEditingValue.text.isEmpty) {
+                              return const Iterable<String>.empty();
+                            }
+                            return model.bankList
+                                .map((bank) => bank.branch ?? "")
+                                .toList()
+                                .where((bank) => bank.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase()));
+                          },
+                          onSelected: (String routeName) {
+                            // Find the corresponding route object
+                            final bankData = model.bankList
+                                .firstWhere((bank) => bank.branch == routeName);
+                            model.setSelectedBranch(
+                                bankData.branch); // Pass the route
+                          },
+                          fieldViewBuilder: (BuildContext context,
+                              TextEditingController textEditingController,
+                              FocusNode focusNode,
+                              VoidCallback onFieldSubmitted) {
+                            return TextFormField(
+                              controller: textEditingController,
+                              focusNode: focusNode,
+                              decoration: const InputDecoration(
+                                labelText: 'Branch',
+                              ),
+                              onChanged: (String value) {},
+                            );
+                          },
+                          optionsViewBuilder: (BuildContext contpext,
+                              AutocompleteOnSelected<String> onSelected,
+                              Iterable<String> options) {
+                            return Align(
+                              alignment: Alignment.topLeft,
+                              child: Material(
+                                elevation: 4.0,
+                                child: Container(
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 200),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: options.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final String option =
+                                          options.elementAt(index);
+                                      return GestureDetector(
+                                        onTap: () {
+                                          onSelected(option);
+                                        },
+                                        child: ListTile(
+                                          title: Text(option),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          optionsMaxHeight: 200,
                         ),
                       ),
                       Expanded(
@@ -773,13 +836,13 @@ class AddFarmerScreen extends StatelessWidget {
                                 'Bank File: ${model.passbookattch.split("/").last}',
                                 overflow: TextOverflow.ellipsis,
                               )
-                            // : model.isFileSelected(kBankpdf) &&
-                            //         model.files.getFile(kBankpdf) != null
-                            //     ? Text(
-                            //         'Bank Passbook: ${model.files.getFile(kBankpdf)!.path.split("/").last}',
-                            //         overflow: TextOverflow.ellipsis,
-                            //       )
-                            : const Text('Attach Passbook'),
+                            : model.isFileSelected(kBankpdf) &&
+                                    model.files.getFile(kBankpdf) != null
+                                ? Text(
+                                    'Bank Passbook: ${model.files.getFile(kBankpdf)!.path.split("/").last}',
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : const Text('Attach Passbook'),
                       )),
                     ],
                   ),

@@ -19,6 +19,14 @@ class ListCaneModel extends BaseViewModel {
         return const Color(0xFFD3E8FD);
       case 'To Sampling':
         return const Color(0xFFEAF5EE);
+      case 'Harvester':
+        return const Color(0xFFDCEDC8);
+      case 'Diversion':
+        return const Color(0xFFE1BEE7);
+      case 'Added to Sampling':
+        return const Color(0xFFCFD8DC);
+      case 'Added to Harvesting':
+        return const Color(0xFF66BB6A);
       default:
         return const Color(0xFFFFF5F5);
     }

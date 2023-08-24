@@ -18,7 +18,9 @@ class AddCaneScreen extends StatelessWidget {
         onViewModelReady: (model) => model.initialise(context, caneId),
         builder: (context, model, child) => Scaffold(
               appBar: AppBar(
-                title: const Text('Cane Registration'),
+                title: model.isEdit == true
+                    ? Text(model.canedata.name.toString() ?? "")
+                    : const Text('Cane Registration'),
               ),
               body: fullScreenLoader(
                 child: SingleChildScrollView(
@@ -84,12 +86,109 @@ class AddCaneScreen extends StatelessWidget {
                               ),
                             ],
                           ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Autocomplete<String>(
+                                  key: Key(model.canedata.area ?? "03"),
+                                  initialValue: TextEditingValue(
+                                    text: model.canedata.area ?? "",
+                                  ),
+                                  optionsBuilder:
+                                      (TextEditingValue textEditingValue) {
+                                    if (textEditingValue.text.isEmpty) {
+                                      return const Iterable<String>.empty();
+                                    }
+                                    return model.villageList
+                                        .map((route) => route.name!)
+                                        .toList()
+                                        .where((route) => route
+                                            .toLowerCase()
+                                            .contains(textEditingValue.text
+                                                .toLowerCase()));
+                                  },
+                                  onSelected: (String routeName) {
+                                    // Find the corresponding route object
+                                    final routeData = model.villageList
+                                        .firstWhere(
+                                            (route) => route.name == routeName);
+                                    model.setSelectedVillage(
+                                        routeData.name); // Pass the route
+                                  },
+                                  fieldViewBuilder: (BuildContext context,
+                                      TextEditingController
+                                          textEditingController,
+                                      FocusNode focusNode,
+                                      VoidCallback onFieldSubmitted) {
+                                    return TextFormField(
+                                      // key: Key(model.farmerData.village ?? ""),
+                                      // initialValue: model.farmerData.village,
+                                      controller: textEditingController,
+                                      focusNode: focusNode,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Village',
+                                      ),
+                                      onChanged: (String value) {},
+                                      validator: model.validateVillage,
+                                    );
+                                  },
+                                  optionsViewBuilder: (BuildContext contpext,
+                                      AutocompleteOnSelected<String> onSelected,
+                                      Iterable<String> options) {
+                                    return Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Material(
+                                        elevation: 4.0,
+                                        child: Container(
+                                          constraints: const BoxConstraints(
+                                              maxHeight: 200),
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: options.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final String option =
+                                                  options.elementAt(index);
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  onSelected(option);
+                                                },
+                                                child: ListTile(
+                                                  title: Text(option),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  optionsMaxHeight: 200,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  key: Key(model.canedata.circleOffice ??
+                                      "circleoffice"),
+                                  readOnly: true,
+                                  initialValue: model.canedata.circleOffice,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Circle Office',
+                                  ),
+                                  onChanged: model.setSelectedcircleoffice,
+                                ),
+                              ),
+                            ],
+                          ),
                           Row(children: [
                             Expanded(
                               child: Autocomplete<String>(
-                                key: Key(model.canedata.growerCode ?? "05"),
+                                key: Key(model.canedata.vendorCode ?? "05"),
                                 initialValue: TextEditingValue(
-                                  text: model.canedata.growerCode ?? "",
+                                  text: model.canedata.vendorCode ?? "",
                                 ),
                                 optionsBuilder:
                                     (TextEditingValue textEditingValue) {
@@ -97,12 +196,13 @@ class AddCaneScreen extends StatelessWidget {
                                     return const Iterable<String>.empty();
                                   }
                                   return model.farmerList
-                                      .map((grower) => grower.name ?? "")
-                                      .toList()
-                                      .where((grower) => grower
+                                      .where((grower) => grower.supplierName!
                                           .toLowerCase()
                                           .contains(textEditingValue.text
-                                              .toLowerCase()));
+                                              .toLowerCase()))
+                                      .map((grower) =>
+                                          grower.existingSupplierCode ?? "")
+                                      .toList();
                                 },
                                 onSelected: model.setSelectedgrowercode,
                                 fieldViewBuilder: (BuildContext context,
@@ -110,8 +210,6 @@ class AddCaneScreen extends StatelessWidget {
                                     FocusNode focusNode,
                                     VoidCallback onFieldSubmitted) {
                                   return TextFormField(
-                                    // key: Key(model.farmerData.village ?? ""),
-                                    // initialValue: model.farmerData.village,
                                     controller: textEditingController,
                                     focusNode: focusNode,
                                     decoration: const InputDecoration(
@@ -121,7 +219,7 @@ class AddCaneScreen extends StatelessWidget {
                                     validator: model.validateGrowerCode,
                                   );
                                 },
-                                optionsViewBuilder: (BuildContext contpext,
+                                optionsViewBuilder: (BuildContext context,
                                     AutocompleteOnSelected<String> onSelected,
                                     Iterable<String> options) {
                                   return Align(
@@ -140,7 +238,9 @@ class AddCaneScreen extends StatelessWidget {
                                                 options.elementAt(index);
                                             final routeData = model.farmerList
                                                 .firstWhere((route) =>
-                                                    route.name == option);
+                                                    route
+                                                        .existingSupplierCode ==
+                                                    option);
                                             return GestureDetector(
                                               onTap: () {
                                                 onSelected(option);
@@ -273,103 +373,6 @@ class AddCaneScreen extends StatelessWidget {
                                 )
                               : Container(),
 
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Autocomplete<String>(
-                                  key: Key(model.canedata.area ?? "03"),
-                                  initialValue: TextEditingValue(
-                                    text: model.canedata.area ?? "",
-                                  ),
-                                  optionsBuilder:
-                                      (TextEditingValue textEditingValue) {
-                                    if (textEditingValue.text.isEmpty) {
-                                      return const Iterable<String>.empty();
-                                    }
-                                    return model.villageList
-                                        .map((route) => route.name!)
-                                        .toList()
-                                        .where((route) => route
-                                            .toLowerCase()
-                                            .contains(textEditingValue.text
-                                                .toLowerCase()));
-                                  },
-                                  onSelected: (String routeName) {
-                                    // Find the corresponding route object
-                                    final routeData = model.villageList
-                                        .firstWhere(
-                                            (route) => route.name == routeName);
-                                    model.setSelectedVillage(
-                                        routeData.name); // Pass the route
-                                  },
-                                  fieldViewBuilder: (BuildContext context,
-                                      TextEditingController
-                                          textEditingController,
-                                      FocusNode focusNode,
-                                      VoidCallback onFieldSubmitted) {
-                                    return TextFormField(
-                                      // key: Key(model.farmerData.village ?? ""),
-                                      // initialValue: model.farmerData.village,
-                                      controller: textEditingController,
-                                      focusNode: focusNode,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Village',
-                                      ),
-                                      onChanged: (String value) {},
-                                      validator: model.validateVillage,
-                                    );
-                                  },
-                                  optionsViewBuilder: (BuildContext contpext,
-                                      AutocompleteOnSelected<String> onSelected,
-                                      Iterable<String> options) {
-                                    return Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Material(
-                                        elevation: 4.0,
-                                        child: Container(
-                                          constraints: const BoxConstraints(
-                                              maxHeight: 200),
-                                          child: ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: options.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final String option =
-                                                  options.elementAt(index);
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  onSelected(option);
-                                                },
-                                                child: ListTile(
-                                                  title: Text(option),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  optionsMaxHeight: 200,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: TextFormField(
-                                  key: Key(model.canedata.circleOffice ??
-                                      "circleoffice"),
-                                  readOnly: true,
-                                  initialValue: model.canedata.circleOffice,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Circle Office',
-                                  ),
-                                  onChanged: model.setSelectedcircleoffice,
-                                ),
-                              ),
-                            ],
-                          ),
                           Visibility(
                             visible: model.isEdit,
                             child: Row(

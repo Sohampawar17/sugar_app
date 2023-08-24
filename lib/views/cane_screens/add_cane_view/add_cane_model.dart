@@ -75,7 +75,7 @@ class CaneViewModel extends BaseViewModel {
     irrigationmethodList = await AddCaneService().fetchirrigationmethod();
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
     soilTypeList = await AddCaneService().fetchSoilType();
-    farmerList = await AddCaneService().fetchfarmerListwithfilter();
+
     canedata.plantationStatus = "New";
     Logger().i(caneId);
     if (caneId != "") {
@@ -168,8 +168,18 @@ class CaneViewModel extends BaseViewModel {
     );
     if (isValidDate) {
       errorMessage = '';
+      // Parse the formatted date using "dd-MM-yyyy" format
       DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(formattedDate);
-      canedata.plantattionRatooningDate = parsedDate.toString();
+
+// Format the parsed date into "yyyy-MM-dd" format
+      String formattedDateInDesiredFormat =
+          DateFormat('yyyy-MM-dd').format(parsedDate);
+
+      Logger().i(formattedDateInDesiredFormat);
+      selectedDate = DateTime.parse(formattedDateInDesiredFormat);
+      canedata.plantattionRatooningDate =
+          DateFormat('yyyy-MM-dd').format(selectedDate ?? DateTime.now());
+      // Format selectedDate as "YYYY-MM-DD" string
     } else {
       errorMessage = 'Invalid date';
     }
@@ -185,8 +195,18 @@ class CaneViewModel extends BaseViewModel {
     );
     if (isValidDate) {
       errorMessageforbasel = '';
+      // Parse the formatted date using "dd-MM-yyyy" format
       DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(formattedDate);
-      canedata.basalDate = parsedDate.toString();
+
+// Format the parsed date into "yyyy-MM-dd" format
+      String formattedDateInDesiredFormat =
+          DateFormat('yyyy-MM-dd').format(parsedDate);
+
+      Logger().i(formattedDateInDesiredFormat);
+      selectedDate = DateTime.parse(formattedDateInDesiredFormat);
+      canedata.basalDate =
+          DateFormat('yyyy-MM-dd').format(selectedDate ?? DateTime.now());
+      // Format selectedDate as "YYYY-MM-DD" string
     } else {
       errorMessageforbasel = 'Invalid date';
     }
@@ -241,6 +261,10 @@ class CaneViewModel extends BaseViewModel {
   void setSelectedVillage(String? village) async {
     selectedVillage = village;
     canedata.area = selectedVillage;
+    Logger().i(village);
+    farmerList =
+        await AddCaneService().fetchfarmerListwithfilter(village ?? "");
+    Logger().i(farmerList);
     final selectedRouteData =
         villageList.firstWhere((routeData) => routeData.name == village);
     selectedvillage = selectedRouteData.circleOffice;
@@ -338,12 +362,12 @@ class CaneViewModel extends BaseViewModel {
 
   void setSelectedgrowercode(String? growercode) {
     selectedgrowercode = growercode;
-    canedata.growerCode = selectedgrowercode;
-    final selectedgrowerData =
-        farmerList.firstWhere((growerData) => growerData.name == growercode);
+    final selectedgrowerData = farmerList.firstWhere(
+        (growerData) => growerData.existingSupplierCode == growercode);
     Logger().i(selectedgrowerData);
     selectedgrowername =
         selectedgrowerData.supplierName; // Set th distance in the kmController
+    canedata.growerCode = selectedgrowerData.name;
     canedata.growerName = selectedgrowername;
     Logger().i(selectedgrowername);
     notifyListeners();

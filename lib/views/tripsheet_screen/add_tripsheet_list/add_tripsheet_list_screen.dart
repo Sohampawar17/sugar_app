@@ -15,7 +15,7 @@ class TripsheetMaster extends StatelessWidget {
       onViewModelReady: (model) => model.initialise(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Trip Sheet Master'),
+          title: const Text('Trip Sheet List'),
         ),
         body: fullScreenLoader(
             child: Column(
@@ -61,7 +61,7 @@ class TripsheetMaster extends StatelessWidget {
                                     // ),
                                   ),
                                   const SizedBox(
-                                    width: 5.0,
+                                    width: 10.0,
                                   ),
                                   Expanded(
                                     child: TextField(
@@ -73,13 +73,11 @@ class TripsheetMaster extends StatelessWidget {
                                         },
                                         decoration: const InputDecoration(
                                           labelText: 'Village',
+                                          prefixIcon: Icon(Icons.search),
                                         )),
                                   ),
                                   const SizedBox(
-                                    width: 5.0,
-                                  ),
-                                  const SizedBox(
-                                    width: 5.0,
+                                    width: 10.0,
                                   ),
                                   SizedBox(
                                     width: getWidth(context) / 4,
@@ -92,13 +90,13 @@ class TripsheetMaster extends StatelessWidget {
                                       },
                                       decoration: const InputDecoration(
                                         labelText: 'Transporter',
-
+                                        prefixIcon: Icon(Icons.search),
                                         // prefixIcon: Icon(Icons.search),
                                       ),
                                     ),
                                   ),
                                   const SizedBox(
-                                    width: 5.0,
+                                    width: 10.0,
                                   ),
                                   Expanded(
                                     child: TextField(
@@ -110,10 +108,11 @@ class TripsheetMaster extends StatelessWidget {
                                       },
                                       decoration: const InputDecoration(
                                         labelText: 'Season',
+                                        prefixIcon: Icon(Icons.search),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 5.0),
+                                  const SizedBox(width: 10.0),
                                 ],
                               ),
                             ),
@@ -123,47 +122,59 @@ class TripsheetMaster extends StatelessWidget {
                     ),
                   ),
                 ),
-                const ListTile(
-                  tileColor: Colors.black45,
-                  trailing: AutoSizeText(
-                    "Circle Office",
-                    maxLines: 2,
-                  ),
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                        child: AutoSizeText(
-                          'ID',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 11,
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    color: Colors.grey,
+                    child: const ListTile(
+                      trailing: AutoSizeText(
+                        "Circle Office",
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: Colors.white), // Set text color to white
+                      ),
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: AutoSizeText(
+                              'ID',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.white, // Set text color to white
+                              ),
+                            ),
                           ),
-                        ),
+                          Expanded(
+                            child: AutoSizeText(
+                              'Village',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white, // Set text color to white
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: AutoSizeText(
-                          'Village',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      title: Text(
+                        'Transporter Name',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white), // Set text color to white
                       ),
-                    ],
-                  ),
-                  title: Text(
-                    'Transporter Name',
-                    style: TextStyle(fontSize: 11),
-                  ),
-                  subtitle: Row(
-                    children: [
-                      Text(
-                        'Farmer Name',
-                        style: TextStyle(fontSize: 11),
+                      subtitle: Row(
+                        children: [
+                          Text(
+                            'Farmer Name',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white), // Set text color to white
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    )),
                 const SizedBox(
                   height: 20,
                 ),
@@ -172,9 +183,9 @@ class TripsheetMaster extends StatelessWidget {
                     itemCount: model.tripSheetFilter.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: ListTile(
-                            tileColor: Color(0xFFD3E8FD),
+                            tileColor: const Color(0xFFD3E8FD),
                             trailing: AutoSizeText(
                               model.tripSheetFilter[index].circleOffice ?? '',
                               maxLines: 2,
@@ -188,7 +199,7 @@ class TripsheetMaster extends StatelessWidget {
                                         .toString(),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 11,
                                     ),
                                   ),
@@ -206,13 +217,13 @@ class TripsheetMaster extends StatelessWidget {
                             title: Text(
                               model.tripSheetFilter[index].transporterName ??
                                   '',
-                              style: TextStyle(fontSize: 11),
+                              style: const TextStyle(fontSize: 14),
                             ),
                             subtitle: Row(
                               children: [
                                 Text(
                                   model.tripSheetFilter[index].farmerName ?? '',
-                                  style: TextStyle(fontSize: 11),
+                                  style: const TextStyle(fontSize: 12),
                                 ),
                               ],
                             ),

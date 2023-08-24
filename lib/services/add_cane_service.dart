@@ -69,12 +69,12 @@ class AddCaneService {
     return [];
   }
 
-  Future<List<caneFarmer>> fetchfarmerListwithfilter() async {
+  Future<List<caneFarmer>> fetchfarmerListwithfilter(String village) async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        apiFarmerListGetwithfilter,
+        '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","village","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1],["village","like","$village%"]]&limit_page_length=999999',
         options: Options(
           method: 'GET',
           headers: headers,
