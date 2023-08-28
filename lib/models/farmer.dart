@@ -1,11 +1,5 @@
 class Farmer {
   String? name;
-  String? owner;
-  String? creation;
-  String? modified;
-  String? modifiedBy;
-  int? docstatus;
-  int? idx;
   String? workflowState;
   String? namingSeries;
   String? supplierName;
@@ -15,7 +9,6 @@ class Farmer {
   String? panNumber;
   String? mobileNumber;
   String? dateOfBirth;
-  String? existingSupplierCode;
   String? gender;
   String? age;
   String? country;
@@ -27,10 +20,10 @@ class Farmer {
   String? village;
   String? circleOffice;
   String? taluka;
-  String? pinCode;
   String? state;
   String? aadhaarCard;
   String? bankPassbook;
+  String? panCard;
   String? consentLetter;
   int? isInternalSupplier;
   String? language;
@@ -48,12 +41,6 @@ class Farmer {
 
   Farmer(
       {this.name,
-      this.owner,
-      this.creation,
-      this.modified,
-      this.modifiedBy,
-      this.docstatus,
-      this.idx,
       this.workflowState,
       this.namingSeries,
       this.supplierName,
@@ -63,7 +50,6 @@ class Farmer {
       this.panNumber,
       this.mobileNumber,
       this.dateOfBirth,
-      this.existingSupplierCode,
       this.gender,
       this.age,
       this.country,
@@ -75,10 +61,10 @@ class Farmer {
       this.village,
       this.circleOffice,
       this.taluka,
-      this.pinCode,
       this.state,
       this.aadhaarCard,
       this.bankPassbook,
+      this.panCard,
       this.consentLetter,
       this.isInternalSupplier,
       this.language,
@@ -96,12 +82,6 @@ class Farmer {
 
   Farmer.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    owner = json['owner'];
-    creation = json['creation'];
-    modified = json['modified'];
-    modifiedBy = json['modified_by'];
-    docstatus = json['docstatus'];
-    idx = json['idx'];
     workflowState = json['workflow_state'];
     namingSeries = json['naming_series'];
     supplierName = json['supplier_name'];
@@ -111,7 +91,6 @@ class Farmer {
     panNumber = json['pan_number'];
     mobileNumber = json['mobile_number'];
     dateOfBirth = json['date_of_birth'];
-    existingSupplierCode = json['existing_supplier_code'];
     gender = json['gender'];
     age = json['age'];
     country = json['country'];
@@ -123,10 +102,10 @@ class Farmer {
     village = json['village'];
     circleOffice = json['circle_office'];
     taluka = json['taluka'];
-    pinCode = json['pin_code'];
     state = json['state'];
     aadhaarCard = json['aadhaar_card'];
     bankPassbook = json['bank_passbook'];
+    panCard = json['pan_card'];
     consentLetter = json['consent_letter'];
     isInternalSupplier = json['is_internal_supplier'];
     language = json['language'];
@@ -153,12 +132,6 @@ class Farmer {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['owner'] = this.owner;
-    data['creation'] = this.creation;
-    data['modified'] = this.modified;
-    data['modified_by'] = this.modifiedBy;
-    data['docstatus'] = this.docstatus;
-    data['idx'] = this.idx;
     data['workflow_state'] = this.workflowState;
     data['naming_series'] = this.namingSeries;
     data['supplier_name'] = this.supplierName;
@@ -168,7 +141,6 @@ class Farmer {
     data['pan_number'] = this.panNumber;
     data['mobile_number'] = this.mobileNumber;
     data['date_of_birth'] = this.dateOfBirth;
-    data['existing_supplier_code'] = this.existingSupplierCode;
     data['gender'] = this.gender;
     data['age'] = this.age;
     data['country'] = this.country;
@@ -180,10 +152,10 @@ class Farmer {
     data['village'] = this.village;
     data['circle_office'] = this.circleOffice;
     data['taluka'] = this.taluka;
-    data['pin_code'] = this.pinCode;
     data['state'] = this.state;
     data['aadhaar_card'] = this.aadhaarCard;
     data['bank_passbook'] = this.bankPassbook;
+    data['pan_card'] = this.panCard;
     data['consent_letter'] = this.consentLetter;
     data['is_internal_supplier'] = this.isInternalSupplier;
     data['language'] = this.language;

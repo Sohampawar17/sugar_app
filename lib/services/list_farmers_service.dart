@@ -23,6 +23,7 @@ class ListFarmersService {
         List<FarmersListModel> farmersList = List.from(jsonData['data'])
             .map<FarmersListModel>((data) => FarmersListModel.fromJson(data))
             .toList();
+        Logger().i(farmersList);
         return farmersList;
       } else {
         Logger().e(response.statusMessage);

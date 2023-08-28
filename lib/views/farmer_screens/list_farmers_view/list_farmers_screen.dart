@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/views/farmer_screens/list_farmers_view/list_farmers_model.dart';
@@ -141,6 +142,8 @@ class ListFarmersScreen extends StatelessWidget {
                 child: ListView.separated(
                   itemCount: model.filteredList.length,
                   itemBuilder: (context, index) {
+                    Logger().i(model.filteredList[index].existingSupplierCode
+                        .toString());
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ListTile(
@@ -180,7 +183,7 @@ class ListFarmersScreen extends StatelessWidget {
                           style: const TextStyle(fontSize: 15),
                         ),
                         subtitle: Text(
-                          model.filteredList[index].name ?? '',
+                          model.filteredList[index].existingSupplierCode ?? '',
                           style: const TextStyle(fontSize: 13),
                         ),
                         onTap: () {

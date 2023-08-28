@@ -127,6 +127,41 @@ class AddAgriServices {
     }
   }
 
+  Future<List<String>> fetchdosetype() async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/resource/Dose Type?filters=[["crop_type","=","Plantation"]]&fields=["dose","fertilize_details.quantity","fertilize_details.fertilize_name"]',
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonData = json.encode(response.data);
+        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
+        List<dynamic> dataList = jsonDataMap["data"];
+        Logger().i(dataList);
+        List<String> namesList =
+            dataList.map((item) => item["name"].toString()).toList();
+        return namesList;
+      }
+
+      if (response.statusCode == 401) {
+        Fluttertoast.showToast(msg: "Unauthorized Access!");
+        return ["401"];
+      } else {
+        Fluttertoast.showToast(msg: "Unable to fetch dose type");
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+      Fluttertoast.showToast(msg: "Unauthorized Access!");
+      return [];
+    }
+  }
+
   Future<List<AgriCane>> fetchcanelistwithfilter(String season) async {
     try {
       var headers = {'Cookie': await getTocken()};

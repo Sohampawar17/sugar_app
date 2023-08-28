@@ -19,7 +19,7 @@ class AddCaneScreen extends StatelessWidget {
         builder: (context, model, child) => Scaffold(
               appBar: AppBar(
                 title: model.isEdit == true
-                    ? Text(model.canedata.name.toString() ?? "")
+                    ? Text(model.canedata.name.toString())
                     : const Text('Cane Registration'),
               ),
               body: fullScreenLoader(
@@ -86,6 +86,15 @@ class AddCaneScreen extends StatelessWidget {
                               ),
                             ],
                           ),
+                          model.isEdit
+                              ? const Text(
+                                  "Address",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                )
+                              : Container(),
                           Row(
                             children: [
                               Expanded(
@@ -182,6 +191,34 @@ class AddCaneScreen extends StatelessWidget {
                                 ),
                               ),
                             ],
+                          ),
+
+                          Visibility(
+                            visible: model.isEdit,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    readOnly: true,
+                                    initialValue: model.canedata.taluka,
+                                    decoration: const InputDecoration(
+                                        labelText: 'Taluka'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 20.0,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    readOnly: true,
+                                    initialValue: model.canedata.state,
+                                    decoration: const InputDecoration(
+                                      labelText: 'State',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Row(children: [
                             Expanded(
@@ -363,43 +400,6 @@ class AddCaneScreen extends StatelessWidget {
                             ],
                           ),
 
-                          model.isEdit
-                              ? const Text(
-                                  "Address",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                )
-                              : Container(),
-
-                          Visibility(
-                            visible: model.isEdit,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    initialValue: model.canedata.taluka,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Taluka'),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20.0,
-                                ),
-                                Expanded(
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    initialValue: model.canedata.state,
-                                    decoration: const InputDecoration(
-                                      labelText: 'State',
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           Row(
                             children: [
                               Expanded(

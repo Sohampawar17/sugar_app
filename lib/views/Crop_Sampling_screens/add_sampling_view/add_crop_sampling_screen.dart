@@ -176,16 +176,40 @@ class AddCropSamplingScreen extends StatelessWidget {
                           visible: model.cropsamplingdata.id != null,
                           child: Column(
                             children: [
-                              TextFormField(
-                                key: Key(model.cropsamplingdata.growerCode ??
-                                    "supplier"),
-                                readOnly: true,
-                                initialValue:
-                                    model.cropsamplingdata.growerCode ?? "",
-                                decoration: const InputDecoration(
-                                  labelText: 'Grower Code',
-                                ),
-                                onChanged: model.setSelectedVendor,
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      key: Key(
+                                          model.cropsamplingdata.growerCode ??
+                                              "supplier"),
+                                      readOnly: true,
+                                      initialValue:
+                                          model.cropsamplingdata.growerCode ??
+                                              "",
+                                      decoration: const InputDecoration(
+                                        labelText: 'Grower Code',
+                                      ),
+                                      onChanged: model.setSelectedVendor,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(
+                                      key: Key(model.cropsamplingdata.season ??
+                                          "season"),
+                                      readOnly: true,
+                                      initialValue:
+                                          model.cropsamplingdata.season ?? "",
+                                      decoration: const InputDecoration(
+                                        labelText: 'Seasom',
+                                      ),
+                                      onChanged: model.setSelectedcropvariety,
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(
                                 height: 15,

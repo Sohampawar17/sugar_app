@@ -93,7 +93,7 @@ class AddFarmerScreen extends StatelessWidget {
                       visible: model.isEdit == true,
                       child: TextFormField(
                         readOnly: true,
-                        initialValue: model.farmerData.existingSupplierCode,
+                        initialValue: model.farmerData.name?.substring(3, 8),
                         decoration:
                             const InputDecoration(labelText: 'Vendor Code'),
                       ),
@@ -108,141 +108,19 @@ class AddFarmerScreen extends StatelessWidget {
                             : null,
                         onChanged: model.updateFarmerName),
 
-                    //mobile number
-                    TextFormField(
-                      controller: model.mobileNumberController,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(10),
-                      ],
-                      keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        labelText: 'Mobile Number',
-                        hintText: 'Enter 10-digit mobile number',
-                      ),
-                      validator: model.validateMobileNumber,
-                      onChanged: model.onMobileNumberChanged,
-                    ),
-
-                    Row(
-                      children: [
-                        //for aadhar card
-                        Expanded(
-                          child: TextFormField(
-                            controller: model.aadharNumberController,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(12),
-                            ],
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Aadhar Card Number',
-                              hintText: 'Enter 12-digit Aadhar number',
-                            ),
-                            validator: model.validateAadhar,
-                            onChanged: model.onAadharChanged,
-                          ),
-                        ),
-
-                        // const SizedBox(
-                        //   width: 20.0,
-                        // ),
-                        // //for pan card
-                        // Expanded(
-                        //   child: TextFormField(
-                        //     controller: model.panNumberController,
-                        //     inputFormatters: [
-                        //       LengthLimitingTextInputFormatter(11),
-                        //       UppercaseTextFormatter()
-                        //     ],
-                        //     keyboardType: TextInputType.text,
-                        //     decoration: const InputDecoration(
-                        //       labelText: 'PAN Number',
-                        //       hintText: 'Enter 10-character PAN number',
-                        //     ),
-                        //     validator: model.validatePanNumber,
-                        //     onChanged: model.onPanNumberChanged,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          //for dob
-                          child: TextFormField(
-                            controller: model.dobController,
-                            keyboardType: TextInputType.datetime,
-                            decoration: InputDecoration(
-                              labelText: 'Date of Birth',
-                              hintText: 'DD-MM-YYYY',
-                              errorText: model.errorMessage.isNotEmpty
-                                  ? model.errorMessage
-                                  : null,
-                            ),
-                            validator: model.validateDob,
-                            onChanged: model.onDobChanged,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20.0,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            readOnly: true,
-                            controller: model.ageController,
-                            decoration: const InputDecoration(labelText: 'Age'),
-                            validator: (value) =>
-                                value!.isEmpty ? 'Please enter an age' : null,
-                            onChanged: (value) =>
-                                model.farmerData.age = value.toString(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          //for gender
-                          child: CdropDown(
-                            dropdownButton: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              value: model.farmerData.gender,
-                              decoration: const InputDecoration(
-                                labelText: 'Gender',
-                              ),
-                              hint: const Text('Select Gender'),
-                              items: model.genders.map((gender) {
-                                return DropdownMenuItem<String>(
-                                  value: gender,
-                                  child: Text(gender),
-                                );
-                              }).toList(),
-                              onChanged: (value) =>
-                                  model.setSelectedGender(value),
-                              validator: model.validateGender,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      "Address",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
+                    // //mobile number
+                    // const Text(
+                    //   "Address",
+                    //   style: TextStyle(
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.w300,
+                    //   ),
+                    // ),
                     Row(
                       children: [
                         Expanded(
                           child: Autocomplete<String>(
-                            key: Key(model.farmerData.village ?? ""),
+                            key: Key(model.farmerData.village ?? "village"),
                             initialValue: TextEditingValue(
                               text: model.farmerData.village ?? "",
                             ),
@@ -360,15 +238,178 @@ class AddFarmerScreen extends StatelessWidget {
                       ),
                     ),
 
-                    Visibility(
-                      visible: model.isEdit,
-                      child: TextFormField(
-                        readOnly: true,
-                        initialValue: model.farmerData.pinCode,
-                        decoration: const InputDecoration(
-                          labelText: 'Pincode',
+                    // Visibility(
+                    //   visible: model.isEdit,
+                    //   child: TextFormField(
+                    //     readOnly: true,
+                    //     initialValue: model.farmerData.pinCode,
+                    //     decoration: const InputDecoration(
+                    //       labelText: 'Pincode',
+                    //     ),
+                    //   ),
+                    // ),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: model.mobileNumberController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(10),
+                            ],
+                            keyboardType: TextInputType.phone,
+                            decoration: const InputDecoration(
+                              labelText: 'Mobile Number',
+                              hintText: 'Enter 10-digit mobile number',
+                            ),
+                            validator: model.validateMobileNumber,
+                            onChanged: model.onMobileNumberChanged,
+                          ),
                         ),
-                      ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        model.isEdit == false
+                            ? Expanded(
+                                child: TextFormField(
+                                  key: Key(model.farmerData.taluka ?? "Taluka"),
+                                  readOnly: true,
+                                  initialValue: model.farmerData.taluka,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Taluka',
+                                  ),
+                                  // onChanged: model.setSelectedcircleoffice,
+                                ),
+                              )
+                            : Expanded(
+                                child: TextFormField(
+                                  controller: model.aadharNumberController,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(12),
+                                  ],
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Aadhar Card Number',
+                                    hintText: 'Enter 12-digit Aadhar number',
+                                  ),
+                                  validator: model.validateAadhar,
+                                  onChanged: model.onAadharChanged,
+                                ),
+                              ),
+                      ],
+                    ),
+
+                    Row(
+                      children: [
+                        //for aadhar card
+                        Expanded(
+                          child: Visibility(
+                            visible: !model.isEdit,
+                            child: TextFormField(
+                              controller: model.aadharNumberController,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(12),
+                              ],
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Aadhar Card Number',
+                                hintText: 'Enter 12-digit Aadhar number',
+                              ),
+                              validator: model.validateAadhar,
+                              onChanged: model.onAadharChanged,
+                            ),
+                          ),
+                        ),
+
+                        // const SizedBox(
+                        //   width: 20.0,
+                        // ),
+                        // //for pan card
+                        // Expanded(
+                        //   child: TextFormField(
+                        //     controller: model.panNumberController,
+                        //     inputFormatters: [
+                        //       LengthLimitingTextInputFormatter(11),
+                        //       UppercaseTextFormatter()
+                        //     ],
+                        //     keyboardType: TextInputType.text,
+                        //     decoration: const InputDecoration(
+                        //       labelText: 'PAN Number',
+                        //       hintText: 'Enter 10-character PAN number',
+                        //     ),
+                        //     validator: model.validatePanNumber,
+                        //     onChanged: model.onPanNumberChanged,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          //for dob
+                          child: TextFormField(
+                            controller: model.dobController,
+                            keyboardType: TextInputType.datetime,
+                            decoration: InputDecoration(
+                              labelText: 'Date of Birth',
+                              hintText: 'DD-MM-YYYY',
+                              errorText: model.errorMessage.isNotEmpty
+                                  ? model.errorMessage
+                                  : null,
+                            ),
+                            validator: model.validateDob,
+                            onChanged: model.onDobChanged,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            readOnly: true,
+                            controller: model.ageController,
+                            decoration: const InputDecoration(labelText: 'Age'),
+                            validator: (value) =>
+                                value!.isEmpty ? 'Please enter an age' : null,
+                            onChanged: (value) =>
+                                model.farmerData.age = value.toString(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          //for gender
+                          child: CdropDown(
+                            dropdownButton: DropdownButtonFormField<String>(
+                              isExpanded: true,
+                              value: model.farmerData.gender,
+                              decoration: const InputDecoration(
+                                labelText: 'Gender',
+                              ),
+                              hint: const Text('Select Gender'),
+                              items: model.genders.map((gender) {
+                                return DropdownMenuItem<String>(
+                                  value: gender,
+                                  child: Text(gender),
+                                );
+                              }).toList(),
+                              onChanged: (value) =>
+                                  model.setSelectedGender(value),
+                              validator: model.validateGender,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
 
                     //roles of user
@@ -544,9 +585,7 @@ class AddFarmerScreen extends StatelessWidget {
                                 DataColumn(
                                   label: Text('Acc. Number'),
                                 ),
-                                DataColumn(
-                                  label: Text('Branch'),
-                                ),
+
                                 DataColumn(
                                   label: Text('Bank Passbook'),
                                 ),
@@ -569,9 +608,6 @@ class AddFarmerScreen extends StatelessWidget {
                                         .toString())),
                                     DataCell(Text(model
                                         .bankAccounts[index].accountNumber
-                                        .toString())),
-                                    DataCell(Text(model
-                                        .bankAccounts[index].bankAndBranch
                                         .toString())),
                                     DataCell(Text(model
                                         .bankAccounts[index].bankPassbook
@@ -664,7 +700,7 @@ class AddFarmerScreen extends StatelessWidget {
                               return const Iterable<String>.empty();
                             }
                             return model.bankList
-                                .map((bank) => bank.bankName ?? "")
+                                .map((bank) => bank.bankAndBranch ?? "")
                                 .toList()
                                 .where((bank) => bank.toLowerCase().contains(
                                     textEditingValue.text.toLowerCase()));
@@ -672,9 +708,9 @@ class AddFarmerScreen extends StatelessWidget {
                           onSelected: (String routeName) {
                             // Find the corresponding route object
                             final bankData = model.bankList.firstWhere(
-                                (bank) => bank.bankName == routeName);
+                                (bank) => bank.bankAndBranch == routeName);
                             model.setSelectedBank(
-                                bankData.bankName); // Pass the route
+                                bankData.bankAndBranch); // Pass the route
                           },
                           fieldViewBuilder: (BuildContext context,
                               TextEditingController textEditingController,
@@ -723,80 +759,80 @@ class AddFarmerScreen extends StatelessWidget {
                           optionsMaxHeight: 200,
                         ),
                       ),
-                      Expanded(
-                        child: Autocomplete<String>(
-                          key: Key(index == -1
-                              ? ""
-                              : model.bankAccounts[index].bankAndBranch ?? ""),
-                          initialValue: TextEditingValue(
-                              text: index == -1
-                                  ? ""
-                                  : model.bankAccounts[index].bankAndBranch ??
-                                      ""),
-                          optionsBuilder: (TextEditingValue textEditingValue) {
-                            if (textEditingValue.text.isEmpty) {
-                              return const Iterable<String>.empty();
-                            }
-                            return model.bankList
-                                .map((bank) => bank.branch ?? "")
-                                .toList()
-                                .where((bank) => bank.toLowerCase().contains(
-                                    textEditingValue.text.toLowerCase()));
-                          },
-                          onSelected: (String routeName) {
-                            // Find the corresponding route object
-                            final bankData = model.bankList
-                                .firstWhere((bank) => bank.branch == routeName);
-                            model.setSelectedBranch(
-                                bankData.branch); // Pass the route
-                          },
-                          fieldViewBuilder: (BuildContext context,
-                              TextEditingController textEditingController,
-                              FocusNode focusNode,
-                              VoidCallback onFieldSubmitted) {
-                            return TextFormField(
-                              controller: textEditingController,
-                              focusNode: focusNode,
-                              decoration: const InputDecoration(
-                                labelText: 'Branch',
-                              ),
-                              onChanged: (String value) {},
-                            );
-                          },
-                          optionsViewBuilder: (BuildContext contpext,
-                              AutocompleteOnSelected<String> onSelected,
-                              Iterable<String> options) {
-                            return Align(
-                              alignment: Alignment.topLeft,
-                              child: Material(
-                                elevation: 4.0,
-                                child: Container(
-                                  constraints:
-                                      const BoxConstraints(maxHeight: 200),
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: options.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      final String option =
-                                          options.elementAt(index);
-                                      return GestureDetector(
-                                        onTap: () {
-                                          onSelected(option);
-                                        },
-                                        child: ListTile(
-                                          title: Text(option),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          optionsMaxHeight: 200,
-                        ),
-                      ),
+                      // Expanded(
+                      //   child: Autocomplete<String>(
+                      //     key: Key(index == -1
+                      //         ? ""
+                      //         : model.bankAccounts[index].bankAndBranch ?? ""),
+                      //     initialValue: TextEditingValue(
+                      //         text: index == -1
+                      //             ? ""
+                      //             : model.bankAccounts[index].bankAndBranch ??
+                      //                 ""),
+                      //     optionsBuilder: (TextEditingValue textEditingValue) {
+                      //       if (textEditingValue.text.isEmpty) {
+                      //         return const Iterable<String>.empty();
+                      //       }
+                      //       return model.bankList
+                      //           .map((bank) => bank.branch ?? "")
+                      //           .toList()
+                      //           .where((bank) => bank.toLowerCase().contains(
+                      //               textEditingValue.text.toLowerCase()));
+                      //     },
+                      //     onSelected: (String routeName) {
+                      //       // Find the corresponding route object
+                      //       final bankData = model.bankList
+                      //           .firstWhere((bank) => bank.branch == routeName);
+                      //       model.setSelectedBranch(
+                      //           bankData.branch); // Pass the route
+                      //     },
+                      //     fieldViewBuilder: (BuildContext context,
+                      //         TextEditingController textEditingController,
+                      //         FocusNode focusNode,
+                      //         VoidCallback onFieldSubmitted) {
+                      //       return TextFormField(
+                      //         controller: textEditingController,
+                      //         focusNode: focusNode,
+                      //         decoration: const InputDecoration(
+                      //           labelText: 'Branch',
+                      //         ),
+                      //         onChanged: (String value) {},
+                      //       );
+                      //     },
+                      //     optionsViewBuilder: (BuildContext contpext,
+                      //         AutocompleteOnSelected<String> onSelected,
+                      //         Iterable<String> options) {
+                      //       return Align(
+                      //         alignment: Alignment.topLeft,
+                      //         child: Material(
+                      //           elevation: 4.0,
+                      //           child: Container(
+                      //             constraints:
+                      //                 const BoxConstraints(maxHeight: 200),
+                      //             child: ListView.builder(
+                      //               shrinkWrap: true,
+                      //               itemCount: options.length,
+                      //               itemBuilder:
+                      //                   (BuildContext context, int index) {
+                      //                 final String option =
+                      //                     options.elementAt(index);
+                      //                 return GestureDetector(
+                      //                   onTap: () {
+                      //                     onSelected(option);
+                      //                   },
+                      //                   child: ListTile(
+                      //                     title: Text(option),
+                      //                   ),
+                      //                 );
+                      //               },
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //     optionsMaxHeight: 200,
+                      //   ),
+                      // ),
                       Expanded(
                         child: TextFormField(
                           initialValue:

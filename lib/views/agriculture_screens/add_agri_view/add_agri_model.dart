@@ -36,6 +36,7 @@ class AgriViewModel extends BaseViewModel {
   final List<String> _selectedItems = [];
   List<String> get selectedItems => _selectedItems;
   late String AgriId;
+
   initialise(BuildContext context, String agriid) async {
     setBusy(true);
     seasonlist = await AddAgriServices().fetchSeason();

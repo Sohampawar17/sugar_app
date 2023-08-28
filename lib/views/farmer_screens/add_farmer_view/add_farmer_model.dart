@@ -50,8 +50,8 @@ class FarmerViewModel extends BaseViewModel {
   initialise(BuildContext context, String farmerid) async {
     setBusy(true);
     villageList = (await FarmerService().fetchVillages());
-    bankList = await FarmerService().fetchBanks("");
-    Logger().i(villageList.toString());
+    bankList = await FarmerService().fetchBanks();
+
     farmerId = farmerid;
     //setting aleardy available data
     if (farmerId != "") {
@@ -235,7 +235,7 @@ class FarmerViewModel extends BaseViewModel {
     if (errorMessage.isNotEmpty) {
       Text(
         errorMessage,
-        style: TextStyle(color: Colors.red),
+        style: const TextStyle(color: Colors.red),
       );
     }
     return null;
@@ -320,6 +320,7 @@ class FarmerViewModel extends BaseViewModel {
 
   String? selectedVillage;
   String? selectedoffice;
+  String? selectedtaluka;
 
   void setSelectedVillage(String? village) {
     selectedVillage = village;
@@ -327,9 +328,13 @@ class FarmerViewModel extends BaseViewModel {
     final selectedRouteData =
         villageList.firstWhere((routeData) => routeData.name == village);
     selectedoffice = selectedRouteData.circleOffice;
+    selectedtaluka = selectedRouteData.taluka;
+
     Logger().i(selectedVillage);
     farmerData.circleOffice = selectedoffice;
+    farmerData.taluka = selectedtaluka;
     Logger().i(farmerData.circleOffice);
+
     notifyListeners();
   }
 
@@ -341,17 +346,16 @@ class FarmerViewModel extends BaseViewModel {
 
   void setSelectedBank(String? bank) async {
     bankName = bank ?? "";
-    bankList = await FarmerService().fetchBanks(bank ?? "");
+    Logger().i(bank);
+    final selectedRouteData =
+        bankList.firstWhere((bankData) => bankData.bankAndBranch == bank);
+    Logger().i(selectedRouteData);
+    branchifscCode = selectedRouteData.ifscCode ?? "";
     notifyListeners();
   }
 
   void setSelectedBranch(String? bankbranch) {
     branch = bankbranch ?? "";
-    Logger().i(bankbranch);
-    final selectedRouteData =
-        bankList.firstWhere((bankData) => bankData.branch == bankbranch);
-    Logger().i(selectedRouteData);
-    branchifscCode = selectedRouteData.ifscCode ?? "";
     Logger().i(branchifscCode);
   }
 
@@ -665,12 +669,7 @@ class FarmerViewModel extends BaseViewModel {
     if (value!.isEmpty) {
       return 'Please enter an account number';
     }
-    if (value.length < 10) {
-      return 'The account number must be at least 10 characters long';
-    }
-    if (value.length > 20) {
-      return 'The account number must be no more than 20 characters long';
-    }
+
     return null;
   }
 

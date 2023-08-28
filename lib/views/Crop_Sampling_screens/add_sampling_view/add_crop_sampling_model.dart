@@ -15,10 +15,7 @@ class AddCropSmaplingModel extends BaseViewModel {
   bool isEdit = false;
   initialise(BuildContext context, String samplingId) async {
     plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter());
-    cropsamplingdata.brixBottom = 0.0; // Set your desired initial value
-    cropsamplingdata.brixMiddle = 0.0; // Set your desired initial value
-    cropsamplingdata.brixTop = 0.0; // Set your desired initial value
-    cropsamplingdata.noOfPairs = 0; // Set your desired initial value
+
     if (samplingId != "") {
       isEdit = true;
       cropsamplingdata =
@@ -65,6 +62,8 @@ class AddCropSmaplingModel extends BaseViewModel {
   String? selectedcroptype;
   String? selectedAreaInAcrs;
   String? selectedvendor;
+  String? selectedseason;
+
   void setSelectedplot(String? plot) {
     selectedPlot = plot;
     cropsamplingdata.id = selectedPlot;
@@ -78,12 +77,14 @@ class AddCropSmaplingModel extends BaseViewModel {
     selectedcroptype = selectedCaneData.cropType;
     selectedAreaInAcrs = selectedCaneData.soilType;
     selectedvendor = selectedCaneData.vendorCode;
+    selectedseason = selectedCaneData.season;
     cropsamplingdata.growerName = selectedVendorname;
     cropsamplingdata.area = selectedvillage;
     cropsamplingdata.cropVariety = selectedcropvariety;
     cropsamplingdata.cropType = selectedcroptype;
     cropsamplingdata.soilType = selectedAreaInAcrs;
     cropsamplingdata.growerCode = selectedvendor;
+    cropsamplingdata.season = selectedseason;
     cropsamplingdata.plantName = selectedplant;
     notifyListeners();
   }
@@ -129,6 +130,12 @@ class AddCropSmaplingModel extends BaseViewModel {
   void setSelectedvillage(String? area) {
     selectedvillage = area;
     cropsamplingdata.area = selectedvillage;
+    notifyListeners();
+  }
+
+  void setSelectedseason(String? season) {
+    selectedseason = season;
+    cropsamplingdata.season = selectedseason;
     notifyListeners();
   }
 

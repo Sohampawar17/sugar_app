@@ -25,7 +25,7 @@ class TripsheetMaster extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
-                      height: 150,
+                      height: 100,
                       child: Row(
                         children: [
                           Expanded(
@@ -130,7 +130,8 @@ class TripsheetMaster extends StatelessWidget {
                         "Circle Office",
                         maxLines: 2,
                         style: TextStyle(
-                            color: Colors.white), // Set text color to white
+                            color: Colors.white,
+                            fontSize: 14), // Set text color to white
                       ),
                       leading: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
