@@ -222,18 +222,18 @@ class AddFarmerScreen extends StatelessWidget {
                                   const InputDecoration(labelText: 'Taluka'),
                             ),
                           ),
-                          const SizedBox(
-                            width: 20.0,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              readOnly: true,
-                              initialValue: model.farmerData.state,
-                              decoration: const InputDecoration(
-                                labelText: 'State',
-                              ),
-                            ),
-                          ),
+                          // const SizedBox(
+                          //   width: 20.0,
+                          // ),
+                          // Expanded(
+                          //   child: TextFormField(
+                          //     readOnly: true,
+                          //     initialValue: model.farmerData.state,
+                          //     decoration: const InputDecoration(
+                          //       labelText: 'State',
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -267,7 +267,7 @@ class AddFarmerScreen extends StatelessWidget {
                             onChanged: model.onMobileNumberChanged,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 15,
                         ),
                         model.isEdit == false
@@ -594,6 +594,11 @@ class AddFarmerScreen extends StatelessWidget {
                                   // Add a new DataColumn for the button
                                   numeric: false,
                                 ),
+                                DataColumn(
+                                  label: Text('Delete'),
+                                  // Add a new DataColumn for the button
+                                  numeric: false,
+                                ),
                               ],
                               rows: List<DataRow>.generate(
                                 model.bankAccounts.length,
@@ -627,6 +632,40 @@ class AddFarmerScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                    DataCell(IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title:
+                                                  const Text('Confirm Delete'),
+                                              content: const Text(
+                                                  'Are you sure you want to delete this bank account?'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context); // Close the confirmation dialog
+                                                  },
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context); // Close the confirmation dialog
+                                                    model.deleteBankAccount(
+                                                        index); // Delete the entry
+                                                  },
+                                                  child: const Text('Delete'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      icon: const Icon(Icons.delete),
+                                    ))
                                   ],
                                 ),
                               ),
@@ -866,14 +905,14 @@ class AddFarmerScreen extends StatelessWidget {
                       ),
                       Expanded(
                           child: ElevatedButton(
-                        onPressed: () => pickDoc(kBankpdf, context, model),
+                        onPressed: () =>
+                            pickDocforpassbook(kBankpdf, context, model),
                         child: model.passbookattch.isNotEmpty
                             ? Text(
                                 'Bank File: ${model.passbookattch.split("/").last}',
                                 overflow: TextOverflow.ellipsis,
                               )
-                            : model.isFileSelected(kBankpdf) &&
-                                    model.files.getFile(kBankpdf) != null
+                            : model.files.getFile(kBankpdf) != null
                                 ? Text(
                                     'Bank Passbook: ${model.files.getFile(kBankpdf)!.path.split("/").last}',
                                     overflow: TextOverflow.ellipsis,
@@ -905,7 +944,7 @@ class AddFarmerScreen extends StatelessWidget {
     );
   }
 
-  pickDoc(String filetype, BuildContext context, FarmerViewModel model) {
+  void pickDoc(String filetype, BuildContext context, FarmerViewModel model) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -923,42 +962,107 @@ class AddFarmerScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.file_copy),
-              title: const Text('Gallary'),
+              title: const Text('Gallery'),
               onTap: () {
                 Navigator.of(context).pop();
                 model.selectPdf(filetype, ImageSource.gallery);
               },
             ),
-            (model.files.getFile(filetype) != null ||
-                    (model.getFileFromFarmer(filetype) != null &&
-                        model.getFileFromFarmer(filetype) != ""))
-                ? ElevatedButton(
-                    onPressed: () {
-                      (model.files.getFile(filetype) != null)
-                          ? Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => ViewImage(
-                                  image: Image.file(
-                                    model.getFileFromFileType(filetype) ??
-                                        File(""),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ViewImageInternet(
-                                  url: model.getFileFromFarmer(filetype) ?? "",
-                                ),
-                              ),
-                            );
-                    },
-                    child: const Text("View Uploaded File"),
-                  )
-                : Container(),
+            if (model.files.getFile(filetype) != null ||
+                (model.getFileFromFarmer(filetype) ?? "").isNotEmpty)
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+
+                  if (model.files.getFile(filetype) != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ViewImage(
+                          image: Image.file(
+                            model.getFileFromFileType(filetype) ?? File(""),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ViewImageInternet(
+                          url: model.getFileFromFarmer(filetype) ?? "",
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: const Text("View Uploaded File"),
+              )
+            else
+              Container(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void pickDocforpassbook(
+      String filetype, BuildContext context, FarmerViewModel model) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Pick an image or document'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera),
+              title: const Text('Camera'),
+              onTap: () {
+                Navigator.of(context).pop();
+                model.selectPdfpassbook(filetype, ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.file_copy),
+              title: const Text('Gallery'),
+              onTap: () {
+                Navigator.of(context).pop();
+                model.selectPdfpassbook(filetype, ImageSource.gallery);
+              },
+            ),
+            if (model.files.getBankPassbookFileByIndex(0) != null ||
+                (model.getFileFromFarmer(filetype) ?? "").isNotEmpty)
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+
+                  final bankPassbookFile =
+                      model.files.getBankPassbookFileByIndex(0);
+                  if (bankPassbookFile != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ViewImageInternet(
+                          url: model.getFileFromFarmer(filetype) ?? "",
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ViewImageInternet(
+                          url: model.getFileFromFarmer(filetype) ?? "",
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: const Text("View Uploaded File"),
+              )
+            else
+              Container(),
           ],
         ),
       ),

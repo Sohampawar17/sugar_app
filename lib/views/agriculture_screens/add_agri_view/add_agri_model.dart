@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/models/Agri.dart';
 
 import '../../../models/agri_cane_model.dart';
+import '../../../router.router.dart';
 import '../../../services/add_agri_services.dart';
 
 class AgriViewModel extends BaseViewModel {
@@ -66,6 +68,16 @@ class AgriViewModel extends BaseViewModel {
       }
       if (agridata.ratoon2 == 1) {
         _selectedItems.add(items[5]);
+      }
+    }
+    if (seasonlist.isEmpty) {
+      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await prefs0;
+      prefs.clear();
+      if (context.mounted) {
+        setBusy(false);
+        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+        Logger().i('logged out success');
       }
     }
     setBusy(false);

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/models/trip_crop_harvesting_model.dart';
 import 'package:sugar_mill_app/models/tripsheet.dart';
 import '../../../models/CaneRoute.dart';
 import '../../../models/tripsheet_transport_model.dart';
 import '../../../models/tripsheet_water_supplier.dart';
+import '../../../router.router.dart';
 import '../../../services/add_tripsheet_service.dart';
-import '../../../services/list_tripsheet_service.dart';
 
 class AddTripSheetModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
@@ -106,6 +107,16 @@ class AddTripSheetModel extends BaseViewModel {
           await AddTripSheetServices().getTripsheet(tripId) ?? Tripsheet();
       notifyListeners();
       plantingDateController.text = tripSheetData.plantationDate ?? '';
+    }
+    if (routeList.isEmpty) {
+      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await prefs0;
+      prefs.clear();
+      if (context.mounted) {
+        setBusy(false);
+        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+        Logger().i('logged out success');
+      }
     }
     setBusy(false);
   }

@@ -4,6 +4,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/models/CaneFarmer.dart';
 import 'package:sugar_mill_app/models/CaneRoute.dart';
@@ -71,7 +72,7 @@ class CaneViewModel extends BaseViewModel {
     plantationsystemList = await AddCaneService().fetchplantationsystem();
     seedmaterialList = await AddCaneService().fetchseedMaterial();
     croptypeList = await AddCaneService().fetchCropType();
-    // routeList = (await AddCaneService().fetchroute(canedata.area ?? ""));
+
     irrigationmethodList = await AddCaneService().fetchirrigationmethod();
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
     soilTypeList = await AddCaneService().fetchSoilType();
@@ -85,10 +86,14 @@ class CaneViewModel extends BaseViewModel {
       plantationdateController.text = canedata.plantattionRatooningDate ?? '';
       baselDateController.text = canedata.basalDate ?? '';
     }
-    if (villageList.length == 1 && villageList[0] == "401") {
+    if (villageList.length == 0) {
+      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await prefs0;
+      prefs.clear();
       if (context.mounted) {
         setBusy(false);
         Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+        Logger().i('logged out success');
       }
     }
     setBusy(false);
