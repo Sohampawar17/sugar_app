@@ -64,7 +64,7 @@ class FarmerViewModel extends BaseViewModel {
       supplierNameController.text = farmerData.supplierName ?? "";
       aadharNumberController.text =
           _formatAadhar(farmerData.aadhaarNumber ?? "");
-      panNumberController.text = _formatPanNumber(farmerData.panNumber ?? "");
+
       mobileNumberController.text = farmerData.mobileNumber ?? "";
       dobController.text = farmerData.dateOfBirth ?? "";
       ageController.text = farmerData.age ?? "";
@@ -95,11 +95,13 @@ class FarmerViewModel extends BaseViewModel {
     if (formKey.currentState!.validate()) {
       // Fluttertoast.showToast(msg: "Farmer Added");
       await uploadFiles();
-      await uploadpassbook();
+      // await uploadpassbook();
       farmerData.bankDetails = bankAccounts;
-      Logger().i(farmerData.toJson());
+
       bool res = false;
       if (isEdit == true) {
+        farmerData.workflowState = "Pending";
+        Logger().i(farmerData.toJson());
         res = await FarmerService().updateFarmer(farmerData);
         if (res) {
           if (context.mounted) {
@@ -181,22 +183,22 @@ class FarmerViewModel extends BaseViewModel {
     return null;
   }
 
-  void onPanNumberChanged(String value) {
-    String formattedPanNumber = _formatPanNumber(value);
-    panNumberController.value = TextEditingValue(
-      text: formattedPanNumber,
-      selection: TextSelection.collapsed(offset: formattedPanNumber.length),
-    );
-    farmerData.panNumber = panNumberController.text.replaceAll(" ", '');
-  }
+  // void onPanNumberChanged(String value) {
+  //   String formattedPanNumber = _formatPanNumber(value);
+  //   panNumberController.value = TextEditingValue(
+  //     text: formattedPanNumber,
+  //     selection: TextSelection.collapsed(offset: formattedPanNumber.length),
+  //   );
+  //   farmerData.panNumber = panNumberController.text.replaceAll(" ", '');
+  // }
 
-  String _formatPanNumber(String value) {
-    value = value.replaceAll(' ', ''); // Remove existing spaces
-    if (value.length > 5) {
-      value = '${value.substring(0, 5)} ${value.substring(5, value.length)}';
-    }
-    return value;
-  }
+  // String _formatPanNumber(String value) {
+  //   value = value.replaceAll(' ', ''); // Remove existing spaces
+  //   if (value.length > 5) {
+  //     value = '${value.substring(0, 5)} ${value.substring(5, value.length)}';
+  //   }
+  //   return value;
+  // }
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// mobile number////////////////////////////////

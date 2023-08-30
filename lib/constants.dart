@@ -13,14 +13,16 @@ const kPanpdf = "PanCard";
 
 const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
-// const apiBaseUrl = "http://deverpvppl.erpdata.in";
-const apiBaseUrl = "http://vpplprogress.erpdata.in";
+const apiBaseUrl = "http://deverpvppl.erpdata.in";
+// const apiBaseUrl = "http://vpplprogress.erpdata.in";
 
 // api usrls
 String apifetchSeason =
     '$apiBaseUrl/api/resource/Season?filters=[["disabled","=","0"]]';
 String apifetchPlant = '$apiBaseUrl/api/resource/Branch';
 //farmer List
+String apimethodcall =
+    '$apiBaseUrl/api/method/sugar_mill.sugar_mill.doctype.farmer_list.farmer_list.vendor_code?docname=Farmer List';
 String apiVillageListGet =
     '$apiBaseUrl/api/resource/Village?limit_page_length=999999&fields=["name","circle_office","taluka"]';
 String apiBankListGet =

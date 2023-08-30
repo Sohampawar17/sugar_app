@@ -19,6 +19,7 @@ class CaneViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
   TextEditingController plantationdateController = TextEditingController();
   TextEditingController formNumberController = TextEditingController();
+  TextEditingController surveyNumberController = TextEditingController();
   TextEditingController areainAcrsController = TextEditingController();
   TextEditingController baselDateController = TextEditingController();
   Cane canedata = Cane();
@@ -72,7 +73,6 @@ class CaneViewModel extends BaseViewModel {
     plantationsystemList = await AddCaneService().fetchplantationsystem();
     seedmaterialList = await AddCaneService().fetchseedMaterial();
     croptypeList = await AddCaneService().fetchCropType();
-
     irrigationmethodList = await AddCaneService().fetchirrigationmethod();
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
     soilTypeList = await AddCaneService().fetchSoilType();
@@ -83,10 +83,13 @@ class CaneViewModel extends BaseViewModel {
       isEdit = true;
       canedata = await AddCaneService().getCane(caneId) ?? Cane();
       notifyListeners();
+      areainAcrsController.text = canedata.areaAcrs.toString();
+      surveyNumberController.text = canedata.surveyNumber ?? "";
+      formNumberController.text = canedata.formNumber ?? "";
       plantationdateController.text = canedata.plantattionRatooningDate ?? '';
       baselDateController.text = canedata.basalDate ?? '';
     }
-    if (villageList.length == 0) {
+    if (villageList.isEmpty) {
       final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
       final SharedPreferences prefs = await prefs0;
       prefs.clear();
@@ -253,7 +256,11 @@ class CaneViewModel extends BaseViewModel {
   }
 
   void setSelectedareainacrs(String? areainAcrs) {
-    canedata.areaAcrs = double.tryParse(areainAcrs!) ?? 0;
+    areainAcrsController.value = areainAcrsController.value.copyWith(
+      text: areainAcrs ?? '',
+      selection: TextSelection.collapsed(offset: (areainAcrs ?? '').length),
+    );
+    canedata.areaAcrs = double.tryParse(areainAcrs ?? "") ?? 0;
     notifyListeners();
   }
 
@@ -400,12 +407,20 @@ class CaneViewModel extends BaseViewModel {
   }
 
   void setsurveyNumber(String? surveyNumber) {
-    canedata.surveyNumber = surveyNumber;
+    surveyNumberController.value = surveyNumberController.value.copyWith(
+      text: surveyNumber ?? '',
+      selection: TextSelection.collapsed(offset: (surveyNumber ?? '').length),
+    );
+    canedata.surveyNumber = surveyNumber ?? '';
     notifyListeners();
   }
 
   void setFormNumber(String? formNumber) {
-    canedata.formNumber = formNumber;
+    formNumberController.value = formNumberController.value.copyWith(
+      text: formNumber ?? '',
+      selection: TextSelection.collapsed(offset: (formNumber ?? '').length),
+    );
+    canedata.formNumber = formNumber ?? '';
     notifyListeners();
   }
 

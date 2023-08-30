@@ -1,14 +1,18 @@
 class Farmer {
   String? name;
+  String? owner;
+  String? modifiedBy;
+  int? docstatus;
+  int? idx;
   String? workflowState;
   String? namingSeries;
   String? supplierName;
   String? supplierType;
   String? branch;
   String? aadhaarNumber;
-  String? panNumber;
   String? mobileNumber;
   String? dateOfBirth;
+  String? existingSupplierCode;
   String? gender;
   String? age;
   String? country;
@@ -22,8 +26,6 @@ class Farmer {
   String? taluka;
   String? state;
   String? aadhaarCard;
-  String? bankPassbook;
-  String? panCard;
   String? consentLetter;
   int? isInternalSupplier;
   String? language;
@@ -37,19 +39,24 @@ class Farmer {
   int? preventPos;
   int? onHold;
   String? holdType;
+  String? doctype;
   List<BankDetails>? bankDetails;
 
   Farmer(
       {this.name,
+      this.owner,
+      this.modifiedBy,
+      this.docstatus,
+      this.idx,
       this.workflowState,
       this.namingSeries,
       this.supplierName,
       this.supplierType,
       this.branch,
       this.aadhaarNumber,
-      this.panNumber,
       this.mobileNumber,
       this.dateOfBirth,
+      this.existingSupplierCode,
       this.gender,
       this.age,
       this.country,
@@ -63,8 +70,6 @@ class Farmer {
       this.taluka,
       this.state,
       this.aadhaarCard,
-      this.bankPassbook,
-      this.panCard,
       this.consentLetter,
       this.isInternalSupplier,
       this.language,
@@ -78,19 +83,24 @@ class Farmer {
       this.preventPos,
       this.onHold,
       this.holdType,
+      this.doctype,
       this.bankDetails});
 
   Farmer.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    owner = json['owner'];
+    modifiedBy = json['modified_by'];
+    docstatus = json['docstatus'];
+    idx = json['idx'];
     workflowState = json['workflow_state'];
     namingSeries = json['naming_series'];
     supplierName = json['supplier_name'];
     supplierType = json['supplier_type'];
     branch = json['branch'];
     aadhaarNumber = json['aadhaar_number'];
-    panNumber = json['pan_number'];
     mobileNumber = json['mobile_number'];
     dateOfBirth = json['date_of_birth'];
+    existingSupplierCode = json['existing_supplier_code'];
     gender = json['gender'];
     age = json['age'];
     country = json['country'];
@@ -104,8 +114,6 @@ class Farmer {
     taluka = json['taluka'];
     state = json['state'];
     aadhaarCard = json['aadhaar_card'];
-    bankPassbook = json['bank_passbook'];
-    panCard = json['pan_card'];
     consentLetter = json['consent_letter'];
     isInternalSupplier = json['is_internal_supplier'];
     language = json['language'];
@@ -121,6 +129,7 @@ class Farmer {
     preventPos = json['prevent_pos'];
     onHold = json['on_hold'];
     holdType = json['hold_type'];
+    doctype = json['doctype'];
     if (json['bank_details'] != null) {
       bankDetails = <BankDetails>[];
       json['bank_details'].forEach((v) {
@@ -132,15 +141,19 @@ class Farmer {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
+    data['owner'] = this.owner;
+    data['modified_by'] = this.modifiedBy;
+    data['docstatus'] = this.docstatus;
+    data['idx'] = this.idx;
     data['workflow_state'] = this.workflowState;
     data['naming_series'] = this.namingSeries;
     data['supplier_name'] = this.supplierName;
     data['supplier_type'] = this.supplierType;
     data['branch'] = this.branch;
     data['aadhaar_number'] = this.aadhaarNumber;
-    data['pan_number'] = this.panNumber;
     data['mobile_number'] = this.mobileNumber;
     data['date_of_birth'] = this.dateOfBirth;
+    data['existing_supplier_code'] = this.existingSupplierCode;
     data['gender'] = this.gender;
     data['age'] = this.age;
     data['country'] = this.country;
@@ -154,8 +167,6 @@ class Farmer {
     data['taluka'] = this.taluka;
     data['state'] = this.state;
     data['aadhaar_card'] = this.aadhaarCard;
-    data['bank_passbook'] = this.bankPassbook;
-    data['pan_card'] = this.panCard;
     data['consent_letter'] = this.consentLetter;
     data['is_internal_supplier'] = this.isInternalSupplier;
     data['language'] = this.language;
@@ -171,6 +182,7 @@ class Farmer {
     data['prevent_pos'] = this.preventPos;
     data['on_hold'] = this.onHold;
     data['hold_type'] = this.holdType;
+    data['doctype'] = this.doctype;
     if (this.bankDetails != null) {
       data['bank_details'] = this.bankDetails!.map((v) => v.toJson()).toList();
     }

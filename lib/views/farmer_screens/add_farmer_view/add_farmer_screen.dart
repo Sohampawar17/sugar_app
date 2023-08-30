@@ -15,7 +15,6 @@ import 'package:sugar_mill_app/widgets/view_image.dart';
 
 class AddFarmerScreen extends StatelessWidget {
   final String farmerid;
-
   const AddFarmerScreen({super.key, required this.farmerid});
 
   @override
@@ -26,7 +25,7 @@ class AddFarmerScreen extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: model.isEdit == true
-              ? Text(model.farmerData.supplierName ?? "")
+              ? Text(model.farmerData.name ?? "")
               : const Text('Farmer Form'),
         ),
         body: fullScreenLoader(
@@ -90,14 +89,22 @@ class AddFarmerScreen extends StatelessWidget {
                       ],
                     ),
                     Visibility(
-                      visible: model.isEdit == true,
-                      child: TextFormField(
-                        readOnly: true,
-                        initialValue: model.farmerData.name?.substring(3, 8),
-                        decoration:
-                            const InputDecoration(labelText: 'Vendor Code'),
-                      ),
-                    ),
+                        visible: model.isEdit == true,
+                        child: model.farmerData.existingSupplierCode != null
+                            ? TextFormField(
+                                readOnly: true,
+                                initialValue:
+                                    model.farmerData.existingSupplierCode,
+                                decoration: const InputDecoration(
+                                    labelText: 'Vendor Code'),
+                              )
+                            : TextFormField(
+                                readOnly: true,
+                                initialValue:
+                                    model.farmerData.name?.substring(3),
+                                decoration: const InputDecoration(
+                                    labelText: 'Vendor Code'),
+                              )),
                     TextFormField(
                         key: Key(model.farmerData.supplierName ?? ""),
                         initialValue: model.farmerData.supplierName,

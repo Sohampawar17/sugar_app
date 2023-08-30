@@ -360,8 +360,7 @@ class AddCaneScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: TextFormField(
-                                  key: Key(model.canedata.formNumber ?? "04"),
-                                  initialValue: model.canedata.formNumber,
+                                  controller: model.formNumberController,
                                   decoration: const InputDecoration(
                                       labelText: 'Form Number'),
                                   validator: (value) => value!.isEmpty
@@ -513,15 +512,15 @@ class AddCaneScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: TextFormField(
-                                    key: Key(
-                                        model.canedata.surveyNumber ?? "01"),
-                                    initialValue: model.canedata.surveyNumber,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Survey Number'),
-                                    validator: (value) => value!.isEmpty
-                                        ? 'Please enter a Survey Number'
-                                        : null,
-                                    onChanged: model.setsurveyNumber),
+                                  controller: model.surveyNumberController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Survey Number',
+                                  ),
+                                  validator: (value) => value!.isEmpty
+                                      ? 'Please enter a Survey Number'
+                                      : null,
+                                  onChanged: model.setsurveyNumber,
+                                ),
                               ),
                               const SizedBox(
                                 width: 15,
@@ -692,9 +691,7 @@ class AddCaneScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  key: Key(model.canedata.areaAcrs.toString()),
-                                  initialValue:
-                                      model.canedata.areaAcrs?.toString() ?? "",
+                                  controller: model.areainAcrsController,
                                   decoration: const InputDecoration(
                                     labelText: 'Area In Acrs',
                                   ),
@@ -709,6 +706,7 @@ class AddCaneScreen extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: model.plantationdateController,
+                                  keyboardType: TextInputType.datetime,
                                   decoration: InputDecoration(
                                     labelText: 'Plantation Date',
                                     hintText: 'DD-MM-YYYY',
@@ -724,6 +722,7 @@ class AddCaneScreen extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: model.baselDateController,
+                                  keyboardType: TextInputType.datetime,
                                   decoration: InputDecoration(
                                     labelText: 'Basel Date',
                                     hintText: 'DD-MM-YYYY',

@@ -69,6 +69,31 @@ class FarmerService {
     }
   }
 
+  Future<bool> methodcall(String? docname) async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/method/sugar_mill.sugar_mill.doctype.farmer_list.farmer_list.vendor_code?docname=$docname',
+        options: Options(
+          method: 'POST',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(msg: "vendor code genrated");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: "UNABLE TO vendor code genrated!");
+        return false;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error accoured $e ");
+      Logger().e(e);
+    }
+    return false;
+  }
+
   Future<bool> addFarmer(Farmer farmer) async {
     var data = json.encode({
       "data": farmer,
@@ -86,6 +111,9 @@ class FarmerService {
       );
 
       if (response.statusCode == 200) {
+        String name = response.data['data']['name'].toString();
+        Logger().i(name);
+        await FarmerService().methodcall(name);
         Fluttertoast.showToast(msg: "FARMER ADDED");
         return true;
       } else {

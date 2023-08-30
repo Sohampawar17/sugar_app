@@ -6,6 +6,8 @@ import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/views/farmer_screens/list_farmers_view/list_farmers_model.dart';
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
+import '../../../router.router.dart';
+
 class ListFarmersScreen extends StatelessWidget {
   const ListFarmersScreen({super.key});
 
@@ -17,6 +19,20 @@ class ListFarmersScreen extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Farmers'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.addFarmerScreen,
+                      arguments: const AddFarmerScreenArguments(farmerid: ""),
+                    );
+                  },
+                  child: Text('Add Farmer')),
+            )
+          ],
         ),
         body: fullScreenLoader(
           child: Column(
@@ -71,7 +87,7 @@ class ListFarmersScreen extends StatelessWidget {
                                   // controller: model.villageController,
                                   onChanged: (value) {
                                     model.villageController.text = value;
-                                    model.filterList("name", value);
+                                    model.filterList(value, "name");
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'ID',
@@ -182,10 +198,20 @@ class ListFarmersScreen extends StatelessWidget {
                           model.filteredList[index].supplierName ?? '',
                           style: const TextStyle(fontSize: 15),
                         ),
-                        subtitle: Text(
-                          model.filteredList[index].existingSupplierCode ?? '',
-                          style: const TextStyle(fontSize: 13),
-                        ),
+                        subtitle: model
+                                    .filteredList[index].existingSupplierCode !=
+                                null
+                            ? Text(
+                                model.filteredList[index]
+                                        .existingSupplierCode ??
+                                    '',
+                                style: const TextStyle(fontSize: 13),
+                              )
+                            : Text(
+                                model.filteredList[index].name?.substring(3) ??
+                                    '',
+                                style: const TextStyle(fontSize: 13),
+                              ),
                         onTap: () {
                           // Handle row click here
                           // _onRowClick(context, filteredList[index]);

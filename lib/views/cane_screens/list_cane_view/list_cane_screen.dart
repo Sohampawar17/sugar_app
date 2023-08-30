@@ -5,6 +5,7 @@ import 'package:sugar_mill_app/views/cane_screens/list_cane_view/list_cane_model
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
 import '../../../constants.dart';
+import '../../../router.router.dart';
 
 class ListCaneScreen extends StatelessWidget {
   const ListCaneScreen({super.key});
@@ -17,6 +18,20 @@ class ListCaneScreen extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Cane Master'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.addCaneScreen,
+                      arguments: const AddCaneScreenArguments(caneId: ""),
+                    );
+                  },
+                  child: Text('Add Cane Master')),
+            )
+          ],
         ),
         body: fullScreenLoader(
           child: Column(
