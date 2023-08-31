@@ -198,20 +198,10 @@ class ListFarmersScreen extends StatelessWidget {
                           model.filteredList[index].supplierName ?? '',
                           style: const TextStyle(fontSize: 15),
                         ),
-                        subtitle: model
-                                    .filteredList[index].existingSupplierCode !=
-                                null
-                            ? Text(
-                                model.filteredList[index]
-                                        .existingSupplierCode ??
-                                    '',
-                                style: const TextStyle(fontSize: 13),
-                              )
-                            : Text(
-                                model.filteredList[index].name?.substring(3) ??
-                                    '',
-                                style: const TextStyle(fontSize: 13),
-                              ),
+                        subtitle: Text(
+                          model.filteredList[index].existingSupplierCode ?? '',
+                          style: const TextStyle(fontSize: 13),
+                        ),
                         onTap: () {
                           // Handle row click here
                           // _onRowClick(context, filteredList[index]);

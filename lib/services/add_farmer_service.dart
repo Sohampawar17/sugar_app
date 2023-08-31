@@ -56,7 +56,6 @@ class FarmerService {
         List<BankMaster> dataList = List.from(jsonData['data'])
             .map<BankMaster>((data) => BankMaster.fromJson(data))
             .toList();
-
         return dataList;
       } else {
         Fluttertoast.showToast(msg: "Unable to fetch Villages");
@@ -181,7 +180,7 @@ class FarmerService {
       if (response.statusCode == 200) {
         return Farmer.fromJson(response.data["data"]);
       } else {
-        // print(response.statusMessage);
+        print(response.statusMessage);
         return null;
       }
     } catch (e) {

@@ -32,6 +32,7 @@ class FarmerViewModel extends BaseViewModel {
   final List<String> items = ['Farmer', 'Member'];
   final List<String> plantlist = ['Bedkihal', 'Nagpur'];
   final List<String> vendorGroupList = ['Cane'];
+  final List<String> roles = ['Transporter', 'Harvester', 'Farmer'];
   List<villagemodel> villageList = [];
   List<BankMaster> bankList = [];
   DateTime? selectedDate;
@@ -48,6 +49,37 @@ class FarmerViewModel extends BaseViewModel {
   final List<String> _selectedItems = [];
 
   List<String> get selectedItems => _selectedItems;
+
+  final List<String> _selectedrole = [];
+
+  List<String> get selectedRoles => _selectedrole;
+
+  void toggleRoles(String item, int index) {
+    if (_selectedrole.contains(item)) {
+      _selectedrole.remove(item);
+      if (item == roles[0]) {
+        bankAccounts[index].transporter = 0;
+      }
+      if (item == roles[1]) {
+        bankAccounts[index].harvester = 0;
+      }
+      if (item == roles[2]) {
+        bankAccounts[index].farmer = 0;
+      }
+    } else {
+      _selectedrole.add(item);
+      if (item == roles[0]) {
+        bankAccounts[index].transporter = 1;
+      }
+      if (item == roles[1]) {
+        bankAccounts[index].harvester = 1;
+      }
+      if (item == roles[2]) {
+        bankAccounts[index].farmer = 1;
+      }
+    }
+    notifyListeners();
+  }
 
   initialise(BuildContext context, String farmerid) async {
     setBusy(true);
@@ -349,7 +381,6 @@ class FarmerViewModel extends BaseViewModel {
     farmerData.circleOffice = selectedoffice;
     farmerData.taluka = selectedtaluka;
     Logger().i(farmerData.circleOffice);
-
     notifyListeners();
   }
 
@@ -374,8 +405,11 @@ class FarmerViewModel extends BaseViewModel {
     Logger().i(branchifscCode);
   }
 
+  // final List<String> _selectedItems = [];
+  //
+  // List<String> get selectedItems => _selectedItems;
   String? selectedRole;
-
+  String? get SelectedRole => selectedRole;
   void setSelectedRole(String? role) {
     selectedRole = role;
     notifyListeners();
@@ -383,10 +417,31 @@ class FarmerViewModel extends BaseViewModel {
 
   //////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// for user role ////////////////////////////////
-  final List<String> roles = ['Transporter', 'Harvester', 'Farmer', 'None'];
+
+  // void toggleRole(String item) {
+  //   if (roles?.contains(item)) {
+  //     roles?.remove(item);
+  //     // 'Transporter', 'Harvester', 'Farmer', 'Member'
+  //     if (item == roles[0]) {
+  //       bankAccounts.;
+  //     }
+  //     if (item == roles[1]) {
+  //       farmerData.isMember = 0;
+  //     }
+  //   } else {
+  //     _selectedItems.add(item);
+  //     if (item == roles[0]) {
+  //       farmerData.isFarmer = 1;
+  //     }
+  //     if (item == roles[1]) {
+  //       farmerData.isMember = 1;
+  //     }
+  //   }
+  //   notifyListeners();
+  // }
   // final List<String> roles = ['Transporter'];
   // String? _selectedRole;
-
+  //
   // String? get selectedRole => _selectedRole;
 
   // void setSelectedRole(String? role) {
@@ -404,8 +459,9 @@ class FarmerViewModel extends BaseViewModel {
   bool farmer = false;
   bool member = false;
 
-  void setTransporter(bool value) {
-    transporter = value;
+  void setTransporter(bool? value) {
+    transporter = value ?? false;
+    Logger().i(transporter);
     notifyListeners();
   }
 
@@ -443,7 +499,6 @@ class FarmerViewModel extends BaseViewModel {
         farmerData.isMember = 1;
       }
     }
-
     notifyListeners();
   }
   ///////////////////////////////////////////////////////////////////////
@@ -578,9 +633,9 @@ class FarmerViewModel extends BaseViewModel {
     if (formState!.validate()) {
       // Form is valid, submit it
       if (index == -1) {
-        if (!isRoleAlreadyPresent(bankName)) {
+        if (!isRoleAlreadyPresent(selectedRole ?? "")) {
           Fluttertoast.showToast(
-              msg: "Bank is already exist", toastLength: Toast.LENGTH_LONG);
+              msg: "Role is already exist", toastLength: Toast.LENGTH_LONG);
           return;
         }
       }
@@ -645,7 +700,9 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   void resetBankVariables() {
-    selectedRole = ""; // Reset selectedRole
+    farmer = false;
+    transporter = false;
+    harvester = false;
     bankName = "";
     branchifscCode = "";
     accountNumber = "";
@@ -727,9 +784,7 @@ class FarmerViewModel extends BaseViewModel {
       if (passbookattch.isNotEmpty) {
         return passbookattch;
       } else if (files.bankPassbooks.isNotEmpty) {
-        return files.bankPassbooks
-            .map((file) => file?.path.split("/").last)
-            .join(", ");
+        return 'Image Picked';
       } else {
         return null;
       }
@@ -740,8 +795,7 @@ class FarmerViewModel extends BaseViewModel {
 
   List<File?>? getFileFromFileTypepassbook(String filetype) {
     if (filetype == kBankpdf) return List.from(files.bankPassbooks);
-
-    return null;
+    return [];
   }
 
   File? getFileFromFileType(String filetype) {

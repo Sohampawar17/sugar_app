@@ -123,6 +123,7 @@ class AddFarmerScreen extends StatelessWidget {
                     //     fontWeight: FontWeight.w300,
                     //   ),
                     // ),
+
                     Row(
                       children: [
                         Expanded(
@@ -574,15 +575,15 @@ class AddFarmerScreen extends StatelessWidget {
                               // ignore: deprecated_member_use
                               dataRowHeight: 40.0,
                               columns: const [
-                                // DataColumn(
-                                //   label: Text('Far.'),
-                                // ),
-                                // DataColumn(
-                                //   label: Text('Har.'),
-                                // ),
-                                // DataColumn(
-                                //   label: Text('Trans.'),
-                                // ),
+                                DataColumn(
+                                  label: Text('Far.'),
+                                ),
+                                DataColumn(
+                                  label: Text('Har.'),
+                                ),
+                                DataColumn(
+                                  label: Text('Trans.'),
+                                ),
                                 DataColumn(
                                   label: Text('B. Name'),
                                 ),
@@ -592,7 +593,6 @@ class AddFarmerScreen extends StatelessWidget {
                                 DataColumn(
                                   label: Text('Acc. Number'),
                                 ),
-
                                 DataColumn(
                                   label: Text('Bank Passbook'),
                                 ),
@@ -612,6 +612,15 @@ class AddFarmerScreen extends StatelessWidget {
                                 // Replace 10 with the actual number of rows you want
                                 (int index) => DataRow(
                                   cells: [
+                                    DataCell(Text(model
+                                        .bankAccounts[index].farmer
+                                        .toString())),
+                                    DataCell(Text(model
+                                        .bankAccounts[index].harvester
+                                        .toString())),
+                                    DataCell(Text(model
+                                        .bankAccounts[index].transporter
+                                        .toString())),
                                     DataCell(Text(model
                                         .bankAccounts[index].bankName
                                         .toString())),
@@ -732,6 +741,29 @@ class AddFarmerScreen extends StatelessWidget {
                   key: model.bankformKey,
                   child: Column(
                     children: [
+                      Wrap(
+                        spacing: 4.0,
+                        runSpacing: 3.0,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          for (String item in model.roles)
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Checkbox(
+                                    value: model.selectedRoles.contains(item),
+                                    onChanged: (_) => model.toggleRoles(
+                                        item, index), // Pass the correct index
+                                  ),
+                                  Text(item),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+
                       Expanded(
                         child: Autocomplete<String>(
                           key: Key(index == -1
@@ -919,9 +951,9 @@ class AddFarmerScreen extends StatelessWidget {
                                 'Bank File: ${model.passbookattch.split("/").last}',
                                 overflow: TextOverflow.ellipsis,
                               )
-                            : model.files.getFile(kBankpdf) != null
+                            : model.getFileFromFileType(kBankpdf) != null
                                 ? Text(
-                                    'Bank Passbook: ${model.files.getFile(kBankpdf)!.path.split("/").last}',
+                                    'Bank Passbook: ${model.getFileFromFileTypepassbook(kBankpdf)}',
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : const Text('Attach Passbook'),
