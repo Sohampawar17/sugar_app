@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/views/farmer_screens/add_farmer_view/add_farmer_model.dart';
@@ -257,57 +258,55 @@ class AddFarmerScreen extends StatelessWidget {
                     //   ),
                     // ),
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: model.mobileNumberController,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(10),
-                            ],
-                            keyboardType: TextInputType.phone,
-                            decoration: const InputDecoration(
-                              labelText: 'Mobile Number',
-                              hintText: 'Enter 10-digit mobile number',
-                            ),
-                            validator: model.validateMobileNumber,
-                            onChanged: model.onMobileNumberChanged,
+                    Row(children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: model.mobileNumberController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(10),
+                          ],
+                          keyboardType: TextInputType.phone,
+                          decoration: const InputDecoration(
+                            labelText: 'Mobile Number',
+                            hintText: 'Enter 10-digit mobile number',
                           ),
+                          validator: model.validateMobileNumber,
+                          onChanged: model.onMobileNumberChanged,
                         ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        model.isEdit == false
-                            ? Expanded(
-                                child: TextFormField(
-                                  key: Key(model.farmerData.taluka ?? "Taluka"),
-                                  readOnly: true,
-                                  initialValue: model.farmerData.taluka,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Taluka',
-                                  ),
-                                  // onChanged: model.setSelectedcircleoffice,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      model.isEdit == false
+                          ? Expanded(
+                              child: TextFormField(
+                                key: Key(model.farmerData.taluka ?? "Taluka"),
+                                readOnly: true,
+                                initialValue: model.farmerData.taluka,
+                                decoration: const InputDecoration(
+                                  labelText: 'Taluka',
                                 ),
-                              )
-                            : Expanded(
-                                child: TextFormField(
-                                  controller: model.aadharNumberController,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    LengthLimitingTextInputFormatter(12),
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Aadhar Card Number',
-                                    hintText: 'Enter 12-digit Aadhar number',
-                                  ),
-                                  validator: model.validateAadhar,
-                                  onChanged: model.onAadharChanged,
-                                ),
+                                // onChanged: model.setSelectedcircleoffice,
                               ),
-                      ],
-                    ),
+                            )
+                          : Expanded(
+                              child: TextFormField(
+                                controller: model.aadharNumberController,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(12),
+                                ],
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Aadhar Card Number',
+                                  hintText: 'Enter 12-digit Aadhar number',
+                                ),
+                                validator: model.validateAadhar,
+                                onChanged: model.onAadharChanged,
+                              ),
+                            ),
+                    ]),
 
                     Row(
                       children: [
@@ -741,29 +740,28 @@ class AddFarmerScreen extends StatelessWidget {
                   key: model.bankformKey,
                   child: Column(
                     children: [
-                      Wrap(
-                        spacing: 4.0,
-                        runSpacing: 3.0,
-                        alignment: WrapAlignment.center,
-                        children: [
-                          for (String item in model.roles)
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                    value: model.selectedRoles.contains(item),
-                                    onChanged: (_) => model.toggleRoles(
-                                        item, index), // Pass the correct index
-                                  ),
-                                  Text(item),
-                                ],
-                              ),
-                            ),
-                        ],
+                      CheckboxListTile(
+                        title: Text("Farmer"),
+                        value: model.farmer,
+                        onChanged: (bool? newValue) {
+                          model.setRole("Farmer", newValue ?? false);
+                        },
                       ),
 
+                      CheckboxListTile(
+                        title: Text("Harvester"),
+                        value: model.harvester,
+                        onChanged: (bool? newValue) {
+                          model.setRole("Harvester", newValue ?? false);
+                        },
+                      ),
+                      CheckboxListTile(
+                        title: Text("Transporter"),
+                        value: model.transporter,
+                        onChanged: (bool? newValue) {
+                          model.setRole("Transporter", newValue ?? false);
+                        },
+                      ),
                       Expanded(
                         child: Autocomplete<String>(
                           key: Key(index == -1
@@ -951,12 +949,7 @@ class AddFarmerScreen extends StatelessWidget {
                                 'Bank File: ${model.passbookattch.split("/").last}',
                                 overflow: TextOverflow.ellipsis,
                               )
-                            : model.getFileFromFileType(kBankpdf) != null
-                                ? Text(
-                                    'Bank Passbook: ${model.getFileFromFileTypepassbook(kBankpdf)}',
-                                    overflow: TextOverflow.ellipsis,
-                                  )
-                                : const Text('Attach Passbook'),
+                            : const Text('Attach Passbook'),
                       )),
                     ],
                   ),

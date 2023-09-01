@@ -87,10 +87,11 @@ class ListFarmersScreen extends StatelessWidget {
                                   // controller: model.villageController,
                                   onChanged: (value) {
                                     model.villageController.text = value;
-                                    model.filterList(value, "name");
+                                    model.filterList(
+                                        value, "existing_supplier_code");
                                   },
                                   decoration: const InputDecoration(
-                                    labelText: 'ID',
+                                    labelText: 'Vendor Code',
                                     prefixIcon: Icon(Icons.search),
                                     // prefixIcon: Icon(Icons.search),
                                   ),

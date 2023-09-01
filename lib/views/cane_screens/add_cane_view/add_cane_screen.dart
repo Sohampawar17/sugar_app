@@ -108,8 +108,8 @@ class AddCaneScreen extends StatelessWidget {
                                     if (textEditingValue.text.isEmpty) {
                                       return const Iterable<String>.empty();
                                     }
-                                    return model.villageList
-                                        .map((route) => route.name!)
+                                    return model.routeList
+                                        .map((route) => route.village ?? "")
                                         .toList()
                                         .where((route) => route
                                             .toLowerCase()
@@ -118,11 +118,11 @@ class AddCaneScreen extends StatelessWidget {
                                   },
                                   onSelected: (String routeName) {
                                     // Find the corresponding route object
-                                    final routeData = model.villageList
-                                        .firstWhere(
-                                            (route) => route.name == routeName);
+                                    final routeData = model.routeList
+                                        .firstWhere((route) =>
+                                            route.village == routeName);
                                     model.setSelectedVillage(
-                                        routeData.name); // Pass the route
+                                        routeData.village); // Pass the route
                                   },
                                   fieldViewBuilder: (BuildContext context,
                                       TextEditingController
@@ -233,10 +233,11 @@ class AddCaneScreen extends StatelessWidget {
                                     return const Iterable<String>.empty();
                                   }
                                   return model.farmerList
-                                      .where((grower) => grower.supplierName!
-                                          .toLowerCase()
-                                          .contains(textEditingValue.text
-                                              .toLowerCase()))
+                                      .where((grower) =>
+                                          (grower.supplierName ?? "")
+                                              .toLowerCase()
+                                              .contains(textEditingValue.text
+                                                  .toLowerCase()))
                                       .map((grower) =>
                                           grower.existingSupplierCode ?? "")
                                       .toList();

@@ -40,12 +40,12 @@ class AddCaneService {
     return false;
   }
 
-  Future<List<caneRoute>> fetchroute(String village) async {
+  Future<List<caneRoute>> fetchroute() async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        '$apiBaseUrl/api/resource/Route?fields=["route","distance_km","name"]&limit_page_length=99999&filters=[["village","like","$village%"]]',
+        '$apiBaseUrl/api/resource/Route?fields=["route","distance_km","name","village","circle_office","taluka"]&limit_page_length=99999',
         options: Options(
           method: 'GET',
           headers: headers,

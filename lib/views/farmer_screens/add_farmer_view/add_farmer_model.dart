@@ -32,7 +32,7 @@ class FarmerViewModel extends BaseViewModel {
   final List<String> items = ['Farmer', 'Member'];
   final List<String> plantlist = ['Bedkihal', 'Nagpur'];
   final List<String> vendorGroupList = ['Cane'];
-  final List<String> roles = ['Transporter', 'Harvester', 'Farmer'];
+  final List<String> roles = ['Farmer', 'Harvester', 'Transporter'];
   List<villagemodel> villageList = [];
   List<BankMaster> bankList = [];
   DateTime? selectedDate;
@@ -49,37 +49,6 @@ class FarmerViewModel extends BaseViewModel {
   final List<String> _selectedItems = [];
 
   List<String> get selectedItems => _selectedItems;
-
-  final List<String> _selectedrole = [];
-
-  List<String> get selectedRoles => _selectedrole;
-
-  void toggleRoles(String item, int index) {
-    if (_selectedrole.contains(item)) {
-      _selectedrole.remove(item);
-      if (item == roles[0]) {
-        bankAccounts[index].transporter = 0;
-      }
-      if (item == roles[1]) {
-        bankAccounts[index].harvester = 0;
-      }
-      if (item == roles[2]) {
-        bankAccounts[index].farmer = 0;
-      }
-    } else {
-      _selectedrole.add(item);
-      if (item == roles[0]) {
-        bankAccounts[index].transporter = 1;
-      }
-      if (item == roles[1]) {
-        bankAccounts[index].harvester = 1;
-      }
-      if (item == roles[2]) {
-        bankAccounts[index].farmer = 1;
-      }
-    }
-    notifyListeners();
-  }
 
   initialise(BuildContext context, String farmerid) async {
     setBusy(true);
@@ -101,6 +70,7 @@ class FarmerViewModel extends BaseViewModel {
       dobController.text = farmerData.dateOfBirth ?? "";
       ageController.text = farmerData.age ?? "";
       bankAccounts.addAll(farmerData.bankDetails?.toList() ?? []);
+
       if (farmerData.isFarmer == 1) {
         _selectedItems.add(items[0]);
       }
@@ -409,11 +379,11 @@ class FarmerViewModel extends BaseViewModel {
   //
   // List<String> get selectedItems => _selectedItems;
   String? selectedRole;
-  String? get SelectedRole => selectedRole;
-  void setSelectedRole(String? role) {
-    selectedRole = role;
-    notifyListeners();
-  }
+  // String? get SelectedRole => selectedRole;
+  // void setSelectedRole(String? role) {
+  //   selectedRole = role;
+  //   notifyListeners();
+  // }
 
   //////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////// for user role ////////////////////////////////
@@ -440,9 +410,10 @@ class FarmerViewModel extends BaseViewModel {
   //   notifyListeners();
   // }
   // final List<String> roles = ['Transporter'];
-  // String? _selectedRole;
-  //
-  // String? get selectedRole => _selectedRole;
+  Set<String> selectedRoleforservice = <String>{};
+  String? _selectedRole;
+
+  String? get SelectedRole => _selectedRole;
 
   // void setSelectedRole(String? role) {
   //   if (role != null) {
@@ -459,9 +430,8 @@ class FarmerViewModel extends BaseViewModel {
   bool farmer = false;
   bool member = false;
 
-  void setTransporter(bool? value) {
-    transporter = value ?? false;
-    Logger().i(transporter);
+  void setTransporter(bool value) {
+    transporter = value;
     notifyListeners();
   }
 
@@ -475,10 +445,25 @@ class FarmerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setMember(bool value) {
-    member = value;
+  void setRole(String role, bool value) {
+    switch (role) {
+      case 'Farmer':
+        farmer = value;
+        break;
+      case 'Harvester':
+        harvester = value;
+        break;
+      case 'Transporter':
+        transporter = value;
+        break;
+    }
     notifyListeners();
   }
+
+  // void setMember(bool value) {
+  //   member = value;
+  //   notifyListeners();
+  // }
 
   void toggleItem(String item) {
     if (_selectedItems.contains(item)) {
@@ -633,7 +618,7 @@ class FarmerViewModel extends BaseViewModel {
     if (formState!.validate()) {
       // Form is valid, submit it
       if (index == -1) {
-        if (!isRoleAlreadyPresent(selectedRole ?? "")) {
+        if (!isRoleAlreadyPresent(bankName)) {
           Fluttertoast.showToast(
               msg: "Role is already exist", toastLength: Toast.LENGTH_LONG);
           return;
@@ -650,11 +635,45 @@ class FarmerViewModel extends BaseViewModel {
     }
   }
 
+  bool getRoleValue(String role, int index) {
+    if (index >= 0 && index < bankAccounts.length) {
+      final account = bankAccounts[index];
+      switch (role) {
+        case 'farmer':
+          return account.farmer == 1;
+        case 'harvester':
+          return account.harvester == 1;
+        case 'transporter':
+          return account.transporter == 1;
+      }
+    }
+    return false; // Default to false if index is out of bounds or role is unknown
+  }
+
+  // Set the value of a specific role for a bank account at the given index
+  void setRoleValue(String role, int index, bool newValue) {
+    if (index >= 0 && index < bankAccounts.length) {
+      final account = bankAccounts[index];
+      switch (role) {
+        case 'farmer':
+          account.farmer = newValue ? 1 : 0;
+          break;
+        case 'harvester':
+          account.harvester = newValue ? 1 : 0;
+          break;
+        case 'transporter':
+          account.transporter = newValue ? 1 : 0;
+          break;
+      }
+      notifyListeners(); // Notify listeners to update the UI if necessary
+    }
+  }
+
   void submitBankAccount(int index) {
     if (index != -1) {
-      bankAccounts[index].farmer = selectedRole == "Farmer" ? 1 : 0;
-      bankAccounts[index].harvester = selectedRole == "Harvester" ? 1 : 0;
-      bankAccounts[index].transporter = selectedRole == "Transporter" ? 1 : 0;
+      bankAccounts[index].farmer = farmer ? 1 : 0;
+      bankAccounts[index].harvester = harvester ? 1 : 0;
+      bankAccounts[index].transporter = transporter ? 1 : 0;
       bankAccounts[index].bankName = bankName;
       bankAccounts[index].branchifscCode = branchifscCode;
       bankAccounts[index].accountNumber = accountNumber;
@@ -666,9 +685,9 @@ class FarmerViewModel extends BaseViewModel {
       return;
     }
     bankAccounts.add(BankDetails(
-        farmer: selectedRole == "Farmer" ? 1 : 0,
-        harvester: selectedRole == "Harvester" ? 1 : 0,
-        transporter: selectedRole == "Transporter" ? 1 : 0,
+        farmer: farmer ? 1 : 0,
+        harvester: harvester ? 1 : 0,
+        transporter: transporter ? 1 : 0,
         bankName: bankName,
         branchifscCode: branchifscCode,
         accountNumber: accountNumber,
@@ -682,14 +701,20 @@ class FarmerViewModel extends BaseViewModel {
       if (index >= bankAccounts.length) {
         return;
       }
-      selectedRole = bankAccounts[index].farmer == 1
-          ? "Farmer"
-          : bankAccounts[index].harvester == 1
-              ? "Harvester"
-              : bankAccounts[index].transporter == 1
-                  ? "Transporter"
-                  : "None";
+      // Reset all roles to false
+      farmer = false;
+      harvester = false;
+      transporter = false;
 
+      if (bankAccounts[index].farmer == 1) {
+        farmer = true;
+      }
+      if (bankAccounts[index].harvester == 1) {
+        harvester = true;
+      }
+      if (bankAccounts[index].transporter == 1) {
+        transporter = true;
+      }
       bankName = bankAccounts[index].bankName!;
       branchifscCode = bankAccounts[index].branchifscCode!;
       accountNumber = bankAccounts[index].accountNumber!;
@@ -700,9 +725,9 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   void resetBankVariables() {
-    farmer = false;
-    transporter = false;
-    harvester = false;
+    // farmer = false;
+    // harvester = false;
+    // transporter = false;
     bankName = "";
     branchifscCode = "";
     accountNumber = "";

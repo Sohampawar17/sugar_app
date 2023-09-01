@@ -72,6 +72,7 @@ class CaneViewModel extends BaseViewModel {
     canevarietyList = await AddCaneService().fetchCaneVariety();
     plantationsystemList = await AddCaneService().fetchplantationsystem();
     seedmaterialList = await AddCaneService().fetchseedMaterial();
+    routeList = (await AddCaneService().fetchroute());
     croptypeList = await AddCaneService().fetchCropType();
     irrigationmethodList = await AddCaneService().fetchirrigationmethod();
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
@@ -278,13 +279,12 @@ class CaneViewModel extends BaseViewModel {
         await AddCaneService().fetchfarmerListwithfilter(village ?? "");
     Logger().i(farmerList);
     final selectedRouteData =
-        villageList.firstWhere((routeData) => routeData.name == village);
+        routeList.firstWhere((routeData) => routeData.village == village);
     selectedvillage = selectedRouteData.circleOffice;
     Logger().i(selectedvillage);
     canedata.circleOffice = selectedvillage;
     Logger().i(canedata.circleOffice);
-    routeList = (await AddCaneService().fetchroute(
-        canedata.area ?? "")); // Set th distance in the kmController
+    // Set th distance in the kmController
     notifyListeners();
   }
 
