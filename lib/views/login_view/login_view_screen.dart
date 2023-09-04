@@ -156,6 +156,7 @@
 //     );
 //   }
 // }
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
@@ -205,77 +206,88 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                 vertical: 16.0, horizontal: 32.0),
                             child: Form(
                               key: model.formGlobalKey,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  const Icon(Icons.person, size: 100),
-                                  const SizedBox(height: 50.0),
-                                  TextFormField(
-                                    controller: model.usernameController,
-                                    focusNode: model.focusNode,
-                                    decoration: InputDecoration(
-                                      labelText: 'Username',
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                              child: AutofillGroup(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    const Icon(Icons.person, size: 100),
+                                    const SizedBox(height: 50.0),
+                                    TextFormField(
+                                      controller: model.usernameController,
+                                      focusNode: model.focusNode,
+                                      decoration: InputDecoration(
+                                        labelText: 'Username',
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        prefixIcon: const Icon(Icons.person),
+                                        // Icon for the username field
                                       ),
-                                      prefixIcon: Icon(Icons
-                                          .person), // Icon for the username field
+                                      autofillHints: const [
+                                        AutofillHints.username
+                                      ],
+                                      validator: (value) =>
+                                          model.validateUsername(value),
                                     ),
-                                    validator: (value) =>
-                                        model.validateUsername(value),
-                                  ),
-                                  const SizedBox(height: 16.0),
-                                  TextFormField(
-                                    controller: model.passwordController,
-                                    obscureText: model.obscurePassword,
-                                    decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      prefixIcon: Icon(Icons
-                                          .lock), // Icon for the password field
-                                      suffixIcon: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            model.obscurePassword =
-                                                !model.obscurePassword;
-                                          });
-                                        },
-                                        child: Icon(
-                                          model.obscurePassword
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
+                                    const SizedBox(height: 16.0),
+                                    TextFormField(
+                                      controller: model.passwordController,
+                                      obscureText: model.obscurePassword,
+                                      decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        prefixIcon: const Icon(Icons
+                                            .lock), // Icon for the password field
+                                        suffixIcon: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              model.obscurePassword =
+                                                  !model.obscurePassword;
+                                            });
+                                          },
+                                          child: Icon(
+                                            model.obscurePassword
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                          ),
                                         ),
                                       ),
+                                      autofillHints: const [
+                                        AutofillHints.password
+                                      ],
+                                      onEditingComplete: () =>
+                                          TextInput.finishAutofillContext(),
+                                      validator: (value) =>
+                                          model.validatePassword(value),
                                     ),
-                                    validator: (value) =>
-                                        model.validatePassword(value),
-                                  ),
-                                  const SizedBox(height: 16.0),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                      if (model.formGlobalKey.currentState!
-                                          .validate()) {
-                                        model.formGlobalKey.currentState!
-                                            .save();
-                                        model
-                                            .loginwithUsernamePassword(context);
-                                      }
-                                    },
-                                    child: const Text('Login'),
-                                  ),
-                                  const SizedBox(height: 16.0),
-                                ],
+                                    const SizedBox(height: 16.0),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                        if (model.formGlobalKey.currentState!
+                                            .validate()) {
+                                          model.formGlobalKey.currentState!
+                                              .save();
+                                          model.loginwithUsernamePassword(
+                                              context);
+                                        }
+                                      },
+                                      child: const Text('Login'),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -293,7 +305,7 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                               throw 'Could not launch $url';
                             }
                           },
-                          child: Text(
+                          child: const Text(
                             'Developed By ©  QuantBit Technologies Pvt. Ltd ',
                             style: TextStyle(
                               color: Colors.white,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -6,14 +7,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/models/Agri.dart';
 
+import '../../../models/CaneFarmer.dart';
+import '../../../models/DoseType.dart';
 import '../../../models/agri_cane_model.dart';
 import '../../../router.router.dart';
 import '../../../services/add_agri_services.dart';
 
 class AgriViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
+  final bankformKey = GlobalKey<FormState>();
   Agri agridata = Agri();
   List<AgricultureDevelopmentItem> agricultureDevelopmentItem = [];
+  List<Grantor> grantor = [];
   final List<String> items = [
     'Basel',
     'Pre-Earthing',
@@ -25,6 +30,8 @@ class AgriViewModel extends BaseViewModel {
   bool isEdit = false;
   List<String> seasonlist = [""];
   List<AgriCane> canelistwithfilter = [];
+  List<caneFarmer> farmerList = [];
+
   String? selectedplot;
   String? selectedVendorname;
   String? selectedplant;
@@ -44,6 +51,7 @@ class AgriViewModel extends BaseViewModel {
     seasonlist = await AddAgriServices().fetchSeason();
     canelistwithfilter =
         await AddAgriServices().fetchcanelistwithfilter(agridata.season ?? "");
+    farmerList = await AddAgriServices().fetchfarmerListwithfilter();
     if (agriid != "") {
       isEdit = true;
       agridata = await AddAgriServices().getAgri(agriid) ?? Agri();
@@ -81,6 +89,106 @@ class AgriViewModel extends BaseViewModel {
       }
     }
     setBusy(false);
+  }
+
+  List<DosetypeModel> doseList = [];
+
+  void mapJsonToTable() async {
+    agricultureDevelopmentItem.clear();
+    double developmentArea =
+        agridata.developmentArea ?? 0.0; // Assign your development area here
+    double fixedArea = developmentArea.roundToDouble();
+    double guntacal = developmentArea - fixedArea;
+    double guntacalfix = double.parse(guntacal.toStringAsFixed(2));
+    double quotent = 0.0;
+
+    if (guntacalfix >= 0.01 && guntacalfix <= 0.10) {
+      quotent = 0.0;
+    } else if (guntacalfix >= 0.11 && guntacalfix <= 0.20) {
+      quotent = 0.25;
+    } else if (guntacalfix >= 0.21 && guntacalfix <= 0.30) {
+      quotent = 0.50;
+    } else if (guntacalfix >= 0.31 && guntacalfix <= 0.39) {
+      quotent = 0.75;
+    } else if (guntacalfix >= 0.40) {
+      throw Exception(
+          "Invalid input. The Gunta should be between 0.01 and 0.40.");
+    } else {
+      quotent = 0.0;
+    }
+
+    String croptype = agridata.cropType ?? "";
+    String cropvariety = agridata.cropVariety ?? "";
+    double areagunta = ((fixedArea * 40) + (quotent * 40)) / 40;
+    String basel = agridata.basel == 1 ? 'Basel' : 'False';
+    String preearth = agridata.preEarthing == 1 ? 'Pre-Earth' : 'False';
+    String earth = agridata.earth == 1 ? 'Earthing' : 'False';
+    String rainy = agridata.rainy == 1 ? 'Rainy' : 'False';
+    String ratoon1 = agridata.ratoon1 == 1 ? 'Ratoon 1' : 'False';
+    String ratoon2 = agridata.ratoon2 == 1 ? 'Ratoon 2' : 'False';
+    Logger().i(basel);
+    Logger().i(preearth);
+    Logger().i(earth);
+    Logger().i(rainy);
+    Logger().i(ratoon1);
+    Logger().i(ratoon2);
+    doseList = await AddAgriServices().fetchdosetype(
+        basel,
+        preearth,
+        earth,
+        rainy,
+        ratoon1,
+        ratoon2,
+        croptype,
+        cropvariety,
+        developmentArea,
+        fixedArea,
+        areagunta);
+    Logger().i(doseList.toString());
+    agricultureDevelopmentItem = doseList.map((e) {
+      return AgricultureDevelopmentItem(
+          itemCode: e.itemCode,
+          itemName: e.itemName,
+          basel: e.baselqty ?? 0.0,
+          preEarthing: e.preearthqty ?? 0.0,
+          earth: e.earthingqty ?? 0.0,
+          rainy: e.rainyqty ?? 0.0,
+          ratoon1: e.ratoon1qty ?? 0.0,
+          ratoon2: e.ratoon2qty ?? 0.0,
+          qty: ((e.baselqty ?? 0.0) +
+              (e.preearthqty ?? 0.0) +
+              (e.earthingqty ?? 0.0) +
+              (e.rainyqty ?? 0.0) +
+              (e.ratoon1qty ?? 0.0) +
+              (e.ratoon2qty ?? 0.0))
+          // Add other properties here
+          );
+    }).toList();
+    notifyListeners();
+  }
+
+  void validateForm(BuildContext context, int index) async {
+    final formState = bankformKey.currentState;
+    if (formState!.validate()) {
+      // Form is valid, submit it
+      setBusy(true);
+
+      submitBankAccount(index);
+      setBusy(false);
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+          msg: "Grantor is Added Succesfully", toastLength: Toast.LENGTH_LONG);
+    } else {
+      // Form is invalid, show error messages
+      Logger().i('Grantor Form is invalid');
+    }
+  }
+
+  void deleteBankAccount(int index) {
+    if (index >= 0 && index < grantor.length) {
+      grantor.removeAt(index);
+      notifyListeners();
+    }
   }
 
   void setSelectedSeason(String? season) async {
@@ -158,7 +266,6 @@ class AgriViewModel extends BaseViewModel {
         agridata.ratoon2 = 1;
       }
     }
-
     notifyListeners();
   }
 
@@ -226,7 +333,9 @@ class AgriViewModel extends BaseViewModel {
   void onSavePressed(BuildContext context) async {
     setBusy(true);
     if (formKey.currentState!.validate()) {
+      agridata.agricultureDevelopmentItem = agricultureDevelopmentItem;
       bool res = false;
+
       Logger().i(agridata.toJson().toString());
       if (isEdit == true) {
         res = await AddAgriServices().updateAgri(agridata);
@@ -285,5 +394,50 @@ class AgriViewModel extends BaseViewModel {
     } else {
       return null; // No validation error
     }
+  }
+
+  late String suretyname = "";
+  late String suretyCode;
+
+  void setValuesToBankVaribles(int index) {
+    if (index != -1) {
+      if (index >= grantor.length) {
+        return;
+      }
+      // Reset all roles to false
+      suretyCode = grantor[index].suretyCode!;
+      suretyname = grantor[index].suretyName!;
+    }
+    notifyListeners();
+  }
+
+  void resetBankVariables() {
+    suretyCode = "";
+    suretyname = "";
+  }
+
+  void submitBankAccount(int index) {
+    if (index != -1) {
+      grantor[index].suretyCode = suretyCode;
+      grantor[index].suretyName = suretyname;
+
+      notifyListeners();
+      return;
+    }
+    grantor.add(Grantor(
+      suretyCode: suretyCode,
+      suretyName: suretyname,
+    ));
+    notifyListeners();
+  }
+
+  void setSelectedgrantor(String? bank) async {
+    suretyCode = bank ?? "";
+    Logger().i(bank);
+    final selectedRouteData =
+        farmerList.firstWhere((bankData) => bankData.name == bank);
+    Logger().i(selectedRouteData);
+    suretyname = selectedRouteData.supplierName ?? "";
+    notifyListeners();
   }
 }

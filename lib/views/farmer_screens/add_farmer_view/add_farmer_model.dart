@@ -617,6 +617,7 @@ class FarmerViewModel extends BaseViewModel {
     final formState = bankformKey.currentState;
     if (formState!.validate()) {
       // Form is valid, submit it
+      setBusy(true);
       if (index == -1) {
         if (!isRoleAlreadyPresent(bankName)) {
           Fluttertoast.showToast(
@@ -626,9 +627,12 @@ class FarmerViewModel extends BaseViewModel {
       }
       await uploadpassbook();
       submitBankAccount(index);
+      setBusy(false);
       Navigator.pop(context);
       Fluttertoast.showToast(
           msg: "Bank is Added Succesfully", toastLength: Toast.LENGTH_LONG);
+      resetBankVariables();
+      passbookattch = "";
     } else {
       // Form is invalid, show error messages
       Logger().i('Bank Form is invalid');
@@ -667,6 +671,12 @@ class FarmerViewModel extends BaseViewModel {
       }
       notifyListeners(); // Notify listeners to update the UI if necessary
     }
+  }
+
+  void setSelectedfarmerbool(bool? farmer) {
+    notifyListeners();
+    setRole("Farmer", farmer ?? false);
+    notifyListeners();
   }
 
   void submitBankAccount(int index) {
@@ -719,15 +729,15 @@ class FarmerViewModel extends BaseViewModel {
       branchifscCode = bankAccounts[index].branchifscCode!;
       accountNumber = bankAccounts[index].accountNumber!;
       branch = bankAccounts[index].bankAndBranch!;
-      passbookattch = bankAccounts[index].bankPassbook!;
+      passbookattch = bankAccounts[index].bankPassbook ?? "";
     }
     notifyListeners();
   }
 
   void resetBankVariables() {
-    // farmer = false;
-    // harvester = false;
-    // transporter = false;
+    farmer = false;
+    harvester = false;
+    transporter = false;
     bankName = "";
     branchifscCode = "";
     accountNumber = "";

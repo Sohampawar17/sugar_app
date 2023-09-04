@@ -56,7 +56,7 @@ String apifetchcanelistwithfilter =
     '$apiBaseUrl/api/resource/Cane Master?fields=["vendor_code","grower_name","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name"]&filters=[["season","=",""]]&limit_page_length=99999';
 String apiListagri = '$apiBaseUrl/api/resource/Agriculture Development';
 String apigetagrilist =
-    '$apiBaseUrl/api/resource/Agriculture Development?fields=["crop_type","crop_variety","date","area","village","name"]';
+    '$apiBaseUrl/api/resource/Agriculture Development?order_by=creation desc&fields=["crop_type","crop_variety","date","area","village","name"]';
 
 ///Crop Sampling
 String apiPostCropSampling = "$apiBaseUrl/api/resource/Crop Sampling";

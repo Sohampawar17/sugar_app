@@ -6,6 +6,7 @@ import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
 import '../../../constants.dart';
 import '../../../router.router.dart';
+import '../../../widgets/cdrop_down_widget.dart';
 
 class ListCaneScreen extends StatelessWidget {
   const ListCaneScreen({super.key});
@@ -29,7 +30,7 @@ class ListCaneScreen extends StatelessWidget {
                       arguments: const AddCaneScreenArguments(caneId: ""),
                     );
                   },
-                  child: Text('Add Cane Master')),
+                  child: const Text('Add Cane Master')),
             )
           ],
         ),
@@ -45,15 +46,25 @@ class ListCaneScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: TextField(
-                            // controller: model.villageController,
-                            onChanged: (value) {
-                              model.namecontroller.text = value;
-                              model.filterListByNameAndVillage(village: value);
-                            },
-                            decoration: const InputDecoration(
-                              labelText: 'Season',
-                              prefixIcon: Icon(Icons.search),
+                          child: CdropDown(
+                            dropdownButton: DropdownButtonFormField<String>(
+                              isExpanded: true,
+                              // Replace null with the selected value if needed
+                              decoration: const InputDecoration(
+                                labelText: 'Season',
+                              ),
+                              hint: const Text('Select Season'),
+                              items: model.seasonlist.map((val) {
+                                return DropdownMenuItem<String>(
+                                  value: val,
+                                  child: Text(val),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                model.namecontroller.text = value ?? "";
+                                model.filterListByNameAndVillage(
+                                    village: value);
+                              },
                             ),
                           ),
                         ),

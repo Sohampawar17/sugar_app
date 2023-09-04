@@ -527,29 +527,102 @@ class AddCaneScreen extends StatelessWidget {
                                 width: 15,
                               ),
                               Expanded(
-                                child: CdropDown(
-                                  dropdownButton:
-                                      DropdownButtonFormField<String>(
-                                    isExpanded: true,
-                                    value: model.canedata.cropVariety,
-                                    // Replace null with the selected value if needed
-                                    decoration: const InputDecoration(
-                                      labelText: 'Crop Variety',
-                                    ),
-                                    hint: const Text('Select Crop Variety'),
-                                    items: model.canevarietyList.map((val) {
-                                      return DropdownMenuItem<String>(
-                                        value: val,
-                                        child: Text(val),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) =>
-                                        model.setselectedcropVariety(value),
-                                    validator: model.validateCropVariety,
-                                    menuMaxHeight: 200,
+                                child: Autocomplete<String>(
+                                  key: Key(model.canedata.cropVariety ??
+                                      "cropvariety"),
+                                  initialValue: TextEditingValue(
+                                    text: model.canedata.cropVariety ?? "",
                                   ),
+                                  optionsBuilder:
+                                      (TextEditingValue textEditingValue) {
+                                    if (textEditingValue.text.isEmpty) {
+                                      return const Iterable<String>.empty();
+                                    }
+                                    return model.canevarietyList
+                                        .map((route) => route)
+                                        .toList()
+                                        .where((route) => route
+                                            .toLowerCase()
+                                            .contains(textEditingValue.text
+                                                .toLowerCase()));
+                                  },
+                                  onSelected: (value) =>
+                                      model.setselectedcropVariety(value),
+                                  fieldViewBuilder: (BuildContext context,
+                                      TextEditingController
+                                          textEditingController,
+                                      FocusNode focusNode,
+                                      VoidCallback onFieldSubmitted) {
+                                    return TextFormField(
+                                      // key: Key(model.farmerData.village ?? ""),
+                                      // initialValue: model.farmerData.village,
+                                      controller: textEditingController,
+                                      focusNode: focusNode,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Crop Variety',
+                                      ),
+                                      onChanged: (String value) {},
+                                      validator: model.validateVillage,
+                                    );
+                                  },
+                                  optionsViewBuilder: (BuildContext contpext,
+                                      AutocompleteOnSelected<String> onSelected,
+                                      Iterable<String> options) {
+                                    return Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Material(
+                                        elevation: 4.0,
+                                        child: Container(
+                                          constraints: const BoxConstraints(
+                                              maxHeight: 200),
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: options.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final String option =
+                                                  options.elementAt(index);
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  onSelected(option);
+                                                },
+                                                child: ListTile(
+                                                  title: Text(option),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  optionsMaxHeight: 200,
                                 ),
                               ),
+                              // Expanded(
+                              //   child: CdropDown(
+                              //     dropdownButton:
+                              //         DropdownButtonFormField<String>(
+                              //       isExpanded: true,
+                              //       value: model.canedata.cropVariety,
+                              //       // Replace null with the selected value if needed
+                              //       decoration: const InputDecoration(
+                              //         labelText: 'Crop Variety',
+                              //       ),
+                              //       hint: const Text('Select Crop Variety'),
+                              //       items: model.canevarietyList.map((val) {
+                              //         return DropdownMenuItem<String>(
+                              //           value: val,
+                              //           child: Text(val),
+                              //         );
+                              //       }).toList(),
+                              //       onChanged: (value) =>
+                              //           model.setselectedcropVariety(value),
+                              //       validator: model.validateCropVariety,
+                              //       menuMaxHeight: 200,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                           Row(

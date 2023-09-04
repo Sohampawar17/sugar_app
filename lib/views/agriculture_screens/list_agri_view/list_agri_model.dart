@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-
 import '../../../models/agri_list_model.dart';
 import '../../../router.router.dart';
 import '../../../services/list_agri_services.dart';
