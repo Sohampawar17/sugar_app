@@ -13,14 +13,19 @@ class AddCropSmaplingModel extends BaseViewModel {
   String? selectedPlot;
   late String samplingId;
   bool isEdit = false;
+
   initialise(BuildContext context, String samplingId) async {
     plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter());
-
     if (samplingId != "") {
       isEdit = true;
+
       cropsamplingdata =
           await AddCropSmaplingServices().getCropSampling(samplingId) ??
               CropSampling();
+      brixbottmAreaController.text = cropsamplingdata.brixBottom.toString();
+      brixmiddleController.text = cropsamplingdata.brixMiddle.toString();
+      brixtopController.text = cropsamplingdata.brixTop.toString();
+      noofpairsController.text = cropsamplingdata.noOfPairs.toString();
       notifyListeners();
     }
   }
@@ -89,22 +94,42 @@ class AddCropSmaplingModel extends BaseViewModel {
     notifyListeners();
   }
 
+  TextEditingController brixbottmAreaController = TextEditingController();
+  TextEditingController brixmiddleController = TextEditingController();
+  TextEditingController brixtopController = TextEditingController();
+  TextEditingController noofpairsController = TextEditingController();
   void setSelectedbrixbottm(String? brixbottm) {
-    cropsamplingdata.brixBottom = double.tryParse(brixbottm ?? "");
+    brixbottmAreaController.value = brixbottmAreaController.value.copyWith(
+      text: brixbottm ?? '',
+      selection: TextSelection.collapsed(offset: (brixbottm ?? '').length),
+    );
+    cropsamplingdata.brixBottom = double.parse(brixbottm ?? '');
     notifyListeners();
   }
 
   void setSelectedbrixmiddle(String? brixmiddle) {
-    cropsamplingdata.brixMiddle = double.tryParse(brixmiddle ?? "");
+    brixmiddleController.value = brixmiddleController.value.copyWith(
+      text: brixmiddle ?? '',
+      selection: TextSelection.collapsed(offset: (brixmiddle ?? '').length),
+    );
+    cropsamplingdata.brixMiddle = double.parse(brixmiddle ?? '');
     notifyListeners();
   }
 
   void setSelectedbrixtop(String? brixtop) {
-    cropsamplingdata.brixTop = double.tryParse(brixtop ?? "");
+    brixtopController.value = brixtopController.value.copyWith(
+      text: brixtop ?? '',
+      selection: TextSelection.collapsed(offset: (brixtop ?? '').length),
+    );
+    cropsamplingdata.brixTop = double.parse(brixtop ?? '');
     notifyListeners();
   }
 
   void setSelectednoofpairs(String? noofpairs) {
+    noofpairsController.value = noofpairsController.value.copyWith(
+      text: noofpairs ?? '',
+      selection: TextSelection.collapsed(offset: (noofpairs ?? '').length),
+    );
     cropsamplingdata.noOfPairs = int.tryParse(noofpairs ?? "");
     notifyListeners();
   }

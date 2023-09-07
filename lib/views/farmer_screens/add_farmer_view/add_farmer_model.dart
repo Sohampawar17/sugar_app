@@ -42,7 +42,7 @@ class FarmerViewModel extends BaseViewModel {
   late String bankName;
   late String farmerId;
   late String branch = "";
-  late String passbookattch = "";
+  late String passbookattch;
 
   bool isEdit = false;
 
@@ -688,9 +688,9 @@ class FarmerViewModel extends BaseViewModel {
       bankAccounts[index].branchifscCode = branchifscCode;
       bankAccounts[index].accountNumber = accountNumber;
       bankAccounts[index].bankAndBranch = branch;
-      if (passbookattch.isNotEmpty) {
-        bankAccounts[index].bankPassbook = passbookattch;
-      }
+
+      bankAccounts[index].bankPassbook = passbookattch;
+
       notifyListeners();
       return;
     }

@@ -39,7 +39,7 @@ class ListSamplingScreen extends StatelessWidget {
                                   // controller: model.idcontroller,
                                   onChanged: (value) {
                                     model.idcontroller.text = value;
-                                    model.filterList("id", int.parse(value));
+                                    model.filterList("name", int.parse(value));
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'ID',

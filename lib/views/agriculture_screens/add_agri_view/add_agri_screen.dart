@@ -32,24 +32,56 @@ class AddAgriScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(children: [
-                      CdropDown(
-                        dropdownButton: DropdownButtonFormField<String>(
-                          isExpanded: true,
-                          value: model.agridata.season,
-                          // Replace null with the selected value if needed
-                          decoration: const InputDecoration(
-                            labelText: 'Season',
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CdropDown(
+                              dropdownButton: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                value: model.agridata.salesType,
+                                // Replace null with the selected value if needed
+                                decoration: const InputDecoration(
+                                  labelText: 'Sales Type',
+                                ),
+                                hint: const Text('Select Sales type'),
+                                items: model.saleslist.map((val) {
+                                  return DropdownMenuItem<String>(
+                                    value: val,
+                                    child: Text(val),
+                                  );
+                                }).toList(),
+                                onChanged: (value) =>
+                                    model.setSelectedSales(value),
+                                validator: model.validateSalesType,
+                              ),
+                            ),
                           ),
-                          hint: const Text('Select Season'),
-                          items: model.seasonlist.map((val) {
-                            return DropdownMenuItem<String>(
-                              value: val,
-                              child: Text(val),
-                            );
-                          }).toList(),
-                          onChanged: (value) => model.setSelectedSeason(value),
-                          validator: model.validateSeason,
-                        ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: CdropDown(
+                              dropdownButton: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                value: model.agridata.season,
+                                // Replace null with the selected value if needed
+                                decoration: const InputDecoration(
+                                  labelText: 'Season',
+                                ),
+                                hint: const Text('Select Season'),
+                                items: model.seasonlist.map((val) {
+                                  return DropdownMenuItem<String>(
+                                    value: val,
+                                    child: Text(val),
+                                  );
+                                }).toList(),
+                                onChanged: (value) =>
+                                    model.setSelectedSeason(value),
+                                validator: model.validateSeason,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         width: 20.0,
@@ -270,11 +302,7 @@ class AddAgriScreen extends StatelessWidget {
                           Expanded(
                             child: TextFormField(
                               keyboardType: TextInputType.number,
-                              key: Key(
-                                  model.agridata.developmentArea.toString()),
-                              initialValue:
-                                  model.agridata.developmentArea?.toString() ??
-                                      "",
+                              controller: model.developmentAreaController,
                               decoration: const InputDecoration(
                                 labelText: 'Developement Area',
                               ),
@@ -287,9 +315,8 @@ class AddAgriScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
-                              key: Key(model.agridata.route ?? "route"),
                               keyboardType: TextInputType.number,
-                              initialValue: model.agridata.route ?? "",
+                              controller: model.kmController,
                               decoration: const InputDecoration(
                                 labelText: 'K.M.',
                               ),
@@ -301,37 +328,51 @@ class AddAgriScreen extends StatelessWidget {
                       const SizedBox(
                         height: 15,
                       ),
-                      Wrap(
-                        spacing: 4.0,
-                        runSpacing: 3.0,
-                        alignment: WrapAlignment.center,
-                        children: [
-                          for (String item in model.items)
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                    value: model.selectedItems.contains(item),
-                                    onChanged: (_) => model.toggleItem(item),
-                                  ),
-                                  Text(item),
-                                ],
+                      if (model.agridata.salesType == "Fertilizer")
+                        Wrap(
+                          spacing: 4.0,
+                          runSpacing: 3.0,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            for (String item in model.items)
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Checkbox(
+                                      value: model.selectedItems.contains(item),
+                                      onChanged: (_) => model.toggleItem(item),
+                                    ),
+                                    Text(item),
+                                  ],
+                                ),
                               ),
-                            ),
-                        ],
-                      ),
-                      ElevatedButton(
-                          onPressed: () => model.mapJsonToTable(),
-                          child: const Text('Update')),
+                          ],
+                        ),
+                      if (model.agridata.salesType == "Fertilizer")
+                        ElevatedButton(
+                            onPressed: () => model.mapJsonToTable(),
+                            child: const Text('Update')),
+                      if (model.agridata.salesType != "Fertilizer")
+                        ElevatedButton(
+                            onPressed: () =>
+                                getAgricaultureDetails(context, model, -1),
+                            child: const Text('Add Agriculture')),
                       const SizedBox(
                         height: 10.0,
                       ),
                       const Divider(
                         thickness: 1,
                       ),
-                      const Text('Agriculture Development Item'),
+                      const Text(
+                        'Agriculture Development Item',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
                       (model.agricultureDevelopmentItem.isEmpty)
                           ? const SizedBox()
                           : SingleChildScrollView(
@@ -340,7 +381,6 @@ class AddAgriScreen extends StatelessWidget {
                                 columnSpacing: 30.0,
                                 // ignore: deprecated_member_use
                                 border: TableBorder.all(width: 1.0),
-
                                 columns: const [
                                   DataColumn(
                                     label: Text('Item Name'),
@@ -366,16 +406,23 @@ class AddAgriScreen extends StatelessWidget {
                                   DataColumn(
                                     label: Text('Total'),
                                   ),
+                                  DataColumn(
+                                    label: Text('Delete'),
+                                  ),
                                 ],
                                 rows: List<DataRow>.generate(
                                   model.agricultureDevelopmentItem.length,
                                   // Replace 10 with the actual number of rows you want
                                   (int index) => DataRow(
                                     cells: [
-                                      DataCell(Text(model
-                                          .agricultureDevelopmentItem[index]
-                                          .itemName
-                                          .toString())),
+                                      DataCell(Text(
+                                        model.agricultureDevelopmentItem[index]
+                                            .itemCode
+                                            .toString(),
+                                        maxLines: 3,
+                                        textWidthBasis:
+                                            TextWidthBasis.longestLine,
+                                      )),
                                       DataCell(
                                         TextField(
                                           controller: TextEditingController(
@@ -481,7 +528,41 @@ class AddAgriScreen extends StatelessWidget {
                                       ),
                                       DataCell(Text(model
                                           .agricultureDevelopmentItem[index].qty
-                                          .toString()))
+                                          .toString())),
+                                      DataCell(IconButton(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text(
+                                                    'Confirm Delete'),
+                                                content: const Text(
+                                                    'Are you sure you want to delete this bank account?'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(
+                                                          context); // Close the confirmation dialog
+                                                    },
+                                                    child: const Text('Cancel'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(
+                                                          context); // Close the confirmation dialog
+                                                      model.deleteAgriAccount(
+                                                          index); // Delete the entry
+                                                    },
+                                                    child: const Text('Delete'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        icon: const Icon(Icons.delete),
+                                      ))
                                     ],
                                   ),
                                 ),
@@ -493,13 +574,18 @@ class AddAgriScreen extends StatelessWidget {
                       const Divider(
                         thickness: 1,
                       ),
-                      const Text('Grantors'),
+                      const Text(
+                        'Grantors',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
                       (model.grantor.isEmpty)
                           ? const SizedBox()
                           : SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
-                                columnSpacing: 12.0,
+                                columnSpacing: 22.0,
+                                border: TableBorder.all(width: 0.5),
                                 // ignore: deprecated_member_use
                                 dataRowHeight: 40.0,
                                 columns: const [
@@ -675,12 +761,17 @@ class AddAgriScreen extends StatelessWidget {
                                             (BuildContext context, int index) {
                                           final String option =
                                               options.elementAt(index);
+                                          final routeData = model.farmerList
+                                              .firstWhere((route) =>
+                                                  route.name == option);
                                           return GestureDetector(
                                             onTap: () {
                                               onSelected(option);
                                             },
                                             child: ListTile(
                                               title: Text(option),
+                                              subtitle:
+                                                  Text(routeData.supplierName!),
                                             ),
                                           );
                                         },
@@ -721,6 +812,164 @@ class AddAgriScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       model.validateForm(context, index);
+                    },
+                    child: const Text('Add'),
+                  ),
+                ],
+              );
+            });
+          },
+        );
+      },
+    );
+  }
+
+  getAgricaultureDetails(BuildContext context, AgriViewModel model, int index) {
+    if (index == -1) {
+      model.resetAgriVariables(); // Add this function to reset variables
+    } else {
+      model.setValuesToAgriVaribles(index);
+    }
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return StatefulBuilder(builder: (BuildContext context,
+                void Function(void Function()) setState) {
+              return AlertDialog(
+                title: const Text('Add Agricultural Development'),
+                content: SizedBox(
+                  height: getHeight(context) / 6,
+                  child: fullScreenLoader(
+                    child: Form(
+                      key: model.agriformKey,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Autocomplete<String>(
+                              key: Key(index == -1
+                                  ? ""
+                                  : model.agricultureDevelopmentItem[index]
+                                          .itemCode ??
+                                      ""),
+                              initialValue: TextEditingValue(
+                                  text: index == -1
+                                      ? ""
+                                      : model.agricultureDevelopmentItem[index]
+                                              .itemCode ??
+                                          ""),
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text.isEmpty) {
+                                  return const Iterable<String>.empty();
+                                }
+                                return model.itemList
+                                    .map((bank) => bank.itemName ?? "")
+                                    .toList()
+                                    .where((bank) => bank
+                                        .toLowerCase()
+                                        .contains(textEditingValue.text
+                                            .toLowerCase()));
+                              },
+                              onSelected: (String routeName) {
+                                // Find the corresponding route object
+                                final bankData = model.itemList.firstWhere(
+                                    (bank) => bank.itemName == routeName);
+                                model.setSelectedAgri(
+                                    bankData.itemName); // Pass the route
+                              },
+                              fieldViewBuilder: (BuildContext context,
+                                  TextEditingController textEditingController,
+                                  FocusNode focusNode,
+                                  VoidCallback onFieldSubmitted) {
+                                return TextFormField(
+                                  controller: textEditingController,
+                                  focusNode: focusNode,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Item Name',
+                                  ),
+                                  onChanged: (String value) {},
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter some Item';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              },
+                              optionsViewBuilder: (BuildContext contpext,
+                                  AutocompleteOnSelected<String> onSelected,
+                                  Iterable<String> options) {
+                                return Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 4.0,
+                                    child: Container(
+                                      constraints:
+                                          const BoxConstraints(maxHeight: 200),
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: options.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          final String option =
+                                              options.elementAt(index);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              onSelected(option);
+                                            },
+                                            child: ListTile(
+                                              title: Text(option),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              optionsMaxHeight: 200,
+                            ),
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: model
+                                  .totalController, // Use the controller here
+                              decoration: const InputDecoration(
+                                labelText: 'Total',
+                              ),
+                              onChanged: (newValue) {
+                                double? parsedValue =
+                                    double.tryParse(newValue) ?? 0;
+                                model.setSelectedtotal(parsedValue);
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter some Total';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    loader: model.isBusy,
+                    context: context,
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      model.validateAgriForm(context, index);
                     },
                     child: const Text('Add'),
                   ),

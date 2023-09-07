@@ -7,6 +7,7 @@ import '../constants.dart';
 import '../models/Agri.dart';
 import '../models/CaneFarmer.dart';
 import '../models/DoseType.dart';
+import '../models/Item.dart';
 
 class AddAgriServices {
   Future<bool> updateAgri(Agri agri) async {
@@ -221,6 +222,36 @@ class AddAgriServices {
         List<caneFarmer> farmerList = dataList
             .map<caneFarmer>((data) => caneFarmer.fromJson(data))
             .toList();
+        Logger().i(farmerList);
+        return farmerList;
+      } else {
+        Logger().e(response.statusCode);
+        Logger().e(response.statusMessage);
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+      return [];
+    }
+  }
+
+  Future<List<Item>> fetchItem() async {
+    try {
+      var headers = {'Cookie': await getTocken()};
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/resource/Item?fields=["item_code","item_name"]&limit_page_length=99999',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      if (response.statusCode == 200) {
+        var jsonData = json.encode(response.data);
+        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
+        List<dynamic> dataList = jsonDataMap['data'];
+        List<Item> farmerList =
+            dataList.map<Item>((data) => Item.fromJson(data)).toList();
         Logger().i(farmerList);
         return farmerList;
       } else {

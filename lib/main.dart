@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
             colorScheme: darkScheme,
             extensions: [darkCustomColors],
           ),
-          home: SplashScreen(),
+          home: const SplashScreen(),
         );
       },
     );

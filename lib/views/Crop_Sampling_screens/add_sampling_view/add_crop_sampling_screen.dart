@@ -102,11 +102,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextFormField(
-                              key: Key(
-                                  model.cropsamplingdata.brixBottom.toString()),
-                              initialValue: model.cropsamplingdata.brixBottom
-                                      ?.toString() ??
-                                  "",
+                              controller: model.brixbottmAreaController,
                               decoration: const InputDecoration(
                                 labelText: 'Brix Bottom',
                               ),
@@ -119,11 +115,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
-                              key: Key(
-                                  model.cropsamplingdata.brixMiddle.toString()),
-                              initialValue: model.cropsamplingdata.brixMiddle
-                                      ?.toString() ??
-                                  "",
+                              controller: model.brixmiddleController,
                               decoration: const InputDecoration(
                                 labelText: 'Brix Middle',
                               ),
@@ -139,11 +131,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextFormField(
-                              key: Key(
-                                  model.cropsamplingdata.brixTop.toString()),
-                              initialValue:
-                                  model.cropsamplingdata.brixTop?.toString() ??
-                                      "",
+                              controller: model.brixtopController,
                               decoration: const InputDecoration(
                                 labelText: 'Brix Top',
                               ),
@@ -155,11 +143,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
-                              key: Key(
-                                  model.cropsamplingdata.noOfPairs.toString()),
-                              initialValue: model.cropsamplingdata.noOfPairs
-                                      ?.toString() ??
-                                  "",
+                              controller: model.noofpairsController,
                               decoration: const InputDecoration(
                                 labelText: 'No. of  Pairs',
                               ),

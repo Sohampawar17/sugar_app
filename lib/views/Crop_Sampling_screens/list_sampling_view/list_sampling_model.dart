@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:logger/logger.dart';
+
 import 'package:stacked/stacked.dart';
 
 import '../../../models/List_Crop_sampling_model.dart';
@@ -36,8 +36,7 @@ class ListSamplingModel extends BaseViewModel {
     notifyListeners();
     filtersamplingList =
         await ListCropSamplingServices().getAllCropListfilter(filter, query);
-    Logger().i(filter);
-    Logger().i(query);
+
     notifyListeners();
   }
 
