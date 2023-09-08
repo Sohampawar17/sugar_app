@@ -66,9 +66,10 @@ class CaneViewModel extends BaseViewModel {
 
   initialise(BuildContext context, String caneId) async {
     setBusy(true);
+    villageList = await AddCaneService().fetchVillages();
     plantlist = await AddCaneService().fetchPlant();
     seasonlist = await AddCaneService().fetchSeason();
-    villageList = await AddCaneService().fetchVillages();
+
     canevarietyList = await AddCaneService().fetchCaneVariety();
     plantationsystemList = await AddCaneService().fetchplantationsystem();
     seedmaterialList = await AddCaneService().fetchseedMaterial();

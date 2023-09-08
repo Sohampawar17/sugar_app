@@ -108,7 +108,7 @@ class AddTripSheetModel extends BaseViewModel {
       notifyListeners();
       plantingDateController.text = tripSheetData.plantationDate ?? '';
     }
-    if (routeList.isEmpty) {
+    if (plotList.isEmpty) {
       final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
       final SharedPreferences prefs = await prefs0;
       prefs.clear();

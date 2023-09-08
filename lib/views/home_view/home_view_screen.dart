@@ -9,12 +9,50 @@ import '../../router.router.dart';
 class HomePageScreen extends StatelessWidget {
   const HomePageScreen({super.key});
 
+  // Helper function to create a button with an image and text
+  Widget _buildImageButton({
+    required String imagePath,
+    required String buttonText,
+    required Function onPressed,
+  }) {
+    return Material(
+      color: Colors.white,
+      elevation: 8,
+      borderRadius: BorderRadius.circular(15),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: InkWell(
+        onTap: () => onPressed(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Ink.image(
+              image: NetworkImage(
+                imagePath,
+              ),
+              height: 180,
+              fit: BoxFit.fill,
+              width: 400,
+            ),
+            Text(
+              buttonText,
+              style: const TextStyle(fontSize: 25, color: Colors.black),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Quant Sugar'),
+          leading: Icon(Icons.factory_outlined),
+          title: Text(
+            'Venkateshwara Power Project',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
@@ -31,43 +69,10 @@ class HomePageScreen extends StatelessWidget {
                 tag: "TITLE",
                 child: Center(
                   child: Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // const SizedBox(
-                        //   height: 100.0,
-                        // ),
-                        // const Text('HOME'),
-                        // Image.network(
-                        //     'https://w.wallhaven.cc/full/ex/wallhaven-exwgmr.png'),
-                        // const TextField(
-                        //   decoration: InputDecoration(
-                        //     labelText: 'Enter your name',
-                        //   ),
-                        // ),
-                        // const TextField(
-                        //   decoration: InputDecoration(
-                        //     labelText: 'Enter your email address',
-                        //     hintText: 'example@email.com',
-                        //   ),
-                        // ),
-                        // const TextField(
-                        //   decoration:
-                        //       InputDecoration(labelText: 'Enter your password'),
-                        // ),
-                        // const SizedBox(
-                        //   height: 20.0,
-                        // ),
-                        // SizedBox(
-                        //   width: 300,
-                        //   child: ElevatedButton(
-                        //     onPressed: () {
-                        //       model.getGeoLocation();
-                        //     },
-                        //     child: const Text("Fetch Location"),
-                        //   ),
-                        // ),
                         const SizedBox(
                           height: 10.0,
                         ),
@@ -76,73 +81,34 @@ class HomePageScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 85, 177, 252),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.addFarmerScreen,
-                                        arguments:
-                                            const AddFarmerScreenArguments(
-                                                farmerid: ""),
-                                      );
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "New farmer",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://www.thestatesman.com/wp-content/uploads/2020/05/farmer.jpg',
+                                  buttonText: 'New Farmer',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.addFarmerScreen,
+                                      arguments: const AddFarmerScreenArguments(
+                                          farmerid: ""),
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(
-                                width: 20.0,
+                                width: 30.0,
                               ),
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 167, 235, 170),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.listFarmersScreen,
-                                      );
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "Farmer List ",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                  buttonText: 'Farmer List',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.listFarmersScreen,
+                                    );
+                                  },
                                 ),
                               ),
                             ],
@@ -156,72 +122,34 @@ class HomePageScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 85, 177, 252),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.addCaneScreen,
-                                        arguments: const AddCaneScreenArguments(
-                                            caneId: ""),
-                                      );
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "New Cane Registration",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSsj54U7Hm52ILH-WPkLLtkOjhQIQNkn59vhxvJOQSTiH8BofuFlz3_zbBQOfp8W6E8uI&usqp=CAU',
+                                  buttonText: 'New Cane Registration',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.addCaneScreen,
+                                      arguments: const AddCaneScreenArguments(
+                                          caneId: ""),
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(
-                                width: 20.0,
+                                width: 30.0,
                               ),
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 167, 235, 170),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.listCaneScreen,
-                                      );
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "Cane Registration List",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                  buttonText: 'Cane Master List',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.listCaneScreen,
+                                    );
+                                  },
                                 ),
                               ),
                             ],
@@ -235,72 +163,34 @@ class HomePageScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 85, 177, 252),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.addAgriScreen,
-                                        arguments: const AddAgriScreenArguments(
-                                            agriId: ""),
-                                      );
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "New Agriculture Development",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://agriculturedev.com/wp-content/uploads/2017/08/logo@2x.png',
+                                  buttonText: 'New Agriculture Development',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.addAgriScreen,
+                                      arguments: const AddAgriScreenArguments(
+                                          agriId: ""),
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(
-                                width: 20.0,
+                                width: 30.0,
                               ),
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 167, 235, 170),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.listAgriScreen,
-                                      );
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "Agriculture Development List",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                  buttonText: 'Agriculture List',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.listAgriScreen,
+                                    );
+                                  },
                                 ),
                               ),
                             ],
@@ -314,71 +204,35 @@ class HomePageScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 85, 177, 252),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, Routes.addCropSamplingScreen,
-                                          arguments:
-                                              const AddCropSamplingScreenArguments(
-                                                  samplingId: ""));
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "New Crop Sampling",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://storwukenticomedia.blob.core.windows.net/media/wfu/media/images/insightimages/winfieldunited_tissuetesting_april2019.jpg?ext=.jpg',
+                                  buttonText: 'New Crop Sampling',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.addCropSamplingScreen,
+                                      arguments:
+                                          const AddCropSamplingScreenArguments(
+                                              samplingId: ""),
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(
-                                width: 20.0,
+                                width: 30.0,
                               ),
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 167, 235, 170),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.listSamplingScreen,
-                                      );
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "Crop Smapling List",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                  buttonText: 'Crop Sampling List',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.listSamplingScreen,
+                                    );
+                                  },
                                 ),
                               ),
                             ],
@@ -392,71 +246,35 @@ class HomePageScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 85, 177, 252),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, Routes.addTripsheetScreen,
-                                          arguments:
-                                              const AddTripsheetScreenArguments(
-                                                  tripId: ""));
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "Trip Sheet",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://fl-i.thgim.com/public/other/nbe0q2/article37718586.ece/alternates/LANDSCAPE_1200/fl17sugarcane',
+                                  buttonText: 'New Trip Sheet',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.addTripsheetScreen,
+                                      arguments:
+                                          const AddTripsheetScreenArguments(
+                                              tripId: ""),
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(
-                                width: 20.0,
+                                width: 30.0,
                               ),
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 167, 235, 170),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.tripsheetMaster,
-                                      );
-                                    },
-                                    child: const SizedBox(
-                                      height: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          "Trip Sheet List",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: _buildImageButton(
+                                  imagePath:
+                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                  buttonText: 'Trip Sheet List',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.tripsheetMaster,
+                                    );
+                                  },
                                 ),
                               ),
                             ],

@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import '../../../models/tripsheet_list_search.dart';
 import '../../../router.router.dart';
@@ -26,6 +28,16 @@ class ListTripsheet extends BaseViewModel {
     tripSheetFilter = triSheetList;
 
     setBusy(false);
+    if (triSheetList.isEmpty) {
+      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await prefs0;
+      prefs.clear();
+      if (context.mounted) {
+        setBusy(false);
+        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+        Logger().i('logged out success');
+      }
+    }
     notifyListeners();
   }
 

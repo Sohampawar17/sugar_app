@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/services/add_crop_sampling_service.dart';
 
 import '../../../models/Crop_Sampling.dart';
 import '../../../models/agri_cane_model.dart';
+import '../../../router.router.dart';
 
 class AddCropSmaplingModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
@@ -27,6 +29,16 @@ class AddCropSmaplingModel extends BaseViewModel {
       brixtopController.text = cropsamplingdata.brixTop.toString();
       noofpairsController.text = cropsamplingdata.noOfPairs.toString();
       notifyListeners();
+    }
+    if (plotList.isEmpty) {
+      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await prefs0;
+      prefs.clear();
+      if (context.mounted) {
+        setBusy(false);
+        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+        Logger().i('logged out success');
+      }
     }
   }
 
