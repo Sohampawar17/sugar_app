@@ -763,15 +763,16 @@ class AddFarmerScreen extends StatelessWidget {
     SchedulerBinding.instance.addPostFrameCallback(
       (_) {
         showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) {
             return StatefulBuilder(builder: (BuildContext context,
                 void Function(void Function()) setState) {
-              return AlertDialog(
-                title: const Text('Add Bank Account'),
-                content: SizedBox(
-                  height: getHeight(context) / 1.5,
-                  child: fullScreenLoader(
+              return SingleChildScrollView(
+                child: AlertDialog(
+                  title: const Text('Add Bank Account'),
+                  content: SizedBox(
+                    height: getHeight(context) / 1.5,
                     child: Form(
                       key: model.bankformKey,
                       child: Column(
@@ -998,24 +999,22 @@ class AddFarmerScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    loader: model.isBusy,
-                    context: context,
                   ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        model.validateForm(context, index);
+                      },
+                      child: const Text('Add'),
+                    ),
+                  ],
                 ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      model.validateForm(context, index);
-                    },
-                    child: const Text('Add'),
-                  ),
-                ],
               );
             });
           },

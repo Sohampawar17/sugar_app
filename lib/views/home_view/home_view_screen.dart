@@ -26,16 +26,22 @@ class HomePageScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Ink.image(
-              image: NetworkImage(
+              image: AssetImage(
                 imagePath,
               ),
-              height: 180,
+              height: 120,
               fit: BoxFit.fill,
-              width: 400,
+              width: 300,
             ),
-            Text(
-              buttonText,
-              style: const TextStyle(fontSize: 25, color: Colors.black),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Center(
+                child: Text(
+                  buttonText,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
             )
           ],
         ),
@@ -47,11 +53,14 @@ class HomePageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
+        backgroundColor: Colors.greenAccent.shade200,
         appBar: AppBar(
           leading: Icon(Icons.factory_outlined),
           title: Text(
             'Venkateshwara Power Project',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           actions: [
             IconButton(
@@ -82,8 +91,7 @@ class HomePageScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: _buildImageButton(
-                                  imagePath:
-                                      'https://www.thestatesman.com/wp-content/uploads/2020/05/farmer.jpg',
+                                  imagePath: 'assets/images/farmer.jpg',
                                   buttonText: 'New Farmer',
                                   onPressed: () {
                                     Navigator.pushNamed(
@@ -96,12 +104,11 @@ class HomePageScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(
-                                width: 30.0,
+                                width: 15.0,
                               ),
                               Expanded(
                                 child: _buildImageButton(
-                                  imagePath:
-                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                  imagePath: 'assets/images/farmer_list.jpg',
                                   buttonText: 'Farmer List',
                                   onPressed: () {
                                     Navigator.pushNamed(
@@ -115,7 +122,7 @@ class HomePageScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 10.0,
+                          height: 15.0,
                         ),
                         SizedBox(
                           height: getHeight(context) / 5,
@@ -124,7 +131,7 @@ class HomePageScreen extends StatelessWidget {
                               Expanded(
                                 child: _buildImageButton(
                                   imagePath:
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSsj54U7Hm52ILH-WPkLLtkOjhQIQNkn59vhxvJOQSTiH8BofuFlz3_zbBQOfp8W6E8uI&usqp=CAU',
+                                      'assets/images/cane_registration.jpeg',
                                   buttonText: 'New Cane Registration',
                                   onPressed: () {
                                     Navigator.pushNamed(
@@ -137,12 +144,11 @@ class HomePageScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(
-                                width: 30.0,
+                                width: 15.0,
                               ),
                               Expanded(
                                 child: _buildImageButton(
-                                  imagePath:
-                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                  imagePath: 'assets/images/cane_list.jpg',
                                   buttonText: 'Cane Master List',
                                   onPressed: () {
                                     Navigator.pushNamed(
@@ -156,7 +162,7 @@ class HomePageScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 10.0,
+                          height: 15.0,
                         ),
                         SizedBox(
                           height: getHeight(context) / 5,
@@ -165,8 +171,8 @@ class HomePageScreen extends StatelessWidget {
                               Expanded(
                                 child: _buildImageButton(
                                   imagePath:
-                                      'https://agriculturedev.com/wp-content/uploads/2017/08/logo@2x.png',
-                                  buttonText: 'New Agriculture Development',
+                                      'assets/images/agri_developement.jpg',
+                                  buttonText: 'New Cane Development',
                                   onPressed: () {
                                     Navigator.pushNamed(
                                       context,
@@ -178,13 +184,12 @@ class HomePageScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(
-                                width: 30.0,
+                                width: 15.0,
                               ),
                               Expanded(
                                 child: _buildImageButton(
-                                  imagePath:
-                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
-                                  buttonText: 'Agriculture List',
+                                  imagePath: 'assets/images/agri_list.jpg',
+                                  buttonText: 'Agriculture Develop List',
                                   onPressed: () {
                                     Navigator.pushNamed(
                                       context,
@@ -197,7 +202,7 @@ class HomePageScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 10.0,
+                          height: 15.0,
                         ),
                         SizedBox(
                           height: getHeight(context) / 5,
@@ -205,8 +210,7 @@ class HomePageScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: _buildImageButton(
-                                  imagePath:
-                                      'https://storwukenticomedia.blob.core.windows.net/media/wfu/media/images/insightimages/winfieldunited_tissuetesting_april2019.jpg?ext=.jpg',
+                                  imagePath: 'assets/images/crop_sampling.jpg',
                                   buttonText: 'New Crop Sampling',
                                   onPressed: () {
                                     Navigator.pushNamed(
@@ -220,12 +224,12 @@ class HomePageScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(
-                                width: 30.0,
+                                width: 15.0,
                               ),
                               Expanded(
                                 child: _buildImageButton(
                                   imagePath:
-                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                      'assets/images/crop_sample_list.jpg',
                                   buttonText: 'Crop Sampling List',
                                   onPressed: () {
                                     Navigator.pushNamed(
@@ -239,7 +243,7 @@ class HomePageScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 10.0,
+                          height: 15.0,
                         ),
                         SizedBox(
                           height: getHeight(context) / 5,
@@ -247,8 +251,7 @@ class HomePageScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: _buildImageButton(
-                                  imagePath:
-                                      'https://fl-i.thgim.com/public/other/nbe0q2/article37718586.ece/alternates/LANDSCAPE_1200/fl17sugarcane',
+                                  imagePath: 'assets/images/trip_sheet.webp',
                                   buttonText: 'New Trip Sheet',
                                   onPressed: () {
                                     Navigator.pushNamed(
@@ -262,12 +265,11 @@ class HomePageScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(
-                                width: 30.0,
+                                width: 15.0,
                               ),
                               Expanded(
                                 child: _buildImageButton(
-                                  imagePath:
-                                      'https://cdn4.vectorstock.com/i/1000x1000/93/58/sheet-text-icon-vector-45499358.jpg',
+                                  imagePath: 'assets/images/trip_list.jpg',
                                   buttonText: 'Trip Sheet List',
                                   onPressed: () {
                                     Navigator.pushNamed(

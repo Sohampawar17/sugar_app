@@ -476,7 +476,7 @@ class AgriViewModel extends BaseViewModel {
 
   void resetAgriVariables() {
     itemName = "";
-    total = 0.0;
+    totalController.clear();
   }
 
   final totalController = TextEditingController();

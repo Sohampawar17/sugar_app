@@ -114,6 +114,7 @@ class AddAgriScreen extends StatelessWidget {
                                   FocusNode focusNode,
                                   VoidCallback onFieldSubmitted) {
                                 return TextFormField(
+                                  keyboardType: TextInputType.number,
                                   // key: Key(model.farmerData.village ?? ""),
                                   // initialValue: model.farmerData.village,
                                   controller: textEditingController,
@@ -381,28 +382,34 @@ class AddAgriScreen extends StatelessWidget {
                                 columnSpacing: 30.0,
                                 // ignore: deprecated_member_use
                                 border: TableBorder.all(width: 1.0),
-                                columns: const [
+                                columns: [
                                   DataColumn(
                                     label: Text('Item Name'),
                                   ),
-                                  DataColumn(
-                                    label: Text('Basel'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Pre-Earthing'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Earth'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Rainy'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Ratoon1'),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Ratoon2'),
-                                  ),
+                                  if (model.agridata.salesType == 'Fertilizer')
+                                    DataColumn(
+                                      label: Text('Basel'),
+                                    ),
+                                  if (model.agridata.salesType == 'Fertilizer')
+                                    DataColumn(
+                                      label: Text('Pre-Earthing'),
+                                    ),
+                                  if (model.agridata.salesType == 'Fertilizer')
+                                    DataColumn(
+                                      label: Text('Earth'),
+                                    ),
+                                  if (model.agridata.salesType == 'Fertilizer')
+                                    DataColumn(
+                                      label: Text('Rainy'),
+                                    ),
+                                  if (model.agridata.salesType == 'Fertilizer')
+                                    DataColumn(
+                                      label: Text('Ratoon1'),
+                                    ),
+                                  if (model.agridata.salesType == 'Fertilizer')
+                                    DataColumn(
+                                      label: Text('Ratoon2'),
+                                    ),
                                   DataColumn(
                                     label: Text('Total'),
                                   ),
@@ -423,109 +430,121 @@ class AddAgriScreen extends StatelessWidget {
                                         textWidthBasis:
                                             TextWidthBasis.longestLine,
                                       )),
-                                      DataCell(
-                                        TextField(
-                                          controller: TextEditingController(
-                                            text: model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .basel
-                                                .toString(),
+                                      if (model.agridata.salesType ==
+                                          'Fertilizer')
+                                        DataCell(
+                                          TextField(
+                                            controller: TextEditingController(
+                                              text: model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .basel
+                                                  .toString(),
+                                            ),
+                                            onChanged: (value) {
+                                              model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .basel = double.parse(value);
+                                            },
                                           ),
-                                          onChanged: (value) {
-                                            model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .basel = double.parse(value);
-                                          },
                                         ),
-                                      ),
-                                      DataCell(
-                                        TextField(
-                                          controller: TextEditingController(
-                                            text: model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .preEarthing
-                                                .toString(),
+                                      if (model.agridata.salesType ==
+                                          'Fertilizer')
+                                        DataCell(
+                                          TextField(
+                                            controller: TextEditingController(
+                                              text: model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .preEarthing
+                                                  .toString(),
+                                            ),
+                                            onChanged: (value) {
+                                              model
+                                                      .agricultureDevelopmentItem[
+                                                          index]
+                                                      .preEarthing =
+                                                  double.parse(value);
+                                            },
                                           ),
-                                          onChanged: (value) {
-                                            model
-                                                    .agricultureDevelopmentItem[
-                                                        index]
-                                                    .preEarthing =
-                                                double.parse(value);
-                                          },
                                         ),
-                                      ),
-                                      DataCell(
-                                        TextField(
-                                          controller: TextEditingController(
-                                            text: model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .earth
-                                                .toString(),
+                                      if (model.agridata.salesType ==
+                                          'Fertilizer')
+                                        DataCell(
+                                          TextField(
+                                            controller: TextEditingController(
+                                              text: model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .earth
+                                                  .toString(),
+                                            ),
+                                            onChanged: (value) {
+                                              model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .earth = double.parse(value);
+                                            },
                                           ),
-                                          onChanged: (value) {
-                                            model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .earth = double.parse(value);
-                                          },
                                         ),
-                                      ),
-                                      DataCell(
-                                        TextField(
-                                          controller: TextEditingController(
-                                            text: model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .rainy
-                                                .toString(),
+                                      if (model.agridata.salesType ==
+                                          'Fertilizer')
+                                        DataCell(
+                                          TextField(
+                                            controller: TextEditingController(
+                                              text: model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .rainy
+                                                  .toString(),
+                                            ),
+                                            onChanged: (value) {
+                                              model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .rainy = double.parse(value);
+                                            },
                                           ),
-                                          onChanged: (value) {
-                                            model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .rainy = double.parse(value);
-                                          },
                                         ),
-                                      ),
-                                      DataCell(
-                                        TextField(
-                                          controller: TextEditingController(
-                                            text: model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .ratoon1
-                                                .toString(),
+                                      if (model.agridata.salesType ==
+                                          'Fertilizer')
+                                        DataCell(
+                                          TextField(
+                                            controller: TextEditingController(
+                                              text: model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .ratoon1
+                                                  .toString(),
+                                            ),
+                                            onChanged: (value) {
+                                              model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .ratoon1 = double.parse(value);
+                                            },
                                           ),
-                                          onChanged: (value) {
-                                            model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .ratoon1 = double.parse(value);
-                                          },
                                         ),
-                                      ),
-                                      DataCell(
-                                        TextField(
-                                          controller: TextEditingController(
-                                            text: model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .ratoon2
-                                                .toString(),
+                                      if (model.agridata.salesType ==
+                                          'Fertilizer')
+                                        DataCell(
+                                          TextField(
+                                            controller: TextEditingController(
+                                              text: model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .ratoon2
+                                                  .toString(),
+                                            ),
+                                            onChanged: (value) {
+                                              model
+                                                  .agricultureDevelopmentItem[
+                                                      index]
+                                                  .ratoon2 = double.parse(value);
+                                            },
                                           ),
-                                          onChanged: (value) {
-                                            model
-                                                .agricultureDevelopmentItem[
-                                                    index]
-                                                .ratoon2 = double.parse(value);
-                                          },
                                         ),
-                                      ),
                                       DataCell(Text(model
                                           .agricultureDevelopmentItem[index].qty
                                           .toString())),
@@ -590,10 +609,10 @@ class AddAgriScreen extends StatelessWidget {
                                 dataRowHeight: 40.0,
                                 columns: const [
                                   DataColumn(
-                                    label: Text('Acc. Number'),
+                                    label: Text('Surety Code'),
                                   ),
                                   DataColumn(
-                                    label: Text('Bank Passbook'),
+                                    label: Text('Surety Name'),
                                   ),
                                   DataColumn(
                                     label: Text('Delete'),
@@ -694,7 +713,7 @@ class AddAgriScreen extends StatelessWidget {
             return StatefulBuilder(builder: (BuildContext context,
                 void Function(void Function()) setState) {
               return AlertDialog(
-                title: const Text('Add Bank Account'),
+                title: const Text('Add Grantors'),
                 content: SizedBox(
                   height: getHeight(context) / 6,
                   child: fullScreenLoader(
@@ -738,6 +757,7 @@ class AddAgriScreen extends StatelessWidget {
                                 return TextFormField(
                                   controller: textEditingController,
                                   focusNode: focusNode,
+                                  keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
                                     labelText: 'Surety Code',
                                   ),

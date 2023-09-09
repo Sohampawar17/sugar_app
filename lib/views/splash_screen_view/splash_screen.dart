@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../router.router.dart';
@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     // Start the fade-out animation after 2 seconds (adjust timing as needed)
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         opacity = 0.0;
       });
@@ -49,9 +49,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     double fontSize = screenWidth * 0.05;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -62,28 +62,21 @@ class _SplashScreenState extends State<SplashScreen> {
           decoration: const BoxDecoration(
             color: Colors.white,
             image: DecorationImage(
-              fit: BoxFit.fill,
-              image: CachedNetworkImageProvider(
-                'https://images.unsplash.com/photo-1468787737698-f5c03f0570dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1930&q=80',
-              ),
-            ),
+                fit: BoxFit.fill,
+                image: AssetImage('assets/images/splash_screen.jpg')),
           ),
-          child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 500),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AnimatedOpacity(
-                  opacity: opacity,
-                  duration:
-                      const Duration(seconds: 3), // Adjust duration as needed
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 500),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedOpacity(
+                opacity: opacity,
+                duration: const Duration(seconds: 3),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 20, 0.0, 0.0),
+                  child: Align(
+                    alignment: Alignment.topCenter,
                     child: Text(
                       'Venkateshwara Power Project',
-                      textAlign: TextAlign.center,
                       style: GoogleFonts.lato(
                         textStyle: TextStyle(
                           fontSize: fontSize,
@@ -94,8 +87,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

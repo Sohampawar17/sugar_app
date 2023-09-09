@@ -756,9 +756,6 @@ class FarmerViewModel extends BaseViewModel {
 
   bool isRoleAlreadyPresent(String field) {
     for (var i in bankAccounts) {
-      Logger().i(i.transporter);
-      Logger().i(i.farmer);
-      Logger().i(i.harvester);
       switch (field) {
         case 'Transporter':
           if (i.transporter == 1) return false;
