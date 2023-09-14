@@ -5,7 +5,6 @@ import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/views/agriculture_screens/add_agri_view/add_agri_model.dart';
 
 import '../../../constants.dart';
-
 import '../../../widgets/cdrop_down_widget.dart';
 import '../../../widgets/ctext_button.dart';
 import '../../../widgets/full_screen_loader.dart';
@@ -383,37 +382,37 @@ class AddAgriScreen extends StatelessWidget {
                                 // ignore: deprecated_member_use
                                 border: TableBorder.all(width: 1.0),
                                 columns: [
-                                  DataColumn(
+                                  const DataColumn(
                                     label: Text('Item Name'),
                                   ),
                                   if (model.agridata.salesType == 'Fertilizer')
-                                    DataColumn(
+                                    const DataColumn(
                                       label: Text('Basel'),
                                     ),
                                   if (model.agridata.salesType == 'Fertilizer')
-                                    DataColumn(
+                                    const DataColumn(
                                       label: Text('Pre-Earthing'),
                                     ),
                                   if (model.agridata.salesType == 'Fertilizer')
-                                    DataColumn(
+                                    const DataColumn(
                                       label: Text('Earth'),
                                     ),
                                   if (model.agridata.salesType == 'Fertilizer')
-                                    DataColumn(
+                                    const DataColumn(
                                       label: Text('Rainy'),
                                     ),
                                   if (model.agridata.salesType == 'Fertilizer')
-                                    DataColumn(
+                                    const DataColumn(
                                       label: Text('Ratoon1'),
                                     ),
                                   if (model.agridata.salesType == 'Fertilizer')
-                                    DataColumn(
+                                    const DataColumn(
                                       label: Text('Ratoon2'),
                                     ),
-                                  DataColumn(
+                                  const DataColumn(
                                     label: Text('Total'),
                                   ),
-                                  DataColumn(
+                                  const DataColumn(
                                     label: Text('Delete'),
                                   ),
                                 ],

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,12 +7,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/farmer.dart';
-
 import 'package:sugar_mill_app/services/add_farmer_service.dart';
+
 import '../../../models/bank_model.dart';
 import '../../../models/village_model.dart';
 import '../../../router.router.dart';
@@ -35,6 +35,7 @@ class FarmerViewModel extends BaseViewModel {
   final List<String> roles = ['Farmer', 'Harvester', 'Transporter'];
   List<villagemodel> villageList = [];
   List<BankMaster> bankList = [];
+  List<String> bankPassbookUrls = [];
   DateTime? selectedDate;
   Farmer farmerData = Farmer();
   late String accountNumber;
@@ -42,7 +43,8 @@ class FarmerViewModel extends BaseViewModel {
   late String bankName;
   late String farmerId;
   late String branch = "";
-  late String passbookattch;
+  late String passbookattch = "";
+  bool isPassbookAdded = false;
 
   bool isEdit = false;
 
@@ -70,6 +72,9 @@ class FarmerViewModel extends BaseViewModel {
       dobController.text = farmerData.dateOfBirth ?? "";
       ageController.text = farmerData.age ?? "";
       bankAccounts.addAll(farmerData.bankDetails?.toList() ?? []);
+      for (BankDetails bank in bankAccounts) {
+        bankPassbookUrls.add(bank.bankPassbook ?? "");
+      }
 
       if (farmerData.isFarmer == 1) {
         _selectedItems.add(items[0]);
@@ -369,13 +374,15 @@ class FarmerViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedBank(String? bank) async {
-    bankName = bank ?? "";
-    Logger().i(bank);
-    final selectedRouteData =
-        bankList.firstWhere((bankData) => bankData.bankAndBranch == bank);
-    Logger().i(selectedRouteData);
-    branchifscCode = selectedRouteData.ifscCode ?? "";
+  void setSelectedBank(BankMaster bank) async {
+    bankName = bank.bankAndBranch ?? "";
+    // Logger().i(bank);
+    // final selectedRouteData =
+    //     bankList.firstWhere((bankData) => bankData.bankAndBranch == bank);
+    // Logger().i(selectedRouteData);
+    print("HERE YOU ARE!: ${bank.bankAndBranch} ${bank.ifscCode}");
+    branchifscCode = bank.ifscCode ?? "";
+    print("HERE YOU ARE!: $branchifscCode");
     notifyListeners();
   }
 
@@ -527,14 +534,17 @@ class FarmerViewModel extends BaseViewModel {
       if (result != null) {
         setBusy(true);
         File? compressedFile = await compressFile(fileFromXFile(result));
-        files.setFilepassbook(fileType, [compressedFile]); // Pass as a list
+
+        passbookattch = compressedFile?.path ?? "";
+        Fluttertoast.showToast(
+            msg: "Passbook: ${passbookattch.split('/').last}");
         setBusy(false);
-        notifyListeners();
       }
     } catch (e) {
       Fluttertoast.showToast(
           msg: 'Error while picking an image or document: $e');
     }
+    notifyListeners();
   }
 
   // Function to upload the selected PDF file (Aadhar card)
@@ -561,17 +571,36 @@ class FarmerViewModel extends BaseViewModel {
         letterUrl == "" ? farmerData.consentLetter : letterUrl;
   }
 
-  Future<void> uploadpassbook() async {
-    for (File? passbook in files.bankPassbooks) {
-      if (passbook != null) {
-        String bankUrl = await FarmerService().uploadDocs(passbook);
-        if (bankUrl.isNotEmpty) {
-          passbookattch = bankUrl; // Update the attachment URL
-        } else {
-          Fluttertoast.showToast(msg: "Failed to upload Bank");
-        }
+  Future<void> uploadpassbook(int index) async {
+    print("INDEX IS: $index");
+    if (index == -1) {
+      // bankPassbookUrls.add("");
+      String bankUrl = await FarmerService().uploadDocs(File(passbookattch));
+      if (bankUrl.isNotEmpty) {
+        bankPassbookUrls.add(bankUrl); // Update the attachment URL
+      } else {
+        Fluttertoast.showToast(msg: "Failed to upload Bank");
+      }
+    } else {
+      String bankUrl = await FarmerService().uploadDocs(File(passbookattch));
+      if (bankUrl.isNotEmpty) {
+        bankPassbookUrls[index] = (bankUrl); // Update the attachment URL
+      } else {
+        Fluttertoast.showToast(msg: "Failed to upload Bank");
       }
     }
+    // int i = 0;
+    // for (File? passbook in files.bankPassbooks) {
+    //   if (passbook != null) {
+    //     String bankUrl = await FarmerService().uploadDocs(passbook);
+    //     if (bankUrl.isNotEmpty) {
+    //       bankPassbookUrls[i] = bankUrl; // Update the attachment URL
+    //     } else {
+    //       Fluttertoast.showToast(msg: "Failed to upload Bank");
+    //     }
+    //   }
+    //   i++;
+    // }
   }
 
   // Function to check if a PDF file is selected
@@ -634,14 +663,17 @@ class FarmerViewModel extends BaseViewModel {
           return;
         }
       }
-      await uploadpassbook();
+      await uploadpassbook(index);
       submitBankAccount(index);
-      setBusy(false);
-      Navigator.pop(context);
+
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
       Fluttertoast.showToast(
           msg: "Bank is Added Succesfully", toastLength: Toast.LENGTH_LONG);
       resetBankVariables();
       passbookattch = "";
+      setBusy(false);
     } else {
       // Form is invalid, show error messages
       Logger().i('Bank Form is invalid');
@@ -696,13 +728,13 @@ class FarmerViewModel extends BaseViewModel {
       bankAccounts[index].bankName = bankName;
       bankAccounts[index].branchifscCode = branchifscCode;
       bankAccounts[index].accountNumber = accountNumber;
-      bankAccounts[index].bankAndBranch = branch;
-
       bankAccounts[index].bankPassbook = passbookattch;
+      print("BANK IFSCE: ${bankAccounts[index].bankAndBranch}");
 
       notifyListeners();
       return;
     }
+    print("BANK IFSCE: ${branchifscCode}");
     bankAccounts.add(BankDetails(
         farmer: farmer ? 1 : 0,
         harvester: harvester ? 1 : 0,
@@ -710,7 +742,6 @@ class FarmerViewModel extends BaseViewModel {
         bankName: bankName,
         branchifscCode: branchifscCode,
         accountNumber: accountNumber,
-        bankAndBranch: branch,
         bankPassbook: passbookattch));
     notifyListeners();
   }
@@ -734,10 +765,10 @@ class FarmerViewModel extends BaseViewModel {
       if (bankAccounts[index].transporter == 1) {
         transporter = true;
       }
+      print("SELECED: ${bankAccounts[index].bankAndBranch}");
       bankName = bankAccounts[index].bankName!;
       branchifscCode = bankAccounts[index].branchifscCode!;
       accountNumber = bankAccounts[index].accountNumber!;
-      branch = bankAccounts[index].bankAndBranch!;
       passbookattch = bankAccounts[index].bankPassbook ?? "";
     }
     notifyListeners();
@@ -819,16 +850,12 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   String? getFileFromFarmer(String filetype) {
+    print(filetype);
+    print("SELECTED FILE: $passbookattch");
     if (filetype == kAadharpdf) return farmerData.aadhaarCard;
 
     if (filetype == kBankpdf) {
-      if (passbookattch.isNotEmpty) {
-        return passbookattch;
-      } else if (files.bankPassbooks.isNotEmpty) {
-        return 'Image Picked';
-      } else {
-        return null;
-      }
+      return passbookattch;
     }
     if (filetype == kConcentpdf) return farmerData.consentLetter;
     return null;
@@ -844,6 +871,12 @@ class FarmerViewModel extends BaseViewModel {
 
     if (filetype == kConcentpdf) return files.consentLetter;
     return null;
+  }
+
+  void handlePassbookPdf(int index) {
+    files.bankPassbooks.add(File(passbookattch));
+    passbookattch = "";
+    notifyListeners();
   }
 }
 
@@ -864,7 +897,7 @@ class Files {
 
   File? getBankPassbookFileByIndex(int index) {
     if (index >= 0 && index < bankPassbooks.length) {
-      return bankPassbooks[index];
+      return bankPassbooks[bankPassbooks.length - 1];
     }
     return null;
   }
@@ -897,11 +930,12 @@ class Files {
     }
   }
 
-  void setFilepassbook(String fileType, List<File?> files) {
-    if (fileType == kBankpdf) {
-      bankPassbooks = List.from(files);
-    }
-  }
+  // void setFilepassbook(String fileType, List<File?> files) {
+  //   if (fileType == kBankpdf) {
+  //     // bankPassbooks = List.from(files);
+  //     passbookattch = files[0]?.path;
+  //   }
+  // }
 
   void setFile(String fileType, File? file) {
     if (fileType == kAadharpdf) {

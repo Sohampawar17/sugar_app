@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
-import 'package:sugar_mill_app/models/Agri.dart';
-import 'package:sugar_mill_app/models/Item.dart';
+import 'package:sugar_mill_app/models/agri.dart';
+import 'package:sugar_mill_app/models/item.dart';
 
-import '../../../models/CaneFarmer.dart';
-import '../../../models/DoseType.dart';
 import '../../../models/agri_cane_model.dart';
+import '../../../models/cane_farmer.dart';
+import '../../../models/dose_type.dart';
 import '../../../router.router.dart';
 import '../../../services/add_agri_services.dart';
 

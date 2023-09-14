@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:stacked/stacked.dart';
 
-import '../../../models/List_Crop_sampling_model.dart';
+import '../../../models/list_crop_sampling_model.dart';
 import '../../../router.router.dart';
 import '../../../services/list_crop_sampling_service.dart';
 

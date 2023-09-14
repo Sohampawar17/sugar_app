@@ -24,13 +24,13 @@ class FarmersListModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['supplier_name'] = this.supplierName;
-    data['village'] = this.village;
-    data['name'] = this.name;
-    data['workflow_state'] = this.workflowState;
-    data['circle_office'] = this.circleOffice;
-    data['existing_supplier_code'] = this.existingSupplierCode;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['supplier_name'] = supplierName;
+    data['village'] = village;
+    data['name'] = name;
+    data['workflow_state'] = workflowState;
+    data['circle_office'] = circleOffice;
+    data['existing_supplier_code'] = existingSupplierCode;
     return data;
   }
 }

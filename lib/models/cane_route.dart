@@ -24,13 +24,13 @@ class caneRoute {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['route'] = this.route;
-    data['distance_km'] = this.distanceKm;
-    data['name'] = this.name;
-    data['village'] = this.village;
-    data['circle_office'] = this.circleOffice;
-    data['taluka'] = this.taluka;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['route'] = route;
+    data['distance_km'] = distanceKm;
+    data['name'] = name;
+    data['village'] = village;
+    data['circle_office'] = circleOffice;
+    data['taluka'] = taluka;
     return data;
   }
 }

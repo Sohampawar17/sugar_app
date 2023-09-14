@@ -12,10 +12,10 @@ class BankMaster {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['bank_and_branch'] = this.bankAndBranch;
-    data['branch'] = this.branch;
-    data['ifsc_code'] = this.ifscCode;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['bank_and_branch'] = bankAndBranch;
+    data['branch'] = branch;
+    data['ifsc_code'] = ifscCode;
     return data;
   }
 }

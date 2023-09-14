@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
-import 'package:sugar_mill_app/models/Crop_Sampling.dart';
+import 'package:sugar_mill_app/models/crop_sampling.dart';
 
 import '../constants.dart';
 import '../models/agri_cane_model.dart';

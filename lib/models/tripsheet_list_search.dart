@@ -24,13 +24,13 @@ class TripSheetSearch {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['farmer_name'] = this.farmerName;
-    data['field_village'] = this.fieldVillage;
-    data['transporter_name'] = this.transporterName;
-    data['circle_office'] = this.circleOffice;
-    data['season'] = this.season;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['farmer_name'] = farmerName;
+    data['field_village'] = fieldVillage;
+    data['transporter_name'] = transporterName;
+    data['circle_office'] = circleOffice;
+    data['season'] = season;
     return data;
   }
 }

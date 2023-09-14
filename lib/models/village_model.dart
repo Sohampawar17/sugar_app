@@ -12,10 +12,10 @@ class villagemodel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['circle_office'] = this.circleOffice;
-    data['taluka'] = this.taluka;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['circle_office'] = circleOffice;
+    data['taluka'] = taluka;
     return data;
   }
 }

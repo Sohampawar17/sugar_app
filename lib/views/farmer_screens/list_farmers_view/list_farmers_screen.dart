@@ -30,7 +30,7 @@ class ListFarmersScreen extends StatelessWidget {
                       arguments: const AddFarmerScreenArguments(farmerid: ""),
                     );
                   },
-                  child: Text('Add Farmer')),
+                  child: const Text('Add Farmer')),
             )
           ],
         ),

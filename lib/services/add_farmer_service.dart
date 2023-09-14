@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:sugar_mill_app/constants.dart';
@@ -97,7 +98,7 @@ class FarmerService {
     var data = json.encode({
       "data": farmer,
     });
-
+    Logger().i(data);
     try {
       var dio = Dio();
       var response = await dio.request(
@@ -180,7 +181,9 @@ class FarmerService {
       if (response.statusCode == 200) {
         return Farmer.fromJson(response.data["data"]);
       } else {
-        print(response.statusMessage);
+        if (kDebugMode) {
+          print(response.statusMessage);
+        }
         return null;
       }
     } catch (e) {

@@ -7,7 +7,7 @@ import 'package:sugar_mill_app/models/trip_crop_harvesting_model.dart';
 import 'package:sugar_mill_app/models/tripsheet.dart';
 
 import '../constants.dart';
-import '../models/CaneRoute.dart';
+import '../models/cane_route.dart';
 import '../models/tripsheet_transport_model.dart';
 import '../models/tripsheet_water_supplier.dart';
 

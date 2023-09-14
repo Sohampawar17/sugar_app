@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
 import '../constants.dart';
-import '../models/List_Crop_sampling_model.dart';
+import '../models/list_crop_sampling_model.dart';
 
 class ListCropSamplingServices {
   Future<List<ListSampling>> getAllCropSamplingList() async {

@@ -133,58 +133,58 @@ class Farmer {
     if (json['bank_details'] != null) {
       bankDetails = <BankDetails>[];
       json['bank_details'].forEach((v) {
-        bankDetails!.add(new BankDetails.fromJson(v));
+        bankDetails!.add(BankDetails.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['owner'] = this.owner;
-    data['modified_by'] = this.modifiedBy;
-    data['docstatus'] = this.docstatus;
-    data['idx'] = this.idx;
-    data['workflow_state'] = this.workflowState;
-    data['naming_series'] = this.namingSeries;
-    data['supplier_name'] = this.supplierName;
-    data['supplier_type'] = this.supplierType;
-    data['branch'] = this.branch;
-    data['aadhaar_number'] = this.aadhaarNumber;
-    data['mobile_number'] = this.mobileNumber;
-    data['date_of_birth'] = this.dateOfBirth;
-    data['existing_supplier_code'] = this.existingSupplierCode;
-    data['gender'] = this.gender;
-    data['age'] = this.age;
-    data['country'] = this.country;
-    data['supplier_group'] = this.supplierGroup;
-    data['is_transporter'] = this.isTransporter;
-    data['is_harvester'] = this.isHarvester;
-    data['is_farmer'] = this.isFarmer;
-    data['is_member'] = this.isMember;
-    data['village'] = this.village;
-    data['circle_office'] = this.circleOffice;
-    data['taluka'] = this.taluka;
-    data['state'] = this.state;
-    data['aadhaar_card'] = this.aadhaarCard;
-    data['consent_letter'] = this.consentLetter;
-    data['is_internal_supplier'] = this.isInternalSupplier;
-    data['language'] = this.language;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['owner'] = owner;
+    data['modified_by'] = modifiedBy;
+    data['docstatus'] = docstatus;
+    data['idx'] = idx;
+    data['workflow_state'] = workflowState;
+    data['naming_series'] = namingSeries;
+    data['supplier_name'] = supplierName;
+    data['supplier_type'] = supplierType;
+    data['branch'] = branch;
+    data['aadhaar_number'] = aadhaarNumber;
+    data['mobile_number'] = mobileNumber;
+    data['date_of_birth'] = dateOfBirth;
+    data['existing_supplier_code'] = existingSupplierCode;
+    data['gender'] = gender;
+    data['age'] = age;
+    data['country'] = country;
+    data['supplier_group'] = supplierGroup;
+    data['is_transporter'] = isTransporter;
+    data['is_harvester'] = isHarvester;
+    data['is_farmer'] = isFarmer;
+    data['is_member'] = isMember;
+    data['village'] = village;
+    data['circle_office'] = circleOffice;
+    data['taluka'] = taluka;
+    data['state'] = state;
+    data['aadhaar_card'] = aadhaarCard;
+    data['consent_letter'] = consentLetter;
+    data['is_internal_supplier'] = isInternalSupplier;
+    data['language'] = language;
     data['allow_purchase_invoice_creation_without_purchase_order'] =
-        this.allowPurchaseInvoiceCreationWithoutPurchaseOrder;
+        allowPurchaseInvoiceCreationWithoutPurchaseOrder;
     data['allow_purchase_invoice_creation_without_purchase_receipt'] =
-        this.allowPurchaseInvoiceCreationWithoutPurchaseReceipt;
-    data['is_frozen'] = this.isFrozen;
-    data['disabled'] = this.disabled;
-    data['warn_rfqs'] = this.warnRfqs;
-    data['warn_pos'] = this.warnPos;
-    data['prevent_rfqs'] = this.preventRfqs;
-    data['prevent_pos'] = this.preventPos;
-    data['on_hold'] = this.onHold;
-    data['hold_type'] = this.holdType;
-    data['doctype'] = this.doctype;
-    if (this.bankDetails != null) {
-      data['bank_details'] = this.bankDetails!.map((v) => v.toJson()).toList();
+        allowPurchaseInvoiceCreationWithoutPurchaseReceipt;
+    data['is_frozen'] = isFrozen;
+    data['disabled'] = disabled;
+    data['warn_rfqs'] = warnRfqs;
+    data['warn_pos'] = warnPos;
+    data['prevent_rfqs'] = preventRfqs;
+    data['prevent_pos'] = preventPos;
+    data['on_hold'] = onHold;
+    data['hold_type'] = holdType;
+    data['doctype'] = doctype;
+    if (bankDetails != null) {
+      data['bank_details'] = bankDetails!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -261,28 +261,28 @@ class BankDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['owner'] = this.owner;
-    data['creation'] = this.creation;
-    data['modified'] = this.modified;
-    data['modified_by'] = this.modifiedBy;
-    data['docstatus'] = this.docstatus;
-    data['idx'] = this.idx;
-    data['farmer'] = this.farmer;
-    data['harvester'] = this.harvester;
-    data['transporter'] = this.transporter;
-    data['bank_name'] = this.bankName;
-    data['branchifsc_code'] = this.branchifscCode;
-    data['account_number'] = this.accountNumber;
-    data['status'] = this.status;
-    data['is_active'] = this.isActive;
-    data['bank_and_branch'] = this.bankAndBranch;
-    data['bank_passbook'] = this.bankPassbook;
-    data['parent'] = this.parent;
-    data['parentfield'] = this.parentfield;
-    data['parenttype'] = this.parenttype;
-    data['doctype'] = this.doctype;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['owner'] = owner;
+    data['creation'] = creation;
+    data['modified'] = modified;
+    data['modified_by'] = modifiedBy;
+    data['docstatus'] = docstatus;
+    data['idx'] = idx;
+    data['farmer'] = farmer;
+    data['harvester'] = harvester;
+    data['transporter'] = transporter;
+    data['bank_name'] = bankName;
+    data['branchifsc_code'] = branchifscCode;
+    data['account_number'] = accountNumber;
+    data['status'] = status;
+    data['is_active'] = isActive;
+    data['bank_and_branch'] = bankAndBranch;
+    data['bank_passbook'] = bankPassbook;
+    data['parent'] = parent;
+    data['parentfield'] = parentfield;
+    data['parenttype'] = parenttype;
+    data['doctype'] = doctype;
     return data;
   }
 }

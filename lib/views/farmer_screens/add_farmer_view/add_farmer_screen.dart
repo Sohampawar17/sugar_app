@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/views/farmer_screens/add_farmer_view/add_farmer_model.dart';
@@ -616,8 +615,10 @@ class AddFarmerScreen extends StatelessWidget {
                                       value:
                                           model.bankAccounts[index].farmer == 1,
                                       onChanged: (bool? newValue) {
-                                        model.setRole("Farmer",
-                                            (newValue == true ? 1 : 0) as bool);
+                                        model.setRole(
+                                          "Farmer",
+                                          newValue ?? false,
+                                        );
                                       },
                                     )),
                                     DataCell(Checkbox(
@@ -625,8 +626,8 @@ class AddFarmerScreen extends StatelessWidget {
                                           model.bankAccounts[index].harvester ==
                                               1,
                                       onChanged: (bool? newValue) {
-                                        model.setRole("Harvester",
-                                            (newValue == true ? 1 : 0) as bool);
+                                        model.setRole(
+                                            "Harvester", newValue ?? false);
                                       },
                                     )),
                                     DataCell(Checkbox(
@@ -634,8 +635,8 @@ class AddFarmerScreen extends StatelessWidget {
                                               .transporter ==
                                           1,
                                       onChanged: (bool? newValue) {
-                                        model.setRole("Transporter",
-                                            (newValue == true ? 1 : 0) as bool);
+                                        model.setRole(
+                                            "Transporter", newValue ?? false);
                                       },
                                     )),
 
@@ -650,21 +651,49 @@ class AddFarmerScreen extends StatelessWidget {
                                         .toString())),
                                     DataCell(TextButton(
                                         onPressed: () {
+                                          // Navigator.push(
+                                          //   context,
+                                          //   MaterialPageRoute(
+                                          //     builder: (BuildContext context) =>
+                                          //         ViewImageInternet(
+                                          //       url: model.bankAccounts[index]
+                                          //               .bankPassbook ??
+                                          //           "",
+                                          //     ),
+                                          //   ),
+                                          // );
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
-                                                  ViewImageInternet(
-                                                url: model.bankAccounts[index]
-                                                        .bankPassbook ??
-                                                    "",
-                                              ),
+                                                  model.bankAccounts[index]
+                                                                  .bankPassbook?[
+                                                              0] !=
+                                                          '/'
+                                                      ? ViewImageInternet(
+                                                          url: model
+                                                                  .bankAccounts[
+                                                                      index]
+                                                                  .bankPassbook ??
+                                                              "",
+                                                        )
+                                                      : ViewImage(
+                                                          image: Image.file(
+                                                            File(model
+                                                                    .bankAccounts[
+                                                                        index]
+                                                                    .bankPassbook ??
+                                                                ""),
+                                                          ),
+                                                        ),
                                             ),
                                           );
                                         },
                                         child: Text(model
                                             .bankAccounts[index].bankPassbook
-                                            .toString()))),
+                                            .toString()
+                                            .split("/")
+                                            .last))),
                                     // DataCell(Text(model
                                     //     .bankAccounts[index].
                                     //     .toString())),
@@ -766,8 +795,8 @@ class AddFarmerScreen extends StatelessWidget {
           barrierDismissible: false,
           context: context,
           builder: (context) {
-            return StatefulBuilder(builder: (BuildContext context,
-                void Function(void Function()) setState) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
                 child: AlertDialog(
                   title: const Text('Add Bank Account'),
@@ -785,7 +814,6 @@ class AddFarmerScreen extends StatelessWidget {
                                   model.setRole("Farmer", newValue ?? false));
                             },
                           ),
-
                           CheckboxListTile(
                             title: const Text("Harvester"),
                             value: model.harvester,
@@ -830,7 +858,7 @@ class AddFarmerScreen extends StatelessWidget {
                                 final bankData = model.bankList.firstWhere(
                                     (bank) => bank.bankAndBranch == routeName);
                                 model.setSelectedBank(
-                                    bankData.bankAndBranch); // Pass the route
+                                    bankData); // Pass the route
                               },
                               fieldViewBuilder: (BuildContext context,
                                   TextEditingController textEditingController,
@@ -879,80 +907,6 @@ class AddFarmerScreen extends StatelessWidget {
                               optionsMaxHeight: 200,
                             ),
                           ),
-                          // Expanded(
-                          //   child: Autocomplete<String>(
-                          //     key: Key(index == -1
-                          //         ? ""
-                          //         : model.bankAccounts[index].bankAndBranch ?? ""),
-                          //     initialValue: TextEditingValue(
-                          //         text: index == -1
-                          //             ? ""
-                          //             : model.bankAccounts[index].bankAndBranch ??
-                          //                 ""),
-                          //     optionsBuilder: (TextEditingValue textEditingValue) {
-                          //       if (textEditingValue.text.isEmpty) {
-                          //         return const Iterable<String>.empty();
-                          //       }
-                          //       return model.bankList
-                          //           .map((bank) => bank.branch ?? "")
-                          //           .toList()
-                          //           .where((bank) => bank.toLowerCase().contains(
-                          //               textEditingValue.text.toLowerCase()));
-                          //     },
-                          //     onSelected: (String routeName) {
-                          //       // Find the corresponding route object
-                          //       final bankData = model.bankList
-                          //           .firstWhere((bank) => bank.branch == routeName);
-                          //       model.setSelectedBranch(
-                          //           bankData.branch); // Pass the route
-                          //     },
-                          //     fieldViewBuilder: (BuildContext context,
-                          //         TextEditingController textEditingController,
-                          //         FocusNode focusNode,
-                          //         VoidCallback onFieldSubmitted) {
-                          //       return TextFormField(
-                          //         controller: textEditingController,
-                          //         focusNode: focusNode,
-                          //         decoration: const InputDecoration(
-                          //           labelText: 'Branch',
-                          //         ),
-                          //         onChanged: (String value) {},
-                          //       );
-                          //     },
-                          //     optionsViewBuilder: (BuildContext contpext,
-                          //         AutocompleteOnSelected<String> onSelected,
-                          //         Iterable<String> options) {
-                          //       return Align(
-                          //         alignment: Alignment.topLeft,
-                          //         child: Material(
-                          //           elevation: 4.0,
-                          //           child: Container(
-                          //             constraints:
-                          //                 const BoxConstraints(maxHeight: 200),
-                          //             child: ListView.builder(
-                          //               shrinkWrap: true,
-                          //               itemCount: options.length,
-                          //               itemBuilder:
-                          //                   (BuildContext context, int index) {
-                          //                 final String option =
-                          //                     options.elementAt(index);
-                          //                 return GestureDetector(
-                          //                   onTap: () {
-                          //                     onSelected(option);
-                          //                   },
-                          //                   child: ListTile(
-                          //                     title: Text(option),
-                          //                   ),
-                          //                 );
-                          //               },
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       );
-                          //     },
-                          //     optionsMaxHeight: 200,
-                          //   ),
-                          // ),
                           Expanded(
                             child: TextFormField(
                               initialValue:
@@ -971,18 +925,24 @@ class AddFarmerScreen extends StatelessWidget {
                               validator: model.validateAccountNumber,
                             ),
                           ),
-                          Expanded(
-                            child: TextFormField(
-                              controller: TextEditingController(
-                                  text: model.branchifscCode),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(11),
-                                UppercaseTextFormatter(),
-                              ],
-                              decoration: const InputDecoration(
-                                labelText: 'Branch IFSC Code',
+                          Visibility(
+                            visible: model.branchifscCode != "",
+                            child: Expanded(
+                              child: TextFormField(
+                                readOnly: true,
+                                initialValue: model.branchifscCode,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(11),
+                                  UppercaseTextFormatter(),
+                                ],
+                                decoration: const InputDecoration(
+                                  labelText: 'Branch IFSC Code',
+                                ),
+                                onChanged: (value) {
+                                  model.branchifscCode = value;
+                                },
+                                validator: model.validateBranchIfscCode,
                               ),
-                              validator: model.validateBranchIfscCode,
                             ),
                           ),
                           Expanded(
@@ -991,7 +951,7 @@ class AddFarmerScreen extends StatelessWidget {
                                 pickDocforpassbook(kBankpdf, context, model),
                             child: model.passbookattch != ""
                                 ? Text(
-                                    'Bank File: ${model.passbookattch.split("/").last}',
+                                    'Passbook: ${model.passbookattch.split('/').last}',
                                     overflow: TextOverflow.ellipsis,
                                   )
                                 : const Text('Attach Passbook'),
@@ -1110,33 +1070,27 @@ class AddFarmerScreen extends StatelessWidget {
                 model.selectPdfpassbook(filetype, ImageSource.gallery);
               },
             ),
-            if (model.files.getBankPassbookFileByIndex(0) != null ||
-                (model.getFileFromFarmer(filetype) ?? "").isNotEmpty)
+            if (model.passbookattch != "")
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
 
-                  final bankPassbookFile =
-                      model.files.getBankPassbookFileByIndex(0);
-                  if (bankPassbookFile != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ViewImageInternet(
-                          url: model.getFileFromFarmer(filetype) ?? "",
-                        ),
-                      ),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ViewImageInternet(
-                          url: model.getFileFromFarmer(filetype) ?? "",
-                        ),
-                      ),
-                    );
-                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => model
+                                  .passbookattch[0] !=
+                              '/'
+                          ? ViewImageInternet(
+                              url: model.getFileFromFarmer(filetype) ?? "",
+                            )
+                          : ViewImage(
+                              image: Image.file(
+                                File(model.getFileFromFarmer(filetype) ?? ""),
+                              ),
+                            ),
+                    ),
+                  );
                 },
                 child: const Text("View Uploaded File"),
               )

@@ -24,13 +24,13 @@ class ListSampling {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['season'] = this.season;
-    data['plantation_status'] = this.plantationStatus;
-    data['plant_name'] = this.plantName;
-    data['form_number'] = this.formNumber;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['season'] = season;
+    data['plantation_status'] = plantationStatus;
+    data['plant_name'] = plantName;
+    data['form_number'] = formNumber;
+    data['name'] = name;
     return data;
   }
 }

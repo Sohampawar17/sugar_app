@@ -321,15 +321,16 @@ class AddCaneScreen extends StatelessWidget {
                             )),
                           ]),
                           TextFormField(
-                              readOnly: true,
-                              key: Key(model.canedata.growerName ?? "07"),
-                              initialValue: model.canedata.growerName,
-                              decoration: const InputDecoration(
-                                  labelText: 'Grower Name'),
-                              validator: (value) => value!.isEmpty
-                                  ? 'Please enter a Grower Name'
-                                  : null,
-                              onChanged: model.setSelectedgrowername),
+                            readOnly: true,
+                            key: Key(model.canedata.growerName ?? "07"),
+                            initialValue: model.canedata.growerName,
+                            decoration:
+                                const InputDecoration(labelText: 'Grower Name'),
+                            validator: (value) => value!.isEmpty
+                                ? 'Please enter a Grower Name'
+                                : null,
+                            onChanged: model.setSelectedgrowername,
+                          ),
                           //mobile number
                           Row(
                             children: [
@@ -406,7 +407,7 @@ class AddCaneScreen extends StatelessWidget {
                                 child: Autocomplete<String>(
                                   key: Key(model.canedata.route ?? "02"),
                                   initialValue: TextEditingValue(
-                                    text: model.canedata.route ?? "",
+                                    text: model.selectedCaneRoute ?? "",
                                   ),
                                   optionsBuilder:
                                       (TextEditingValue textEditingValue) {
@@ -424,10 +425,10 @@ class AddCaneScreen extends StatelessWidget {
                                   onSelected: (String routeName) {
                                     // Find the corresponding route object
                                     final routeData = model.routeList
-                                        .firstWhere(
-                                            (route) => route.name == routeName);
+                                        .firstWhere((route) =>
+                                            route.route == routeName);
                                     model.setselectedRoute(
-                                        routeData.name); // Pass the route
+                                        routeData); // Pass the route
                                   },
                                   fieldViewBuilder: (BuildContext context,
                                       TextEditingController
@@ -468,8 +469,8 @@ class AddCaneScreen extends StatelessWidget {
                                                       route.route == option);
                                               return GestureDetector(
                                                 onTap: () {
-                                                  onSelected(routeData
-                                                      .name!); // Send the name as the selected route
+                                                  onSelected(routeData.route ??
+                                                      ""); // Send the name as the selected route
                                                 },
                                                 child: ListTile(
                                                   title: Text(option),

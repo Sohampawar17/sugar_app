@@ -55,8 +55,8 @@ class HomePageScreen extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         backgroundColor: Colors.greenAccent.shade200,
         appBar: AppBar(
-          leading: Icon(Icons.factory_outlined),
-          title: Text(
+          leading: const Icon(Icons.factory_outlined),
+          title: const Text(
             'Venkateshwara Power Project',
             style: TextStyle(
               fontWeight: FontWeight.bold,

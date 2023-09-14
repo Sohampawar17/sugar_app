@@ -36,17 +36,17 @@ class DosetypeModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ItemCode'] = this.itemCode;
-    data['ItemName'] = this.itemName;
-    data['Itemgroup'] = this.itemgroup;
-    data['name'] = this.name;
-    data['Baselqty'] = this.baselqty;
-    data['preearthqty'] = this.preearthqty;
-    data['earthingqty'] = this.earthingqty;
-    data['Rainyqty'] = this.rainyqty;
-    data['Ratoon1qty'] = this.ratoon1qty;
-    data['Ratoon2qty'] = this.ratoon2qty;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ItemCode'] = itemCode;
+    data['ItemName'] = itemName;
+    data['Itemgroup'] = itemgroup;
+    data['name'] = name;
+    data['Baselqty'] = baselqty;
+    data['preearthqty'] = preearthqty;
+    data['earthingqty'] = earthingqty;
+    data['Rainyqty'] = rainyqty;
+    data['Ratoon1qty'] = ratoon1qty;
+    data['Ratoon2qty'] = ratoon2qty;
     return data;
   }
 }

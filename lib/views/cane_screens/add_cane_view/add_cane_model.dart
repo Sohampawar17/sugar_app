@@ -6,11 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
-import 'package:sugar_mill_app/models/CaneFarmer.dart';
-import 'package:sugar_mill_app/models/CaneRoute.dart';
+import 'package:sugar_mill_app/models/cane_farmer.dart';
+import 'package:sugar_mill_app/models/cane_route.dart';
 import 'package:sugar_mill_app/services/add_cane_service.dart';
 import 'package:sugar_mill_app/services/geolocation_service.dart';
-import '../../../models/Cane.dart';
+
+import '../../../models/cane.dart';
 import '../../../models/village_model.dart';
 import '../../../router.router.dart';
 import '../../../widgets/cdate_custom.dart';
@@ -63,6 +64,7 @@ class CaneViewModel extends BaseViewModel {
   String? selectedvillage;
   DateTime? selectedDate;
   DateTime? selectedBaselDate;
+  String? selectedCaneRoute = "";
 
   initialise(BuildContext context, String caneId) async {
     setBusy(true);
@@ -84,6 +86,14 @@ class CaneViewModel extends BaseViewModel {
     if (caneId != "") {
       isEdit = true;
       canedata = await AddCaneService().getCane(caneId) ?? Cane();
+      print("ROUTE!!!1: ${canedata.route}");
+      selectedCaneRoute = canedata.route;
+      for (caneRoute i in routeList) {
+        if (i.name == canedata.route) {
+          selectedCaneRoute = i.route;
+          print("ROUTE!!!2: ${i.route}");
+        }
+      }
       notifyListeners();
       areainAcrsController.text = canedata.areaAcrs.toString();
       surveyNumberController.text = canedata.surveyNumber ?? "";
@@ -133,6 +143,9 @@ class CaneViewModel extends BaseViewModel {
           Logger().i(canedata.toJson().toString());
           // Now you have the updated canedata object with location information
           // You can proceed with saving the data
+
+          print("UPDATING ROUTE: ${canedata.route} ${selectedCaneRoute}");
+          // canedata.route = selectedCaneRoute;
           if (isEdit == true) {
             res = await AddCaneService().updateCane(canedata);
             if (res) {
@@ -278,7 +291,7 @@ class CaneViewModel extends BaseViewModel {
     Logger().i(village);
     farmerList =
         await AddCaneService().fetchfarmerListwithfilter(village ?? "");
-    Logger().i(farmerList);
+
     final selectedRouteData =
         routeList.firstWhere((routeData) => routeData.village == village);
     selectedvillage = selectedRouteData.circleOffice;
@@ -289,14 +302,21 @@ class CaneViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setselectedRoute(String? route) {
-    selectedRoute = route;
-    canedata.route = selectedRoute;
-    Logger().i(route);
-    final selectedRouteData =
-        routeList.firstWhere((routeData) => routeData.name == route);
-    selectedDistance =
-        selectedRouteData.distanceKm; // Set th distance in the kmController
+  void setselectedRoute(caneRoute route) {
+    // selectedRoute = route;
+    // canedata.route = selectedRoute;
+    Logger().i("ROUTE IS: $route");
+    // for (caneRoute i in routeList) {
+    //   if (i.name == route) {
+    selectedRoute = route.route;
+    selectedCaneRoute = route.route;
+    canedata.route = route.name;
+    //   }
+    // }
+    notifyListeners();
+    // final selectedRouteData =
+    //     routeList.firstWhere((routeData) => routeData.route == route);
+    selectedDistance = route.distanceKm; // Set th distance in the kmController
     canedata.routeKm = selectedDistance;
     Logger().i(selectedDistance);
     notifyListeners();

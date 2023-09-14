@@ -1,13 +1,15 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:sugar_mill_app/models/agri_cane_model.dart';
+
 import '../constants.dart';
-import '../models/Agri.dart';
-import '../models/CaneFarmer.dart';
-import '../models/DoseType.dart';
-import '../models/Item.dart';
+import '../models/agri.dart';
+import '../models/cane_farmer.dart';
+import '../models/dose_type.dart';
+import '../models/item.dart';
 
 class AddAgriServices {
   Future<bool> updateAgri(Agri agri) async {

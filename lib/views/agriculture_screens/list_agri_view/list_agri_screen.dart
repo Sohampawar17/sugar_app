@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/views/agriculture_screens/list_agri_view/list_agri_model.dart';
-
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
 class ListAgriScreen extends StatelessWidget {
@@ -109,7 +108,7 @@ class ListAgriScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               Expanded(
@@ -123,7 +122,7 @@ class ListAgriScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: ListTile(
-                          tileColor: Color(0xFFD3E8FD),
+                          tileColor: const Color(0xFFD3E8FD),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [

@@ -11,14 +11,14 @@ class cropharvestingModel {
 
   cropharvestingModel(
       {this.id,
-        this.growerCode,
-        this.growerName,
-        this.area,
-        this.cropVariety,
-        this.plantattionRatooningDate,
-        this.surveyNumber,
-        this.areaAcrs,
-        this.name});
+      this.growerCode,
+      this.growerName,
+      this.area,
+      this.cropVariety,
+      this.plantattionRatooningDate,
+      this.surveyNumber,
+      this.areaAcrs,
+      this.name});
 
   cropharvestingModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -33,16 +33,16 @@ class cropharvestingModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['grower_code'] = this.growerCode;
-    data['grower_name'] = this.growerName;
-    data['area'] = this.area;
-    data['crop_variety'] = this.cropVariety;
-    data['plantattion_ratooning_date'] = this.plantattionRatooningDate;
-    data['survey_number'] = this.surveyNumber;
-    data['area_acrs'] = this.areaAcrs;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['grower_code'] = growerCode;
+    data['grower_name'] = growerName;
+    data['area'] = area;
+    data['crop_variety'] = cropVariety;
+    data['plantattion_ratooning_date'] = plantattionRatooningDate;
+    data['survey_number'] = surveyNumber;
+    data['area_acrs'] = areaAcrs;
+    data['name'] = name;
     return data;
   }
 }
