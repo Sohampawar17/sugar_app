@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -18,6 +19,9 @@ class AddTripSheetModel extends BaseViewModel {
   List<String> plantList = [""];
   List<cropharvestingModel> plotList = [];
   TextEditingController plantingDateController = TextEditingController();
+  TextEditingController slipnoController = TextEditingController();
+  TextEditingController deductionController = TextEditingController();
+  TextEditingController watershareController = TextEditingController();
   final List<String> deductionType = [
     "Matured Cane",
     "Burn Cane",
@@ -52,6 +56,7 @@ class AddTripSheetModel extends BaseViewModel {
   String? village;
   String? caneVariety;
   String? surveyNo;
+  String? routename;
   double? area;
   DateTime? selectedDate;
   double? dist;
@@ -98,7 +103,6 @@ class AddTripSheetModel extends BaseViewModel {
     setBusy(true);
     season = await AddTripSheetServices().fetchSeason();
     plantList = await AddTripSheetServices().fetchPlant();
-    plotList = await AddTripSheetServices().fetchPlot();
     routeList = await AddTripSheetServices().fetchRoute();
     transportList = await AddTripSheetServices().fetchTransport();
     waterSupplier = await AddTripSheetServices().fetchWaterSupplier();
@@ -106,10 +110,28 @@ class AddTripSheetModel extends BaseViewModel {
       isEdit = true;
       tripSheetData =
           await AddTripSheetServices().getTripsheet(tripId) ?? Tripsheet();
+      selectedCaneRoute = tripSheetData.routeName;
+      for (caneRoute i in routeList) {
+        if (i.name == tripSheetData.routeName) {
+          selectedCaneRoute = i.route;
+          if (kDebugMode) {
+            print("ROUTE!!!2: ${i.route}");
+          }
+        }
+      }
+      for (WaterSupplierList i in waterSupplier) {
+        if (i.name == tripSheetData.waterSupplier) {
+          watersuppliercode = i.existingSupplierCode;
+        }
+        if (i.name == tripSheetData.farmerCode) {}
+      }
       notifyListeners();
       plantingDateController.text = tripSheetData.plantationDate ?? '';
+      slipnoController.text = tripSheetData.slipNo.toString();
+      deductionController.text = tripSheetData.deduction.toString();
+      watershareController.text = tripSheetData.waterShare.toString();
     }
-    if (plotList.isEmpty) {
+    if (transportList.isEmpty) {
       final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
       final SharedPreferences prefs = await prefs0;
       prefs.clear();
@@ -137,8 +159,9 @@ class AddTripSheetModel extends BaseViewModel {
     }
   }
 
-  void setSelectedSeason(String? season) {
+  void setSelectedSeason(String? season) async {
     tripSheetData.season = season;
+    plotList = await AddTripSheetServices().fetchPlot(season ?? "");
     notifyListeners();
   }
 
@@ -161,6 +184,9 @@ class AddTripSheetModel extends BaseViewModel {
     plantingDateController.text =
         selectedGrowerData.plantattionRatooningDate.toString();
     tripSheetData.plotNo = selectedGrowerData.name;
+    tripSheetData.platNoId = selectedGrowerData.id;
+    dist = double.tryParse(selectedGrowerData.routeKm ?? "");
+    routename = selectedGrowerData.route;
     tripSheetData.farmerCode = farmerCode;
     tripSheetData.farmerName = farmerName;
     tripSheetData.plantationDate = plantingDateController.text;
@@ -168,17 +194,17 @@ class AddTripSheetModel extends BaseViewModel {
     tripSheetData.caneVariety = caneVariety;
     tripSheetData.surveryNo = surveyNo;
     tripSheetData.areaAcre = area;
-    Logger().i(farmerName);
+
+    Logger().i(routename);
     notifyListeners();
   }
 
-  void setSelectedRoute(String? route) {
-    final selectedGrowerData =
-        routeList.firstWhere((growerData) => growerData.route == route);
-    dist = selectedGrowerData.distanceKm;
-    tripSheetData.routeName = selectedGrowerData.name;
-    tripSheetData.distance = dist;
-    Logger().i(tripSheetData.distance);
+  String? selectedCaneRoute = "";
+
+  void setSelectedRoute(caneRoute route) {
+    selectedCaneRoute = route.route;
+    tripSheetData.routeName = route.name;
+    tripSheetData.distance = route.distanceKm;
     notifyListeners();
   }
 
@@ -188,8 +214,7 @@ class AddTripSheetModel extends BaseViewModel {
         .firstWhere((growerData) => growerData.name.toString() == traCode);
     transName = selectedGrowerData.transporterName;
     vehicleType = selectedGrowerData.vehicleType;
-    harCode = selectedGrowerData.harvesterCode;
-    harName = selectedGrowerData.harvesterName;
+    tripSheetData.transporter = selectedGrowerData.name.toString();
     eNo = selectedGrowerData.vehicleNo;
     trl_1 = selectedGrowerData.trolly1;
     tri_2 = selectedGrowerData.trolly2;
@@ -200,19 +225,19 @@ class AddTripSheetModel extends BaseViewModel {
     tripSheetData.tolly2 = tri_2;
     tripSheetData.transporterName = transName;
     tripSheetData.vehicleType = vehicleType;
-    tripSheetData.harvesterName = harName;
-    tripSheetData.harvesterCode = harCode;
+
     Logger().i(tripSheetData.transporterName);
     Logger().i(tripSheetData.vehicleType);
     notifyListeners();
   }
 
-  void setSelectedWaterSupplier(String? waterSupp) {
-    tripSheetData.waterSupplier = waterSupp;
-    final selectedGrowerData =
-        waterSupplier.firstWhere((growerData) => growerData.name == waterSupp);
-    watersupplierName = selectedGrowerData.supplierName;
-    tripSheetData.waterSupplierName = watersupplierName;
+  String? watersuppliercode;
+  void setSelectedWaterSupplier(WaterSupplierList waterSupp) {
+    Logger().i("watersupplier IS: $waterSupp");
+    watersuppliercode = waterSupp.existingSupplierCode;
+    tripSheetData.waterSupplier = waterSupp.name;
+    notifyListeners();
+    tripSheetData.waterSupplierName = waterSupp.supplierName;
     notifyListeners();
   }
 
@@ -223,6 +248,10 @@ class AddTripSheetModel extends BaseViewModel {
   }
 
   void setSelectedWaterSupShare(String? wsShare) {
+    watershareController.value = watershareController.value.copyWith(
+      text: wsShare ?? '',
+      selection: TextSelection.collapsed(offset: (wsShare ?? '').length),
+    );
     tripSheetData.waterShare = double.tryParse(wsShare ?? "");
     Logger().i(tripSheetData.waterShare);
     notifyListeners();
@@ -253,8 +282,13 @@ class AddTripSheetModel extends BaseViewModel {
   }
 
   void setSelectedHarCode(String? hCode) {
-    harCode = hCode;
+    tripSheetData.harvestingCodeHt = hCode;
+    final selectedGrowerData = transportList
+        .firstWhere((growerData) => growerData.name.toString() == hCode);
+    harCode = selectedGrowerData.harvesterCode;
     tripSheetData.harvesterCode = harCode;
+    harName = selectedGrowerData.harvesterName;
+    tripSheetData.harvesterName = harName;
     notifyListeners();
   }
 
@@ -323,6 +357,10 @@ class AddTripSheetModel extends BaseViewModel {
   }
 
   void setSelectSlipNo(String? slipNo) {
+    slipnoController.value = slipnoController.value.copyWith(
+      text: slipNo ?? '',
+      selection: TextSelection.collapsed(offset: (slipNo ?? '').length),
+    );
     tripSheetData.slipNo = int.tryParse(slipNo ?? "");
     notifyListeners();
   }
@@ -333,6 +371,11 @@ class AddTripSheetModel extends BaseViewModel {
   }
 
   void setSelectedDeductionAmount(String? amt) {
+    deductionController.value = deductionController.value.copyWith(
+      text: amt ?? '',
+      selection: TextSelection.collapsed(offset: (amt ?? '').length),
+    );
+
     tripSheetData.deduction = double.tryParse(amt ?? "");
     notifyListeners();
   }

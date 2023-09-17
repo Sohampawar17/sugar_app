@@ -14,7 +14,7 @@ class Authentication {
     // var data = {'usr': 'nishant.shingate@erpdata.in', 'pwd': 'Admin@123'};
     var data = {'usr': username, 'pwd': password};
     var dio = Dio();
-
+    Logger().i(apiLoginGet);
     try {
       var response = await dio.request(
         apiLoginGet,

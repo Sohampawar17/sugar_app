@@ -577,14 +577,16 @@ class FarmerViewModel extends BaseViewModel {
       // bankPassbookUrls.add("");
       String bankUrl = await FarmerService().uploadDocs(File(passbookattch));
       if (bankUrl.isNotEmpty) {
-        bankPassbookUrls.add(bankUrl); // Update the attachment URL
+        bankPassbookUrls.add(bankUrl);
+        passbookattch = bankUrl; // Update the attachment URL
       } else {
         Fluttertoast.showToast(msg: "Failed to upload Bank");
       }
     } else {
       String bankUrl = await FarmerService().uploadDocs(File(passbookattch));
       if (bankUrl.isNotEmpty) {
-        bankPassbookUrls[index] = (bankUrl); // Update the attachment URL
+        bankPassbookUrls[index] = (bankUrl);
+        passbookattch = bankUrl; // Update the attachment URL
       } else {
         Fluttertoast.showToast(msg: "Failed to upload Bank");
       }

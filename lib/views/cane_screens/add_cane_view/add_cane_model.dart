@@ -71,7 +71,6 @@ class CaneViewModel extends BaseViewModel {
     villageList = await AddCaneService().fetchVillages();
     plantlist = await AddCaneService().fetchPlant();
     seasonlist = await AddCaneService().fetchSeason();
-
     canevarietyList = await AddCaneService().fetchCaneVariety();
     plantationsystemList = await AddCaneService().fetchplantationsystem();
     seedmaterialList = await AddCaneService().fetchseedMaterial();
@@ -86,12 +85,10 @@ class CaneViewModel extends BaseViewModel {
     if (caneId != "") {
       isEdit = true;
       canedata = await AddCaneService().getCane(caneId) ?? Cane();
-      print("ROUTE!!!1: ${canedata.route}");
       selectedCaneRoute = canedata.route;
       for (caneRoute i in routeList) {
         if (i.name == canedata.route) {
           selectedCaneRoute = i.route;
-          print("ROUTE!!!2: ${i.route}");
         }
       }
       notifyListeners();
@@ -144,7 +141,7 @@ class CaneViewModel extends BaseViewModel {
           // Now you have the updated canedata object with location information
           // You can proceed with saving the data
 
-          print("UPDATING ROUTE: ${canedata.route} ${selectedCaneRoute}");
+          print("UPDATING ROUTE: ${canedata.route} $selectedCaneRoute");
           // canedata.route = selectedCaneRoute;
           if (isEdit == true) {
             res = await AddCaneService().updateCane(canedata);
@@ -291,9 +288,9 @@ class CaneViewModel extends BaseViewModel {
     Logger().i(village);
     farmerList =
         await AddCaneService().fetchfarmerListwithfilter(village ?? "");
-
+    Logger().i(farmerList.length);
     final selectedRouteData =
-        routeList.firstWhere((routeData) => routeData.village == village);
+        villageList.firstWhere((routeData) => routeData.name == village);
     selectedvillage = selectedRouteData.circleOffice;
     Logger().i(selectedvillage);
     canedata.circleOffice = selectedvillage;
@@ -303,19 +300,11 @@ class CaneViewModel extends BaseViewModel {
   }
 
   void setselectedRoute(caneRoute route) {
-    // selectedRoute = route;
-    // canedata.route = selectedRoute;
     Logger().i("ROUTE IS: $route");
-    // for (caneRoute i in routeList) {
-    //   if (i.name == route) {
     selectedRoute = route.route;
     selectedCaneRoute = route.route;
     canedata.route = route.name;
-    //   }
-    // }
     notifyListeners();
-    // final selectedRouteData =
-    //     routeList.firstWhere((routeData) => routeData.route == route);
     selectedDistance = route.distanceKm; // Set th distance in the kmController
     canedata.routeKm = selectedDistance;
     Logger().i(selectedDistance);

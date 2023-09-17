@@ -102,6 +102,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
                               controller: model.brixbottmAreaController,
                               decoration: const InputDecoration(
                                 labelText: 'Brix Bottom',
@@ -115,6 +116,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
                               controller: model.brixmiddleController,
                               decoration: const InputDecoration(
                                 labelText: 'Brix Middle',
@@ -131,6 +133,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
                               controller: model.brixtopController,
                               decoration: const InputDecoration(
                                 labelText: 'Brix Top',
@@ -143,6 +146,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
                               controller: model.noofpairsController,
                               decoration: const InputDecoration(
                                 labelText: 'No. of  Pairs',
@@ -164,18 +168,16 @@ class AddCropSamplingScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      key: Key(
-                                          model.cropsamplingdata.growerCode ??
-                                              "supplier"),
-                                      readOnly: true,
-                                      initialValue:
-                                          model.cropsamplingdata.growerCode ??
-                                              "",
-                                      decoration: const InputDecoration(
-                                        labelText: 'Grower Code',
-                                      ),
-                                      onChanged: model.setSelectedVendor,
-                                    ),
+                                        key: Key(
+                                            model.cropsamplingdata.growerCode ??
+                                                "supplier"),
+                                        readOnly: true,
+                                        initialValue: model.selectedfarcode ??
+                                            " model.cropsamplingdata.growerCode",
+                                        decoration: const InputDecoration(
+                                          labelText: 'Grower Code',
+                                        ),
+                                        onChanged: model.setSelectedVendor),
                                   ),
                                   const SizedBox(
                                     width: 15,
@@ -293,10 +295,11 @@ class AddCropSamplingScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      key: Key(model.cropsamplingdata.area
+                                      key: Key(model.cropsamplingdata.soilType
                                           .toString()),
                                       readOnly: true,
-                                      initialValue: model.cropsamplingdata.area
+                                      initialValue: model
+                                          .cropsamplingdata.soilType
                                           .toString(),
                                       decoration: const InputDecoration(
                                         labelText: 'Soil Type',

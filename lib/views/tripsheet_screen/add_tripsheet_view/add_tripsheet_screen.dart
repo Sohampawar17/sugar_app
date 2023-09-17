@@ -84,10 +84,7 @@ class AddTripsheetScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextFormField(
-                                key: Key(model.tripSheetData.slipNo.toString()),
-                                initialValue:
-                                    model.tripSheetData.slipNo?.toString() ??
-                                        "",
+                                controller: model.slipnoController,
                                 decoration:
                                     const InputDecoration(labelText: 'Slip No'),
                                 validator: (value) => value!.isEmpty
@@ -100,9 +97,9 @@ class AddTripsheetScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: Autocomplete<String>(
-                              key: Key(model.tripSheetData.plotNo ?? "05"),
+                              key: Key(model.tripSheetData.platNoId ?? "05"),
                               initialValue: TextEditingValue(
-                                text: model.tripSheetData.plotNo ?? "",
+                                text: model.tripSheetData.platNoId ?? "",
                               ),
                               optionsBuilder:
                                   (TextEditingValue textEditingValue) {
@@ -293,9 +290,9 @@ class AddTripsheetScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: Autocomplete<String>(
-                              key: Key(model.tripSheetData.routeName ?? "05"),
+                              key: Key(model.tripSheetData.routeName ?? "02"),
                               initialValue: TextEditingValue(
-                                text: model.tripSheetData.routeName ?? "",
+                                text: model.selectedCaneRoute ?? "",
                               ),
                               optionsBuilder:
                                   (TextEditingValue textEditingValue) {
@@ -303,14 +300,20 @@ class AddTripsheetScreen extends StatelessWidget {
                                   return const Iterable<String>.empty();
                                 }
                                 return model.routeList
-                                    .map((grower) => grower.route ?? "")
+                                    .map((route) => route.route!)
                                     .toList()
-                                    .where((grower) => grower
+                                    .where((route) => route
                                         .toLowerCase()
                                         .contains(textEditingValue.text
                                             .toLowerCase()));
                               },
-                              onSelected: model.setSelectedRoute,
+                              onSelected: (String routeName) {
+                                // Find the corresponding route object
+                                final routeData = model.routeList.firstWhere(
+                                    (route) => route.route == routeName);
+                                model.setSelectedRoute(
+                                    routeData); // Pass the route
+                              },
                               fieldViewBuilder: (BuildContext context,
                                   TextEditingController textEditingController,
                                   FocusNode focusNode,
@@ -319,9 +322,9 @@ class AddTripsheetScreen extends StatelessWidget {
                                   controller: textEditingController,
                                   focusNode: focusNode,
                                   decoration: const InputDecoration(
-                                    labelText: 'Route Name',
+                                    labelText: 'Route',
                                   ),
-                                  onChanged: (value) {},
+                                  onChanged: (String value) {},
                                   validator: model.validateRote,
                                 );
                               },
@@ -333,8 +336,9 @@ class AddTripsheetScreen extends StatelessWidget {
                                   child: Material(
                                     elevation: 4.0,
                                     child: Container(
-                                      constraints:
-                                          const BoxConstraints(maxHeight: 200),
+                                      constraints: const BoxConstraints(
+                                        maxHeight: 200,
+                                      ),
                                       child: ListView.builder(
                                         shrinkWrap: true,
                                         itemCount: options.length,
@@ -342,12 +346,19 @@ class AddTripsheetScreen extends StatelessWidget {
                                             (BuildContext context, int index) {
                                           final String option =
                                               options.elementAt(index);
+                                          // Find the corresponding route object
+                                          final routeData = model.routeList
+                                              .firstWhere((route) =>
+                                                  route.route == option);
                                           return GestureDetector(
                                             onTap: () {
-                                              onSelected(option);
+                                              onSelected(routeData.route ??
+                                                  ""); // Send the name as the selected route
                                             },
                                             child: ListTile(
                                               title: Text(option),
+                                              // Display the corresponding name value
+                                              subtitle: Text(routeData.name!),
                                             ),
                                           );
                                         },
@@ -405,11 +416,7 @@ class AddTripsheetScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
-                              key:
-                                  Key(model.tripSheetData.deduction.toString()),
-                              initialValue:
-                                  model.tripSheetData.deduction?.toString() ??
-                                      "",
+                              controller: model.deductionController,
                               // onTap: () => model.selectDate(context),
                               decoration: const InputDecoration(
                                 labelText: 'Deduction %',
@@ -449,6 +456,7 @@ class AddTripsheetScreen extends StatelessWidget {
                                   FocusNode focusNode,
                                   VoidCallback onFieldSubmitted) {
                                 return TextFormField(
+                                  keyboardType: TextInputType.number,
                                   controller: textEditingController,
                                   focusNode: focusNode,
                                   decoration: const InputDecoration(
@@ -552,16 +560,80 @@ class AddTripsheetScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
-                            child: TextFormField(
+                            child: Autocomplete<String>(
                               key: Key(
-                                  model.tripSheetData.harvesterCode ?? "09"),
-                              initialValue:
-                                  model.tripSheetData.harvesterCode ?? "",
-                              decoration: const InputDecoration(
-                                labelText: 'Harvester Code',
+                                  model.tripSheetData.harvestingCodeHt ?? "09"),
+                              initialValue: TextEditingValue(
+                                text:
+                                    model.tripSheetData.harvestingCodeHt ?? "",
                               ),
-                              readOnly: true,
-                              onChanged: model.setSelectedHarCode,
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text.isEmpty) {
+                                  return const Iterable<String>.empty();
+                                }
+                                return model.transportList
+                                    .map((grower) => grower.name.toString())
+                                    .toList()
+                                    .where((grower) => grower
+                                        .toLowerCase()
+                                        .contains(textEditingValue.text
+                                            .toLowerCase()));
+                              },
+                              onSelected: model.setSelectedHarCode,
+                              fieldViewBuilder: (BuildContext context,
+                                  TextEditingController textEditingController,
+                                  FocusNode focusNode,
+                                  VoidCallback onFieldSubmitted) {
+                                return TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  controller: textEditingController,
+                                  focusNode: focusNode,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Harvester Code',
+                                  ),
+                                  onChanged: (value) {},
+                                  validator: model.validateTrans,
+                                );
+                              },
+                              optionsViewBuilder: (BuildContext context,
+                                  AutocompleteOnSelected<String> onSelected,
+                                  Iterable<String> options) {
+                                return Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 4.0,
+                                    child: Container(
+                                      constraints:
+                                          const BoxConstraints(maxHeight: 200),
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: options.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          final String option =
+                                              options.elementAt(index);
+                                          final routeData = model.transportList
+                                              .firstWhere((route) =>
+                                                  route.name.toString() ==
+                                                  option);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              onSelected(option);
+                                            },
+                                            child: ListTile(
+                                              title: Text(option),
+                                              subtitle: Text(
+                                                  routeData.harvesterName!),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              optionsMaxHeight: 200,
                             ),
                           ),
                           const SizedBox(
@@ -686,9 +758,9 @@ class AddTripsheetScreen extends StatelessWidget {
                           Expanded(
                             child: Autocomplete<String>(
                               key: Key(
-                                  model.tripSheetData.waterSupplier ?? "05"),
+                                  model.tripSheetData.waterSupplier ?? "15"),
                               initialValue: TextEditingValue(
-                                text: model.tripSheetData.waterSupplier ?? "",
+                                text: model.watersuppliercode ?? "",
                               ),
                               optionsBuilder:
                                   (TextEditingValue textEditingValue) {
@@ -696,25 +768,34 @@ class AddTripsheetScreen extends StatelessWidget {
                                   return const Iterable<String>.empty();
                                 }
                                 return model.waterSupplier
-                                    .map((grower) => grower.name ?? "")
+                                    .map((route) => route.existingSupplierCode!)
                                     .toList()
-                                    .where((grower) => grower
+                                    .where((route) => route
                                         .toLowerCase()
                                         .contains(textEditingValue.text
                                             .toLowerCase()));
                               },
-                              onSelected: model.setSelectedWaterSupplier,
+                              onSelected: (String routeName) {
+                                // Find the corresponding route object
+                                final routeData = model.waterSupplier
+                                    .firstWhere((route) =>
+                                        route.existingSupplierCode ==
+                                        routeName);
+                                model.setSelectedWaterSupplier(
+                                    routeData); // Pass the route
+                              },
                               fieldViewBuilder: (BuildContext context,
                                   TextEditingController textEditingController,
                                   FocusNode focusNode,
                                   VoidCallback onFieldSubmitted) {
                                 return TextFormField(
+                                  keyboardType: TextInputType.number,
                                   controller: textEditingController,
                                   focusNode: focusNode,
                                   decoration: const InputDecoration(
                                     labelText: 'Water Supplier Code',
                                   ),
-                                  onChanged: (value) {},
+                                  onChanged: (String value) {},
                                   validator: model.validateWaterSupplier,
                                 );
                               },
@@ -726,8 +807,9 @@ class AddTripsheetScreen extends StatelessWidget {
                                   child: Material(
                                     elevation: 4.0,
                                     child: Container(
-                                      constraints:
-                                          const BoxConstraints(maxHeight: 200),
+                                      constraints: const BoxConstraints(
+                                        maxHeight: 200,
+                                      ),
                                       child: ListView.builder(
                                         shrinkWrap: true,
                                         itemCount: options.length,
@@ -735,15 +817,20 @@ class AddTripsheetScreen extends StatelessWidget {
                                             (BuildContext context, int index) {
                                           final String option =
                                               options.elementAt(index);
+                                          // Find the corresponding route object
                                           final routeData = model.waterSupplier
                                               .firstWhere((route) =>
-                                                  route.name == option);
+                                                  route.existingSupplierCode ==
+                                                  option);
                                           return GestureDetector(
                                             onTap: () {
-                                              onSelected(option);
+                                              onSelected(routeData
+                                                      .existingSupplierCode ??
+                                                  ""); // Send the name as the selected route
                                             },
                                             child: ListTile(
                                               title: Text(option),
+                                              // Display the corresponding name value
                                               subtitle:
                                                   Text(routeData.supplierName!),
                                             ),
@@ -763,14 +850,14 @@ class AddTripsheetScreen extends StatelessWidget {
                           Expanded(
                             child: TextFormField(
                               key: Key(model.tripSheetData.waterSupplierName ??
-                                  "15"),
+                                  "16"),
                               initialValue:
                                   model.tripSheetData.waterSupplierName ?? "",
                               decoration: const InputDecoration(
                                 labelText: 'Water Supplier Name',
                               ),
                               readOnly: true,
-                              onChanged: model.setSelectedWaterSupplier,
+                              onChanged: model.setSelectedWaterSuppName,
                             ),
                           ),
                         ],
@@ -780,11 +867,7 @@ class AddTripsheetScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextFormField(
-                                key: Key(
-                                    model.tripSheetData.waterShare.toString()),
-                                initialValue: model.tripSheetData.waterShare
-                                        ?.toString() ??
-                                    "",
+                                controller: model.watershareController,
                                 decoration: const InputDecoration(
                                   labelText: 'Water Share(%)',
                                 ),

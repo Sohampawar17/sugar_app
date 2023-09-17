@@ -75,7 +75,7 @@ class AddCaneService {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","village","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1],["village","like","$village%"]]&limit_page_length=999999',
+        '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","village","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1],["village","=","$village"]]&limit_page_length=999999',
         options: Options(
           method: 'GET',
           headers: headers,

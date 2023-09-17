@@ -10,6 +10,7 @@ class AgriCane {
   int? name;
   String? season;
   String? soilType;
+  String? growerCode;
 
   AgriCane(
       {this.vendorCode,
@@ -22,7 +23,8 @@ class AgriCane {
       this.plantName,
       this.name,
       this.season,
-      this.soilType});
+      this.soilType,
+      this.growerCode});
 
   AgriCane.fromJson(Map<String, dynamic> json) {
     vendorCode = json['vendor_code'];
@@ -36,21 +38,23 @@ class AgriCane {
     name = json['name'];
     season = json['season'];
     soilType = json['soil_type'];
+    growerCode = json['grower_code'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['vendor_code'] = vendorCode;
-    data['grower_name'] = growerName;
-    data['area'] = area;
-    data['crop_type'] = cropType;
-    data['crop_variety'] = cropVariety;
-    data['plantattion_ratooning_date'] = plantattionRatooningDate;
-    data['area_acrs'] = areaAcrs;
-    data['plant_name'] = plantName;
-    data['name'] = name;
-    data['season'] = season;
-    data['soil_type'] = soilType;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['vendor_code'] = this.vendorCode;
+    data['grower_name'] = this.growerName;
+    data['area'] = this.area;
+    data['crop_type'] = this.cropType;
+    data['crop_variety'] = this.cropVariety;
+    data['plantattion_ratooning_date'] = this.plantattionRatooningDate;
+    data['area_acrs'] = this.areaAcrs;
+    data['plant_name'] = this.plantName;
+    data['name'] = this.name;
+    data['season'] = this.season;
+    data['soil_type'] = this.soilType;
+    data['grower_code'] = this.growerCode;
     return data;
   }
 }

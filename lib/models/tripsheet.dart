@@ -1,9 +1,18 @@
 class Tripsheet {
   int? name;
+  String? owner;
+  String? creation;
+  String? modified;
+  String? modifiedBy;
+  int? docstatus;
+  int? idx;
+  String? tripsheetNo;
+  String? date;
   int? slipNo;
   String? season;
   String? branch;
   String? plotNo;
+  String? platNoId;
   String? farmerCode;
   String? farmerName;
   String? fieldVillage;
@@ -19,8 +28,12 @@ class Tripsheet {
   String? transporterCode;
   String? transporter;
   String? transporterName;
+  String? vehicleType;
   String? harvesterCode;
   String? harvesterName;
+  String? harvestingCodeHt;
+  String? harvesterCodeH;
+  String? harvesterNameH;
   String? gangType;
   String? vehicleNumber;
   String? tolly1;
@@ -32,14 +45,24 @@ class Tripsheet {
   double? percentage;
   String? slipBoy;
   int? canSlipFlag;
-  String? vehicleType;
+  String? circleOffice;
+  String? doctype;
 
   Tripsheet(
       {this.name,
+      this.owner,
+      this.creation,
+      this.modified,
+      this.modifiedBy,
+      this.docstatus,
+      this.idx,
+      this.tripsheetNo,
+      this.date,
       this.slipNo,
       this.season,
       this.branch,
       this.plotNo,
+      this.platNoId,
       this.farmerCode,
       this.farmerName,
       this.fieldVillage,
@@ -55,8 +78,12 @@ class Tripsheet {
       this.transporterCode,
       this.transporter,
       this.transporterName,
+      this.vehicleType,
       this.harvesterCode,
       this.harvesterName,
+      this.harvestingCodeHt,
+      this.harvesterCodeH,
+      this.harvesterNameH,
       this.gangType,
       this.vehicleNumber,
       this.tolly1,
@@ -68,14 +95,24 @@ class Tripsheet {
       this.percentage,
       this.slipBoy,
       this.canSlipFlag,
-      this.vehicleType});
+      this.circleOffice,
+      this.doctype});
 
   Tripsheet.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    owner = json['owner'];
+    creation = json['creation'];
+    modified = json['modified'];
+    modifiedBy = json['modified_by'];
+    docstatus = json['docstatus'];
+    idx = json['idx'];
+    tripsheetNo = json['tripsheet_no'];
+    date = json['date'];
     slipNo = json['slip_no'];
     season = json['season'];
     branch = json['branch'];
     plotNo = json['plot_no'];
+    platNoId = json['plat_no_id'];
     farmerCode = json['farmer_code'];
     farmerName = json['farmer_name'];
     fieldVillage = json['field_village'];
@@ -91,8 +128,12 @@ class Tripsheet {
     transporterCode = json['transporter_code'];
     transporter = json['transporter'];
     transporterName = json['transporter_name'];
+    vehicleType = json['vehicle_type'];
     harvesterCode = json['harvester_code'];
     harvesterName = json['harvester_name'];
+    harvestingCodeHt = json['harvesting_code__ht'];
+    harvesterCodeH = json['harvester_code_h'];
+    harvesterNameH = json['harvester_name_h'];
     gangType = json['gang_type'];
     vehicleNumber = json['vehicle_number'];
     tolly1 = json['tolly_1'];
@@ -104,45 +145,60 @@ class Tripsheet {
     percentage = json['percentage'];
     slipBoy = json['slip_boy'];
     canSlipFlag = json['can_slip_flag'];
-    vehicleType = json['vehicle_type'];
+    circleOffice = json['circle_office'];
+    doctype = json['doctype'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['slip_no'] = slipNo;
-    data['season'] = season;
-    data['branch'] = branch;
-    data['plot_no'] = plotNo;
-    data['farmer_code'] = farmerCode;
-    data['farmer_name'] = farmerName;
-    data['field_village'] = fieldVillage;
-    data['cane_variety'] = caneVariety;
-    data['plantation_date'] = plantationDate;
-    data['survery_no'] = surveryNo;
-    data['area_acre'] = areaAcre;
-    data['route_name'] = routeName;
-    data['distance'] = distance;
-    data['burn_cane'] = burnCane;
-    data['deduction'] = deduction;
-    data['cartno'] = cartno;
-    data['transporter_code'] = transporterCode;
-    data['transporter'] = transporter;
-    data['transporter_name'] = transporterName;
-    data['harvester_code'] = harvesterCode;
-    data['harvester_name'] = harvesterName;
-    data['gang_type'] = gangType;
-    data['vehicle_number'] = vehicleNumber;
-    data['tolly_1'] = tolly1;
-    data['tolly_2'] = tolly2;
-    data['rope'] = rope;
-    data['water_supplier'] = waterSupplier;
-    data['water_supplier_name'] = waterSupplierName;
-    data['water_share'] = waterShare;
-    data['percentage'] = percentage;
-    data['slip_boy'] = slipBoy;
-    data['can_slip_flag'] = canSlipFlag;
-    data['vehicle_type'] = vehicleType;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['owner'] = this.owner;
+    data['creation'] = this.creation;
+    data['modified'] = this.modified;
+    data['modified_by'] = this.modifiedBy;
+    data['docstatus'] = this.docstatus;
+    data['idx'] = this.idx;
+    data['tripsheet_no'] = this.tripsheetNo;
+    data['date'] = this.date;
+    data['slip_no'] = this.slipNo;
+    data['season'] = this.season;
+    data['branch'] = this.branch;
+    data['plot_no'] = this.plotNo;
+    data['plat_no_id'] = this.platNoId;
+    data['farmer_code'] = this.farmerCode;
+    data['farmer_name'] = this.farmerName;
+    data['field_village'] = this.fieldVillage;
+    data['cane_variety'] = this.caneVariety;
+    data['plantation_date'] = this.plantationDate;
+    data['survery_no'] = this.surveryNo;
+    data['area_acre'] = this.areaAcre;
+    data['route_name'] = this.routeName;
+    data['distance'] = this.distance;
+    data['burn_cane'] = this.burnCane;
+    data['deduction'] = this.deduction;
+    data['cartno'] = this.cartno;
+    data['transporter_code'] = this.transporterCode;
+    data['transporter'] = this.transporter;
+    data['transporter_name'] = this.transporterName;
+    data['vehicle_type'] = this.vehicleType;
+    data['harvester_code'] = this.harvesterCode;
+    data['harvester_name'] = this.harvesterName;
+    data['harvesting_code__ht'] = this.harvestingCodeHt;
+    data['harvester_code_h'] = this.harvesterCodeH;
+    data['harvester_name_h'] = this.harvesterNameH;
+    data['gang_type'] = this.gangType;
+    data['vehicle_number'] = this.vehicleNumber;
+    data['tolly_1'] = this.tolly1;
+    data['tolly_2'] = this.tolly2;
+    data['rope'] = this.rope;
+    data['water_supplier'] = this.waterSupplier;
+    data['water_supplier_name'] = this.waterSupplierName;
+    data['water_share'] = this.waterShare;
+    data['percentage'] = this.percentage;
+    data['slip_boy'] = this.slipBoy;
+    data['can_slip_flag'] = this.canSlipFlag;
+    data['circle_office'] = this.circleOffice;
+    data['doctype'] = this.doctype;
     return data;
   }
 }

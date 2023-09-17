@@ -225,7 +225,9 @@ class AgriViewModel extends BaseViewModel {
 
   void setSelectedSales(String? sales) async {
     agridata.salesType = sales;
-
+    if (agridata.salesType != 'Fertilizer') {
+      agricultureDevelopmentItem.clear();
+    }
     notifyListeners();
   }
 
@@ -434,6 +436,9 @@ class AgriViewModel extends BaseViewModel {
     if (value == null || value.isEmpty) {
       return 'please select Sales type';
     }
+    if (value == 'Fertilizer') {
+      agricultureDevelopmentItem.clear();
+    }
     return null;
   }
 
@@ -483,7 +488,6 @@ class AgriViewModel extends BaseViewModel {
     if (index != -1) {
       agricultureDevelopmentItem[index].itemCode = itemName;
       agricultureDevelopmentItem[index].qty = total;
-
       notifyListeners();
       return;
     }

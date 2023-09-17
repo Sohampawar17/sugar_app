@@ -735,7 +735,8 @@ class AddAgriScreen extends StatelessWidget {
                                   return const Iterable<String>.empty();
                                 }
                                 return model.farmerList
-                                    .map((bank) => bank.name ?? "")
+                                    .map((bank) =>
+                                        bank.existingSupplierCode ?? "")
                                     .toList()
                                     .where((bank) => bank
                                         .toLowerCase()
@@ -745,7 +746,8 @@ class AddAgriScreen extends StatelessWidget {
                               onSelected: (String routeName) {
                                 // Find the corresponding route object
                                 final bankData = model.farmerList.firstWhere(
-                                    (bank) => bank.name == routeName);
+                                    (bank) =>
+                                        bank.existingSupplierCode == routeName);
                                 model.setSelectedgrantor(
                                     bankData.name); // Pass the route
                               },
@@ -782,7 +784,8 @@ class AddAgriScreen extends StatelessWidget {
                                               options.elementAt(index);
                                           final routeData = model.farmerList
                                               .firstWhere((route) =>
-                                                  route.name == option);
+                                                  route.existingSupplierCode ==
+                                                  option);
                                           return GestureDetector(
                                             onTap: () {
                                               onSelected(option);

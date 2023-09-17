@@ -3,7 +3,6 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/services/add_crop_sampling_service.dart';
-
 import '../../../models/agri_cane_model.dart';
 import '../../../models/crop_sampling.dart';
 import '../../../router.router.dart';
@@ -14,13 +13,16 @@ class AddCropSmaplingModel extends BaseViewModel {
   List<AgriCane> plotList = [];
   String? selectedPlot;
   late String samplingId;
+  String? selectedfarcode;
   bool isEdit = false;
 
   initialise(BuildContext context, String samplingId) async {
     plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter());
+    for (dynamic i in plotList) {
+      Logger().i(i.vendorCode);
+    }
     if (samplingId != "") {
       isEdit = true;
-
       cropsamplingdata =
           await AddCropSmaplingServices().getCropSampling(samplingId) ??
               CropSampling();
@@ -28,6 +30,12 @@ class AddCropSmaplingModel extends BaseViewModel {
       brixmiddleController.text = cropsamplingdata.brixMiddle.toString();
       brixtopController.text = cropsamplingdata.brixTop.toString();
       noofpairsController.text = cropsamplingdata.noOfPairs.toString();
+      for (AgriCane i in plotList) {
+        if (i.growerCode == cropsamplingdata.growerCode) {
+          selectedfarcode = i.vendorCode;
+          notifyListeners();
+        }
+      }
       notifyListeners();
     }
     if (plotList.isEmpty) {
@@ -94,6 +102,7 @@ class AddCropSmaplingModel extends BaseViewModel {
     selectedcroptype = selectedCaneData.cropType;
     selectedAreaInAcrs = selectedCaneData.soilType;
     selectedvendor = selectedCaneData.vendorCode;
+    selectedfarcode = selectedvendor;
     selectedseason = selectedCaneData.season;
     cropsamplingdata.growerName = selectedVendorname;
     cropsamplingdata.area = selectedvillage;
@@ -110,6 +119,7 @@ class AddCropSmaplingModel extends BaseViewModel {
   TextEditingController brixmiddleController = TextEditingController();
   TextEditingController brixtopController = TextEditingController();
   TextEditingController noofpairsController = TextEditingController();
+
   void setSelectedbrixbottm(String? brixbottm) {
     brixbottmAreaController.value = brixbottmAreaController.value.copyWith(
       text: brixbottm ?? '',
@@ -147,7 +157,9 @@ class AddCropSmaplingModel extends BaseViewModel {
   }
 
   void setSelectedVendor(String? growerCode) {
+    Logger().i(growerCode);
     selectedvendor = growerCode;
+    notifyListeners();
     cropsamplingdata.growerCode = selectedvendor;
     notifyListeners();
   }

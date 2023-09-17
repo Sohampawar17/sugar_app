@@ -101,15 +101,15 @@ class AddCaneScreen extends StatelessWidget {
                                 child: Autocomplete<String>(
                                   key: Key(model.canedata.area ?? "03"),
                                   initialValue: TextEditingValue(
-                                    text: model.canedata.area ?? "",
+                                    text: model.canedata.area ?? " ",
                                   ),
                                   optionsBuilder:
                                       (TextEditingValue textEditingValue) {
                                     if (textEditingValue.text.isEmpty) {
                                       return const Iterable<String>.empty();
                                     }
-                                    return model.routeList
-                                        .map((route) => route.village ?? "")
+                                    return model.villageList
+                                        .map((route) => route.name ?? "")
                                         .toList()
                                         .where((route) => route
                                             .toLowerCase()
@@ -118,11 +118,11 @@ class AddCaneScreen extends StatelessWidget {
                                   },
                                   onSelected: (String routeName) {
                                     // Find the corresponding route object
-                                    final routeData = model.routeList
-                                        .firstWhere((route) =>
-                                            route.village == routeName);
+                                    final routeData = model.villageList
+                                        .firstWhere(
+                                            (route) => route.name == routeName);
                                     model.setSelectedVillage(
-                                        routeData.village); // Pass the route
+                                        routeData.name); // Pass the route
                                   },
                                   fieldViewBuilder: (BuildContext context,
                                       TextEditingController
@@ -208,15 +208,15 @@ class AddCaneScreen extends StatelessWidget {
                                 const SizedBox(
                                   width: 20.0,
                                 ),
-                                Expanded(
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    initialValue: model.canedata.state,
-                                    decoration: const InputDecoration(
-                                      labelText: 'State',
-                                    ),
-                                  ),
-                                ),
+                                // Expanded(
+                                //   child: TextFormField(
+                                //     readOnly: true,
+                                //     initialValue: model.canedata.state,
+                                //     decoration: const InputDecoration(
+                                //       labelText: 'State',
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
@@ -766,6 +766,7 @@ class AddCaneScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: TextFormField(
+                                  keyboardType: TextInputType.number,
                                   controller: model.areainAcrsController,
                                   decoration: const InputDecoration(
                                     labelText: 'Area In Acrs',

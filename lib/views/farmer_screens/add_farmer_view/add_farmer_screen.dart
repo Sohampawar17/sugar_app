@@ -651,43 +651,43 @@ class AddFarmerScreen extends StatelessWidget {
                                         .toString())),
                                     DataCell(TextButton(
                                         onPressed: () {
-                                          // Navigator.push(
-                                          //   context,
-                                          //   MaterialPageRoute(
-                                          //     builder: (BuildContext context) =>
-                                          //         ViewImageInternet(
-                                          //       url: model.bankAccounts[index]
-                                          //               .bankPassbook ??
-                                          //           "",
-                                          //     ),
-                                          //   ),
-                                          // );
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
-                                                  model.bankAccounts[index]
-                                                                  .bankPassbook?[
-                                                              0] !=
-                                                          '/'
-                                                      ? ViewImageInternet(
-                                                          url: model
-                                                                  .bankAccounts[
-                                                                      index]
-                                                                  .bankPassbook ??
-                                                              "",
-                                                        )
-                                                      : ViewImage(
-                                                          image: Image.file(
-                                                            File(model
-                                                                    .bankAccounts[
-                                                                        index]
-                                                                    .bankPassbook ??
-                                                                ""),
-                                                          ),
-                                                        ),
+                                                  ViewImageInternet(
+                                                url: model.bankAccounts[index]
+                                                        .bankPassbook ??
+                                                    "",
+                                              ),
                                             ),
                                           );
+                                          //   Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //       builder: (BuildContext context) =>
+                                          //           model.bankAccounts[index]
+                                          //                           .bankPassbook?[
+                                          //                       0] !=
+                                          //                   '/'
+                                          //               ? ViewImageInternet(
+                                          //                   url: model
+                                          //                           .bankAccounts[
+                                          //                               index]
+                                          //                           .bankPassbook ??
+                                          //                       "",
+                                          //                 )
+                                          //               : ViewImage(
+                                          //                   image: Image.file(
+                                          //                     File(model
+                                          //                             .bankAccounts[
+                                          //                                 index]
+                                          //                             .bankPassbook ??
+                                          //                         ""),
+                                          //                   ),
+                                          //                 ),
+                                          //     ),
+                                          //   );
                                         },
                                         child: Text(model
                                             .bankAccounts[index].bankPassbook
@@ -1078,18 +1078,15 @@ class AddFarmerScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => model
-                                  .passbookattch[0] !=
-                              '/'
-                          ? ViewImageInternet(
-                              url: model.getFileFromFarmer(filetype) ?? "",
-                            )
-                          : ViewImage(
-                              image: Image.file(
-                                File(model.getFileFromFarmer(filetype) ?? ""),
-                              ),
-                            ),
-                    ),
+                        builder: (BuildContext context) => model
+                                    .passbookattch[0] !=
+                                '/'
+                            ? ViewImageInternet(
+                                url: model.getFileFromFarmer(filetype) ?? "",
+                              )
+                            : ViewImageInternet(
+                                url: model.getFileFromFarmer(filetype) ?? "",
+                              )),
                   );
                 },
                 child: const Text("View Uploaded File"),

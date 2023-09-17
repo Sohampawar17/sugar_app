@@ -14,8 +14,8 @@ const kPanpdf = "PanCard";
 
 const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
-// const apiBaseUrl = "http://deverpvppl.erpdata.in";
-const apiBaseUrl = "http://vpplprogress.erpdata.in";
+const apiBaseUrl = "http://deverpvppl.erpdata.in";
+// const apiBaseUrl = "http://vpplprogress.erpdata.in";
 
 // api usrls
 String apifetchSeason =
@@ -66,11 +66,11 @@ String apiListSampling =
 
 ///TripSheet
 String apifetchplotnumber =
-    '$apiBaseUrl/api/resource/Crop Harvesting?fields=["id","grower_code","grower_name","area","crop_variety","plantattion_ratooning_date","survey_number","area_acrs","name"]';
+    '$apiBaseUrl/api/resource/Crop Harvesting?fields=["id","grower_code","grower_name","area","crop_variety","plantattion_ratooning_date","survey_number","area_acrs","name","route","route_km"]&filters=[["season","=","2022-2023"]]';
 String apifetchtransportinfo =
     '$apiBaseUrl/api/resource/H and T Contract?fields=["name","transporter_name","transporter_code","harvester_code","harvester_name","vehicle_type","vehicle_no","trolly_1","trolly_2","gang_type"]&limit_page_length=99999';
 String apifetchFarList =
-    '$apiBaseUrl/api/resource/Farmer List?fields=["name","supplier_name"]';
+    '$apiBaseUrl/api/resource/Farmer List?fields=["name","supplier_name","existing_supplier_code"]';
 String apifetchtripsheetData = '$apiBaseUrl/api/resource/Trip Sheet';
 String apifetchtripsheetsearch =
     '$apiBaseUrl/api/resource/Trip Sheet?order_by=creation desc&fields=["name","farmer_name","field_village","transporter_name","circle_office","season"]';
