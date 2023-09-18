@@ -13,6 +13,7 @@ class ListTripsheet extends BaseViewModel {
   // TextEditingController namecontroller = TextEditingController();
   List<TripSheetSearch> triSheetList = [];
   List<TripSheetSearch> tripSheetFilter = [];
+  List<String> seasonlist = [];
   String tripsheetVillageFilter = "";
   String tripsheeNameFilter = "";
   String tripsheetSeasonFilter = "";
@@ -26,7 +27,7 @@ class ListTripsheet extends BaseViewModel {
     triSheetList = (await ListTripshhetService().getAllTripsheetList())
         .cast<TripSheetSearch>();
     tripSheetFilter = triSheetList;
-
+    seasonlist = await ListTripshhetService().fetchSeason();
     setBusy(false);
     if (triSheetList.isEmpty) {
       final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();

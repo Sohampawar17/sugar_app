@@ -121,8 +121,17 @@ class FarmerService {
         return false;
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: "Error accoured $e ");
-      Logger().e(e);
+      if (e is DioException) {
+        if (e.response != null && e.response?.statusCode == 417) {
+          Fluttertoast.showToast(msg: "Duplicate Aadhar number!");
+        } else {
+          Fluttertoast.showToast(msg: "Error occurred ${e.message}");
+          Logger().e(e.message);
+        }
+      } else {
+        Fluttertoast.showToast(msg: "Error occurred $e");
+        Logger().e(e);
+      }
     }
     return false;
   }

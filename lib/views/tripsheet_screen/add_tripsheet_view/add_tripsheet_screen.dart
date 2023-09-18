@@ -177,7 +177,8 @@ class AddTripsheetScreen extends StatelessWidget {
                           Expanded(
                             child: TextFormField(
                               key: Key(model.tripSheetData.farmerCode ?? "04"),
-                              initialValue: model.tripSheetData.farmerCode,
+                              initialValue: model.selectedfarcode ??
+                                  model.tripSheetData.vendorCode,
                               decoration: const InputDecoration(
                                   labelText: 'Farmer Code'),
                               validator: (value) => value!.isEmpty
@@ -642,9 +643,9 @@ class AddTripsheetScreen extends StatelessWidget {
                           Expanded(
                             child: TextFormField(
                               key: Key(
-                                  model.tripSheetData.harvesterName ?? "10"),
+                                  model.tripSheetData.harvesterNameH ?? "10"),
                               initialValue:
-                                  model.tripSheetData.harvesterName ?? "",
+                                  model.tripSheetData.harvesterNameH ?? "",
                               decoration: const InputDecoration(
                                 labelText: 'Harvester Name',
                               ),

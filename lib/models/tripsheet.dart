@@ -1,8 +1,6 @@
 class Tripsheet {
   int? name;
   String? owner;
-  String? creation;
-  String? modified;
   String? modifiedBy;
   int? docstatus;
   int? idx;
@@ -45,14 +43,14 @@ class Tripsheet {
   double? percentage;
   String? slipBoy;
   int? canSlipFlag;
+  String? caneSlip;
   String? circleOffice;
+  String? vendorCode;
   String? doctype;
 
   Tripsheet(
       {this.name,
       this.owner,
-      this.creation,
-      this.modified,
       this.modifiedBy,
       this.docstatus,
       this.idx,
@@ -95,14 +93,14 @@ class Tripsheet {
       this.percentage,
       this.slipBoy,
       this.canSlipFlag,
+      this.caneSlip,
       this.circleOffice,
+      this.vendorCode,
       this.doctype});
 
   Tripsheet.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     owner = json['owner'];
-    creation = json['creation'];
-    modified = json['modified'];
     modifiedBy = json['modified_by'];
     docstatus = json['docstatus'];
     idx = json['idx'];
@@ -145,7 +143,9 @@ class Tripsheet {
     percentage = json['percentage'];
     slipBoy = json['slip_boy'];
     canSlipFlag = json['can_slip_flag'];
+    caneSlip = json['cane_slip'];
     circleOffice = json['circle_office'];
+    vendorCode = json['vendor_code'];
     doctype = json['doctype'];
   }
 
@@ -153,8 +153,6 @@ class Tripsheet {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['owner'] = this.owner;
-    data['creation'] = this.creation;
-    data['modified'] = this.modified;
     data['modified_by'] = this.modifiedBy;
     data['docstatus'] = this.docstatus;
     data['idx'] = this.idx;
@@ -197,7 +195,9 @@ class Tripsheet {
     data['percentage'] = this.percentage;
     data['slip_boy'] = this.slipBoy;
     data['can_slip_flag'] = this.canSlipFlag;
+    data['cane_slip'] = this.caneSlip;
     data['circle_office'] = this.circleOffice;
+    data['vendor_code'] = this.vendorCode;
     data['doctype'] = this.doctype;
     return data;
   }

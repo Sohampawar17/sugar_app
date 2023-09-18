@@ -56,7 +56,7 @@ class FarmerViewModel extends BaseViewModel {
     setBusy(true);
     villageList = (await FarmerService().fetchVillages());
     bankList = await FarmerService().fetchBanks();
-
+    Logger().i(villageList.length);
     farmerId = farmerid;
     //setting aleardy available data
     if (farmerId != "") {
@@ -83,6 +83,7 @@ class FarmerViewModel extends BaseViewModel {
         _selectedItems.add(items[1]);
       }
     }
+
     if (villageList.isEmpty) {
       final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
       final SharedPreferences prefs = await prefs0;

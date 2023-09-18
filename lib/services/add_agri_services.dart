@@ -180,7 +180,7 @@ class AddAgriServices {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        '$apiBaseUrl/api/resource/Cane Master?fields=["vendor_code","grower_name","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name","soil_type"]&filters=[["season","=","$season"]]&limit_page_length=99999',
+        '$apiBaseUrl/api/resource/Cane Master?fields=["vendor_code","grower_name","grower_code","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name","soil_type"]&filters=[["season","like","$season%"]]&limit_page_length=99999',
         options: Options(
           method: 'GET',
           headers: headers,

@@ -172,9 +172,9 @@ class AddAgriScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
-                              key: Key(model.agridata.supplier ?? "supplier"),
+                              key: Key(model.agridata.vendorCode ?? "supplier"),
                               readOnly: true,
-                              initialValue: model.agridata.supplier ?? "",
+                              initialValue: model.agridata.vendorCode ?? "",
                               decoration: const InputDecoration(
                                 labelText: 'Vendor Code',
                               ),
@@ -445,6 +445,7 @@ class AddAgriScreen extends StatelessWidget {
                                                   .agricultureDevelopmentItem[
                                                       index]
                                                   .basel = double.parse(value);
+                                              model.calculateTotal();
                                             },
                                           ),
                                         ),
@@ -465,6 +466,7 @@ class AddAgriScreen extends StatelessWidget {
                                                           index]
                                                       .preEarthing =
                                                   double.parse(value);
+                                              model.calculateTotal();
                                             },
                                           ),
                                         ),
@@ -484,6 +486,7 @@ class AddAgriScreen extends StatelessWidget {
                                                   .agricultureDevelopmentItem[
                                                       index]
                                                   .earth = double.parse(value);
+                                              model.calculateTotal();
                                             },
                                           ),
                                         ),
@@ -503,6 +506,7 @@ class AddAgriScreen extends StatelessWidget {
                                                   .agricultureDevelopmentItem[
                                                       index]
                                                   .rainy = double.parse(value);
+                                              model.calculateTotal();
                                             },
                                           ),
                                         ),
@@ -522,6 +526,7 @@ class AddAgriScreen extends StatelessWidget {
                                                   .agricultureDevelopmentItem[
                                                       index]
                                                   .ratoon1 = double.parse(value);
+                                              model.calculateTotal();
                                             },
                                           ),
                                         ),
@@ -541,6 +546,7 @@ class AddAgriScreen extends StatelessWidget {
                                                   .agricultureDevelopmentItem[
                                                       index]
                                                   .ratoon2 = double.parse(value);
+                                              model.calculateTotal();
                                             },
                                           ),
                                         ),
@@ -625,7 +631,7 @@ class AddAgriScreen extends StatelessWidget {
                                   (int index) => DataRow(
                                     cells: [
                                       DataCell(Text(model
-                                          .grantor[index].suretyCode
+                                          .grantor[index].suretyExistingCode
                                           .toString())),
                                       DataCell(Text(model
                                           .grantor[index].suretyName
@@ -728,7 +734,9 @@ class AddAgriScreen extends StatelessWidget {
                               initialValue: TextEditingValue(
                                   text: index == -1
                                       ? ""
-                                      : model.grantor[index].suretyCode ?? ""),
+                                      : model.grantor[index]
+                                              .suretyExistingCode ??
+                                          ""),
                               optionsBuilder:
                                   (TextEditingValue textEditingValue) {
                                 if (textEditingValue.text.isEmpty) {

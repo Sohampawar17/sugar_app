@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
 import '../../../constants.dart';
+import '../../../widgets/cdrop_down_widget.dart';
 import 'add_tripsheet_list_model.dart';
 
 class TripsheetMaster extends StatelessWidget {
@@ -99,16 +100,27 @@ class TripsheetMaster extends StatelessWidget {
                                     width: 10.0,
                                   ),
                                   Expanded(
-                                    child: TextField(
-                                      // controller: model.villageController,
-                                      onChanged: (value) {
-                                        model.namecontroller.text = value;
-                                        model.filterListByNameAndVillage(
-                                            season: value);
-                                      },
-                                      decoration: const InputDecoration(
-                                        labelText: 'Season',
-                                        prefixIcon: Icon(Icons.search),
+                                    child: CdropDown(
+                                      dropdownButton:
+                                          DropdownButtonFormField<String>(
+                                        isExpanded: true,
+                                        // Replace null with the selected value if needed
+                                        decoration: const InputDecoration(
+                                          labelText: 'Season',
+                                        ),
+                                        hint: const Text('Select Season'),
+                                        items: model.seasonlist.map((val) {
+                                          return DropdownMenuItem<String>(
+                                            value: val,
+                                            child: Text(val),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          model.namecontroller.text =
+                                              value ?? "";
+                                          model.filterListByNameAndVillage(
+                                              season: value);
+                                        },
                                       ),
                                     ),
                                   ),

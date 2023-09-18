@@ -79,7 +79,7 @@ class CaneViewModel extends BaseViewModel {
     irrigationmethodList = await AddCaneService().fetchirrigationmethod();
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
     soilTypeList = await AddCaneService().fetchSoilType();
-
+    Logger().i(villageList.length);
     canedata.plantationStatus = "New";
     Logger().i(caneId);
     if (caneId != "") {
@@ -282,12 +282,25 @@ class CaneViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedVillage(String? village) async {
+  void setSelectedVillage(BuildContext context, String? village) async {
     selectedVillage = village;
     canedata.area = selectedVillage;
     Logger().i(village);
     farmerList =
         await AddCaneService().fetchfarmerListwithfilter(village ?? "");
+    if (farmerList.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+
+          content: Text(
+            'There is no Approved farmer Available At $village village',
+            style: const TextStyle(color: Colors.white, fontSize: 25),
+          ),
+          duration: const Duration(seconds: 7), // Adjust the duration as needed
+        ),
+      );
+    }
     Logger().i(farmerList.length);
     final selectedRouteData =
         villageList.firstWhere((routeData) => routeData.name == village);

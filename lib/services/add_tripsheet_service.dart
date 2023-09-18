@@ -134,7 +134,7 @@ class AddTripSheetServices {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        '$apiBaseUrl/api/resource/Crop Harvesting?fields=["id","grower_code","grower_name","area","crop_variety","plantattion_ratooning_date","survey_number","area_acrs","name","route","route_km"]&filters=[["season","=","$season"]]',
+        '$apiBaseUrl/api/resource/Crop Harvesting?fields=["id","grower_code","grower_name","area","crop_variety","plantattion_ratooning_date","survey_number","area_acrs","name","route","route_km","vendor_code"]&filters=[["season","like","$season%"]]',
         options: Options(
           method: 'GET',
           headers: headers,

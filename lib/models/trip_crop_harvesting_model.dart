@@ -10,6 +10,7 @@ class cropharvestingModel {
   String? name;
   String? route;
   String? routeKm;
+  String? vendorCode;
 
   cropharvestingModel(
       {this.id,
@@ -22,7 +23,8 @@ class cropharvestingModel {
       this.areaAcrs,
       this.name,
       this.route,
-      this.routeKm});
+      this.routeKm,
+      this.vendorCode});
 
   cropharvestingModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -36,6 +38,7 @@ class cropharvestingModel {
     name = json['name'];
     route = json['route'];
     routeKm = json['route_km'];
+    vendorCode = json['vendor_code'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +54,7 @@ class cropharvestingModel {
     data['name'] = this.name;
     data['route'] = this.route;
     data['route_km'] = this.routeKm;
+    data['vendor_code'] = this.vendorCode;
     return data;
   }
 }

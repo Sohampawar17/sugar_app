@@ -121,7 +121,7 @@ class AddCaneScreen extends StatelessWidget {
                                     final routeData = model.villageList
                                         .firstWhere(
                                             (route) => route.name == routeName);
-                                    model.setSelectedVillage(
+                                    model.setSelectedVillage(context,
                                         routeData.name); // Pass the route
                                   },
                                   fieldViewBuilder: (BuildContext context,

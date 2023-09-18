@@ -58,6 +58,8 @@ class AddTripSheetModel extends BaseViewModel {
   String? surveyNo;
   String? routename;
   double? area;
+  String? selectedfarcode;
+  String? seletedvendor;
   DateTime? selectedDate;
   double? dist;
   String? transName;
@@ -101,6 +103,7 @@ class AddTripSheetModel extends BaseViewModel {
 
   initialise(BuildContext context, String tripId) async {
     setBusy(true);
+    plotList = await AddTripSheetServices().fetchPlot("");
     season = await AddTripSheetServices().fetchSeason();
     plantList = await AddTripSheetServices().fetchPlant();
     routeList = await AddTripSheetServices().fetchRoute();
@@ -117,6 +120,12 @@ class AddTripSheetModel extends BaseViewModel {
           if (kDebugMode) {
             print("ROUTE!!!2: ${i.route}");
           }
+        }
+      }
+      for (cropharvestingModel i in plotList) {
+        if (i.growerCode == tripSheetData.farmerCode) {
+          selectedfarcode = i.vendorCode;
+          notifyListeners();
         }
       }
       for (WaterSupplierList i in waterSupplier) {
@@ -187,6 +196,8 @@ class AddTripSheetModel extends BaseViewModel {
     tripSheetData.platNoId = selectedGrowerData.id;
     dist = double.tryParse(selectedGrowerData.routeKm ?? "");
     routename = selectedGrowerData.route;
+    selectedfarcode = selectedGrowerData.vendorCode;
+    tripSheetData.vendorCode = selectedGrowerData.vendorCode;
     tripSheetData.farmerCode = farmerCode;
     tripSheetData.farmerName = farmerName;
     tripSheetData.plantationDate = plantingDateController.text;
@@ -215,6 +226,7 @@ class AddTripSheetModel extends BaseViewModel {
     transName = selectedGrowerData.transporterName;
     vehicleType = selectedGrowerData.vehicleType;
     tripSheetData.transporter = selectedGrowerData.name.toString();
+
     eNo = selectedGrowerData.vehicleNo;
     trl_1 = selectedGrowerData.trolly1;
     tri_2 = selectedGrowerData.trolly2;
@@ -288,13 +300,13 @@ class AddTripSheetModel extends BaseViewModel {
     harCode = selectedGrowerData.harvesterCode;
     tripSheetData.harvesterCode = harCode;
     harName = selectedGrowerData.harvesterName;
-    tripSheetData.harvesterName = harName;
+    tripSheetData.harvesterNameH = harName;
     notifyListeners();
   }
 
   void setSelectedHarName(String? hName) {
     harName = hName;
-    tripSheetData.harvesterName = harName;
+    tripSheetData.harvesterNameH = harName;
     notifyListeners();
   }
 

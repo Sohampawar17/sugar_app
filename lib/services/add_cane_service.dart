@@ -121,17 +121,16 @@ class AddCaneService {
             dataList.map((item) => item["name"].toString()).toList();
         return namesList;
       }
-
       if (response.statusCode == 401) {
         Fluttertoast.showToast(msg: "Unauthorized Access!");
         return ["401"];
       } else {
-        Fluttertoast.showToast(msg: "Unable to fetch Villages");
+        Fluttertoast.showToast(msg: "Unable to fetch Season");
         return [];
       }
     } catch (e) {
       Logger().e(e);
-      Fluttertoast.showToast(msg: "Unauthorized Access!");
+      Fluttertoast.showToast(msg: "Unauthorized Season!");
       return [];
     }
   }
