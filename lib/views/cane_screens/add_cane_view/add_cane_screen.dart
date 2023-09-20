@@ -86,22 +86,14 @@ class AddCaneScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          model.isEdit
-                              ? const Text(
-                                  "Address",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                )
-                              : Container(),
+
                           Row(
                             children: [
                               Expanded(
                                 child: Autocomplete<String>(
-                                  key: Key(model.canedata.area ?? "03"),
+                                  key: Key(model.canedata.village ?? "03"),
                                   initialValue: TextEditingValue(
-                                    text: model.canedata.area ?? " ",
+                                    text: model.canedata.village ?? "",
                                   ),
                                   optionsBuilder:
                                       (TextEditingValue textEditingValue) {
@@ -179,47 +171,29 @@ class AddCaneScreen extends StatelessWidget {
                                 width: 15,
                               ),
                               Expanded(
-                                child: TextFormField(
-                                  key: Key(model.canedata.circleOffice ??
-                                      "circleoffice"),
-                                  readOnly: true,
-                                  initialValue: model.canedata.circleOffice,
+                                  child: CdropDown(
+                                dropdownButton: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  value: model.canedata.plantationStatus,
                                   decoration: const InputDecoration(
-                                    labelText: 'Circle Office',
+                                    labelText: 'Plantation Status',
                                   ),
-                                  onChanged: model.setSelectedcircleoffice,
+                                  hint:
+                                      const Text('Select Is Plantation Status'),
+                                  items: model.plantationStatus.map((val) {
+                                    return DropdownMenuItem<String>(
+                                      value: val,
+                                      child: Text(val),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) =>
+                                      model.setSelectedplantation(value),
+                                  validator: model.validatePlantationStatus,
                                 ),
-                              ),
+                              )),
                             ],
                           ),
 
-                          Visibility(
-                            visible: model.isEdit,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    initialValue: model.canedata.taluka,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Taluka'),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20.0,
-                                ),
-                                // Expanded(
-                                //   child: TextFormField(
-                                //     readOnly: true,
-                                //     initialValue: model.canedata.state,
-                                //     decoration: const InputDecoration(
-                                //       labelText: 'State',
-                                //     ),
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
                           Row(children: [
                             Expanded(
                               child: Autocomplete<String>(
@@ -298,27 +272,30 @@ class AddCaneScreen extends StatelessWidget {
                                 optionsMaxHeight: 200,
                               ),
                             ),
+                            const SizedBox(
+                              width: 20.0,
+                            ),
                             Expanded(
-                                //for plant
-                                child: CdropDown(
-                              dropdownButton: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: model.canedata.plantationStatus,
-                                decoration: const InputDecoration(
-                                  labelText: 'Plantation Status',
+                              //for plant
+                              child: CdropDown(
+                                dropdownButton: DropdownButtonFormField<String>(
+                                  value: model.canedata.developmentPlot,
+                                  // Replace null with the selected value if needed
+                                  decoration: const InputDecoration(
+                                    labelText: 'Development Plot',
+                                  ),
+                                  hint: const Text('Select Development Plot'),
+                                  items: model.yesno.map((val) {
+                                    return DropdownMenuItem<String>(
+                                      value: val,
+                                      child: Text(val),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) =>
+                                      model.setSelectedDevelopmentplot(value),
                                 ),
-                                hint: const Text('Select Is Plantation Status'),
-                                items: model.plantationStatus.map((val) {
-                                  return DropdownMenuItem<String>(
-                                    value: val,
-                                    child: Text(val),
-                                  );
-                                }).toList(),
-                                onChanged: (value) =>
-                                    model.setSelectedplantation(value),
-                                validator: model.validatePlantationStatus,
                               ),
-                            )),
+                            ),
                           ]),
                           TextFormField(
                             readOnly: true,
@@ -332,31 +309,7 @@ class AddCaneScreen extends StatelessWidget {
                             onChanged: model.setSelectedgrowername,
                           ),
                           //mobile number
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CdropDown(
-                                  dropdownButton:
-                                      DropdownButtonFormField<String>(
-                                    value: model.canedata.developmentPlot,
-                                    // Replace null with the selected value if needed
-                                    decoration: const InputDecoration(
-                                      labelText: 'Development Plot',
-                                    ),
-                                    hint: const Text('Select Development Plot'),
-                                    items: model.yesno.map((val) {
-                                      return DropdownMenuItem<String>(
-                                        value: val,
-                                        child: Text(val),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) =>
-                                        model.setSelectedDevelopmentplot(value),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -400,7 +353,17 @@ class AddCaneScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-
+                          model.isEdit
+                              ? const Chip(
+                                  label: Text(
+                                    "Route Details",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                           Row(
                             children: [
                               Expanded(
@@ -509,7 +472,58 @@ class AddCaneScreen extends StatelessWidget {
                               )),
                             ],
                           ),
+                          Row(
+                            children: [
+                              Visibility(
+                                visible: model.canedata.route != null,
+                                child: Expanded(
+                                  child: TextFormField(
+                                    key: Key(model.canedata.circleOffice ??
+                                        "circleoffice"),
+                                    readOnly: true,
+                                    initialValue: model.canedata.circleOffice,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Circle Office',
+                                    ),
+                                    onChanged: model.setSelectedcircleoffice,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Visibility(
+                                visible: model.isEdit,
+                                child: Expanded(
+                                  child: TextFormField(
+                                    readOnly: true,
+                                    initialValue: model.canedata.taluka,
+                                    decoration: const InputDecoration(
+                                        labelText: 'Taluka'),
+                                  ),
+                                ),
+                              ),
 
+                              // Expanded(
+                              //   child: TextFormField(
+                              //     readOnly: true,
+                              //     initialValue: model.canedata.state,
+                              //     decoration: const InputDecoration(
+                              //       labelText: 'State',
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Visibility(
+                            visible: model.isEdit,
+                            child: const Divider(
+                              thickness: 1,
+                            ),
+                          ),
                           Row(
                             children: [
                               Expanded(

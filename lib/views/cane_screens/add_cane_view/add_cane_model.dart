@@ -141,7 +141,7 @@ class CaneViewModel extends BaseViewModel {
           // Now you have the updated canedata object with location information
           // You can proceed with saving the data
 
-          print("UPDATING ROUTE: ${canedata.route} $selectedCaneRoute");
+          // print("UPDATING ROUTE: ${canedata.route} $selectedCaneRoute");
           // canedata.route = selectedCaneRoute;
           if (isEdit == true) {
             res = await AddCaneService().updateCane(canedata);
@@ -284,7 +284,7 @@ class CaneViewModel extends BaseViewModel {
 
   void setSelectedVillage(BuildContext context, String? village) async {
     selectedVillage = village;
-    canedata.area = selectedVillage;
+    canedata.village = selectedVillage;
     Logger().i(village);
     farmerList =
         await AddCaneService().fetchfarmerListwithfilter(village ?? "");
@@ -295,18 +295,16 @@ class CaneViewModel extends BaseViewModel {
 
           content: Text(
             'There is no Approved farmer Available At $village village',
-            style: const TextStyle(color: Colors.white, fontSize: 25),
+            style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
           duration: const Duration(seconds: 7), // Adjust the duration as needed
         ),
       );
     }
     Logger().i(farmerList.length);
-    final selectedRouteData =
-        villageList.firstWhere((routeData) => routeData.name == village);
-    selectedvillage = selectedRouteData.circleOffice;
-    Logger().i(selectedvillage);
-    canedata.circleOffice = selectedvillage;
+    // final selectedRouteData =
+    //     villageList.firstWhere((routeData) => routeData.name == village);
+
     Logger().i(canedata.circleOffice);
     // Set th distance in the kmController
     notifyListeners();
@@ -320,6 +318,9 @@ class CaneViewModel extends BaseViewModel {
     notifyListeners();
     selectedDistance = route.distanceKm; // Set th distance in the kmController
     canedata.routeKm = selectedDistance;
+    selectedvillage = route.circleOffice;
+    Logger().i(selectedvillage);
+    canedata.circleOffice = selectedvillage;
     Logger().i(selectedDistance);
     notifyListeners();
   }

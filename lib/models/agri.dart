@@ -26,6 +26,7 @@ class Agri {
   int? ratoon2;
   String? doctype;
   List<AgricultureDevelopmentItem>? agricultureDevelopmentItem;
+  List<AgricultureDevelopmentItem2>? agricultureDevelopmentItem2;
   List<Grantor>? grantor;
 
   Agri(
@@ -56,6 +57,7 @@ class Agri {
       this.ratoon2,
       this.doctype,
       this.agricultureDevelopmentItem,
+      this.agricultureDevelopmentItem2,
       this.grantor});
 
   Agri.fromJson(Map<String, dynamic> json) {
@@ -90,6 +92,13 @@ class Agri {
       json['agriculture_development_item'].forEach((v) {
         agricultureDevelopmentItem!
             .add(new AgricultureDevelopmentItem.fromJson(v));
+      });
+    }
+    if (json['agriculture_development_item2'] != null) {
+      agricultureDevelopmentItem2 = <AgricultureDevelopmentItem2>[];
+      json['agriculture_development_item2'].forEach((v) {
+        agricultureDevelopmentItem2!
+            .add(new AgricultureDevelopmentItem2.fromJson(v));
       });
     }
     if (json['grantor'] != null) {
@@ -131,6 +140,10 @@ class Agri {
     if (this.agricultureDevelopmentItem != null) {
       data['agriculture_development_item'] =
           this.agricultureDevelopmentItem!.map((v) => v.toJson()).toList();
+    }
+    if (this.agricultureDevelopmentItem2 != null) {
+      data['agriculture_development_item2'] =
+          this.agricultureDevelopmentItem2!.map((v) => v.toJson()).toList();
     }
     if (this.grantor != null) {
       data['grantor'] = this.grantor!.map((v) => v.toJson()).toList();
@@ -232,6 +245,79 @@ class AgricultureDevelopmentItem {
     data['stock_uom'] = this.stockUom;
     data['rate'] = this.rate;
     data['item_tax_temp'] = this.itemTaxTemp;
+    data['parent'] = this.parent;
+    data['parentfield'] = this.parentfield;
+    data['parenttype'] = this.parenttype;
+    data['doctype'] = this.doctype;
+    return data;
+  }
+}
+
+class AgricultureDevelopmentItem2 {
+  String? name;
+  String? owner;
+  String? modifiedBy;
+  int? docstatus;
+  int? idx;
+  String? itemCode;
+  String? itemName;
+  double? qty;
+  String? stockUom;
+  double? rate;
+  String? description;
+  String? parent;
+  String? parentfield;
+  String? parenttype;
+  String? doctype;
+
+  AgricultureDevelopmentItem2(
+      {this.name,
+      this.owner,
+      this.modifiedBy,
+      this.docstatus,
+      this.idx,
+      this.itemCode,
+      this.itemName,
+      this.qty,
+      this.stockUom,
+      this.rate,
+      this.description,
+      this.parent,
+      this.parentfield,
+      this.parenttype,
+      this.doctype});
+
+  AgricultureDevelopmentItem2.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    owner = json['owner'];
+    modifiedBy = json['modified_by'];
+    docstatus = json['docstatus'];
+    idx = json['idx'];
+    itemCode = json['item_code'];
+    itemName = json['item_name'];
+    qty = json['qty'];
+    stockUom = json['stock_uom'];
+    rate = json['rate'];
+    description = json['description'];
+    parent = json['parent'];
+    parentfield = json['parentfield'];
+    parenttype = json['parenttype'];
+    doctype = json['doctype'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['owner'] = this.owner;
+    data['modified_by'] = this.modifiedBy;
+    data['docstatus'] = this.docstatus;
+    data['idx'] = this.idx;
+    data['item_code'] = this.itemCode;
+    data['item_name'] = this.itemName;
+    data['qty'] = this.qty;
+    data['stock_uom'] = this.stockUom;
+    data['rate'] = this.rate;
+    data['description'] = this.description;
     data['parent'] = this.parent;
     data['parentfield'] = this.parentfield;
     data['parenttype'] = this.parenttype;

@@ -19,6 +19,7 @@ class AgriViewModel extends BaseViewModel {
   final agriformKey = GlobalKey<FormState>();
   Agri agridata = Agri();
   List<AgricultureDevelopmentItem> agricultureDevelopmentItem = [];
+  List<AgricultureDevelopmentItem2> agricultureDevelopmentItem2 = [];
   List<Grantor> grantor = [];
   final List<String> items = [
     'Basel',
@@ -30,7 +31,7 @@ class AgriViewModel extends BaseViewModel {
   ];
   bool isEdit = false;
   List<String> seasonlist = [""];
-  List<String> saleslist = [" ", "Drip", "Plant (Rope)", "Fertilizer"];
+  List<String> saleslist = ["Drip", "Plant (Rope)", "Fertilizer"];
   List<AgriCane> canelistwithfilter = [];
   List<caneFarmer> farmerList = [];
   List<Item> itemList = [];
@@ -66,6 +67,8 @@ class AgriViewModel extends BaseViewModel {
       agricultureDevelopmentItem
           .addAll(agridata.agricultureDevelopmentItem?.toList() ?? []);
       grantor.addAll(agridata.grantor?.toList() ?? []);
+      agricultureDevelopmentItem2
+          .addAll(agridata.agricultureDevelopmentItem2?.toList() ?? []);
       if (agridata.basel == 1) {
         _selectedItems.add(items[0]);
       }
@@ -101,6 +104,45 @@ class AgriViewModel extends BaseViewModel {
 
   List<DosetypeModel> doseList = [];
 
+  void onSavePressed(BuildContext context) async {
+    if (agridata.docstatus == 1) {
+      Fluttertoast.showToast(
+          msg: "Can not edit Submitted document!",
+          backgroundColor: Colors.redAccent,
+          textColor: Colors.white);
+      return;
+    }
+    setBusy(true);
+    if (formKey.currentState!.validate()) {
+      agridata.agricultureDevelopmentItem = agricultureDevelopmentItem;
+      agridata.grantor = grantor;
+      agridata.agricultureDevelopmentItem2 = agricultureDevelopmentItem2;
+      bool res = false;
+
+      Logger().i(agridata.toJson().toString());
+      if (isEdit == true) {
+        res = await AddAgriServices().updateAgri(agridata);
+        if (res) {
+          if (context.mounted) {
+            setBusy(false);
+            setBusy(false);
+            Navigator.pop(context);
+          }
+        }
+      } else {
+        res = await AddAgriServices().addAgri(agridata);
+        if (res) {
+          if (context.mounted) {
+            setBusy(false);
+            setBusy(false);
+            Navigator.pop(context);
+          }
+        }
+      }
+    }
+    setBusy(false);
+  }
+
   void mapJsonToTable() async {
     double developmentArea =
         agridata.developmentArea ?? 0.0; // Assign your development area here
@@ -133,12 +175,7 @@ class AgriViewModel extends BaseViewModel {
     String rainy = agridata.rainy == 1 ? 'Rainy' : 'False';
     String ratoon1 = agridata.ratoon1 == 1 ? 'Ratoon 1' : 'False';
     String ratoon2 = agridata.ratoon2 == 1 ? 'Ratoon 2' : 'False';
-    Logger().i(basel);
-    Logger().i(preearth);
-    Logger().i(earth);
-    Logger().i(rainy);
-    Logger().i(ratoon1);
-    Logger().i(ratoon2);
+
     doseList = await AddAgriServices().fetchdosetype(
         basel,
         preearth,
@@ -205,6 +242,23 @@ class AgriViewModel extends BaseViewModel {
     }
   }
 
+  void validateAgriForm2(BuildContext context, int index) async {
+    final formState = agriformKey.currentState;
+    if (formState!.validate()) {
+      // Form is valid, submit it
+      setBusy(true);
+      submitAgriAccount2(index);
+      setBusy(false);
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+          msg: "AgriCulture Item is Added Succesfully",
+          toastLength: Toast.LENGTH_LONG);
+    } else {
+      // Form is invalid, show error messages
+      Logger().i('AgriCulture Item Form is invalid');
+    }
+  }
+
   void validateAgriForm(BuildContext context, int index) async {
     final formState = agriformKey.currentState;
     if (formState!.validate()) {
@@ -237,10 +291,17 @@ class AgriViewModel extends BaseViewModel {
     }
   }
 
+  void deleteAgriAccount2(int index) {
+    if (index >= 0 && index < agricultureDevelopmentItem2.length) {
+      agricultureDevelopmentItem2.removeAt(index);
+      notifyListeners();
+    }
+  }
+
   void setSelectedSales(String? sales) async {
     agridata.salesType = sales;
     if (agridata.salesType != 'Fertilizer') {
-      agricultureDevelopmentItem.clear();
+      agricultureDevelopmentItem2.clear();
     }
     notifyListeners();
   }
@@ -254,6 +315,7 @@ class AgriViewModel extends BaseViewModel {
   }
 
   String? selectedgrower;
+
   void setPlotnumber(String? caneRegistrationId) async {
     selectedplot = caneRegistrationId;
     agridata.caneRegistrationId = selectedplot.toString();
@@ -390,37 +452,6 @@ class AgriViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void onSavePressed(BuildContext context) async {
-    setBusy(true);
-    if (formKey.currentState!.validate()) {
-      agridata.agricultureDevelopmentItem = agricultureDevelopmentItem;
-      agridata.grantor = grantor;
-      bool res = false;
-
-      Logger().i(agridata.toJson().toString());
-      if (isEdit == true) {
-        res = await AddAgriServices().updateAgri(agridata);
-        if (res) {
-          if (context.mounted) {
-            setBusy(false);
-            setBusy(false);
-            Navigator.pop(context);
-          }
-        }
-      } else {
-        res = await AddAgriServices().addAgri(agridata);
-        if (res) {
-          if (context.mounted) {
-            setBusy(false);
-            setBusy(false);
-            Navigator.pop(context);
-          }
-        }
-      }
-    }
-    setBusy(false);
-  }
-
   TextEditingController developmentAreaController = TextEditingController();
   TextEditingController kmController = TextEditingController();
 
@@ -454,9 +485,7 @@ class AgriViewModel extends BaseViewModel {
     if (value == null || value.isEmpty) {
       return 'please select Sales type';
     }
-    if (value == 'Fertilizer') {
-      agricultureDevelopmentItem.clear();
-    }
+
     return null;
   }
 
@@ -481,8 +510,10 @@ class AgriViewModel extends BaseViewModel {
   late String suretyname = "";
   late String suretyCode;
   late String suretyExistingCode;
-
+  late String itemCode = "";
   late String itemName = "";
+  late String itemCode2 = "";
+  late String itemName2 = "";
   late double total = 0.0;
 
   void setValuesToAgriVaribles(int index) {
@@ -491,33 +522,75 @@ class AgriViewModel extends BaseViewModel {
         return;
       }
       // Reset all roles to false
-      itemName = agricultureDevelopmentItem[index].itemCode!;
-      total = agricultureDevelopmentItem[index].qty!;
+      itemCode = agricultureDevelopmentItem[index].itemCode!;
+      itemName = agricultureDevelopmentItem[index].itemName!;
     }
     notifyListeners();
   }
 
   void resetAgriVariables() {
-    itemName = "";
-    totalController.clear();
+    itemCode = "";
   }
 
   final totalController = TextEditingController();
   void submitAgriAccount(int index) {
     if (index != -1) {
-      agricultureDevelopmentItem[index].itemCode = itemName;
-      agricultureDevelopmentItem[index].qty = total;
+      agricultureDevelopmentItem[index].itemCode = itemCode;
+      agricultureDevelopmentItem[index].itemName = itemName;
       notifyListeners();
       return;
     }
     agricultureDevelopmentItem.add(AgricultureDevelopmentItem(
-      itemCode: itemName,
+      itemCode: itemCode,
+      itemName: itemName,
+    ));
+    notifyListeners();
+  }
+
+  void setValuesToAgriVaribles2(int index) {
+    if (index != -1) {
+      if (index >= agricultureDevelopmentItem2.length) {
+        return;
+      }
+      // Reset all roles to false
+      itemCode2 = agricultureDevelopmentItem2[index].itemCode!;
+      itemName2 = agricultureDevelopmentItem2[index].itemName!;
+      total = agricultureDevelopmentItem2[index].qty!;
+    }
+    notifyListeners();
+  }
+
+  final totalController2 = TextEditingController();
+  void resetAgriVariables2() {
+    itemCode2 = "";
+    totalController2.clear();
+  }
+
+  void submitAgriAccount2(int index) {
+    if (index != -1) {
+      agricultureDevelopmentItem2[index].itemCode = itemCode2;
+      agricultureDevelopmentItem2[index].itemName = itemName2;
+      agricultureDevelopmentItem2[index].qty = total;
+      notifyListeners();
+      return;
+    }
+    agricultureDevelopmentItem2.add(AgricultureDevelopmentItem2(
+      itemCode: itemCode2,
+      itemName: itemName2,
       qty: total,
     ));
     notifyListeners();
   }
 
-  void setValuesToBankVaribles(int index) {
+  void setSelectedAgri2(String? agri) async {
+    Logger().i(agri);
+    itemCode2 = agri ?? "";
+    final bankData = itemList.firstWhere((bank) => bank.itemCode == agri);
+    itemName2 = bankData.itemName ?? "";
+    notifyListeners();
+  }
+
+  void setValuesTograntorVaribles(int index) {
     if (index != -1) {
       if (index >= grantor.length) {
         return;
@@ -552,7 +625,10 @@ class AgriViewModel extends BaseViewModel {
   }
 
   void setSelectedAgri(String? agri) async {
-    itemName = agri ?? "";
+    Logger().i(agri);
+    itemCode = agri ?? "";
+    final bankData = itemList.firstWhere((bank) => bank.itemCode == agri);
+    itemName = bankData.itemName ?? "";
     notifyListeners();
   }
 

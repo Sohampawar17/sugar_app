@@ -132,7 +132,6 @@ class AddTripSheetModel extends BaseViewModel {
         if (i.name == tripSheetData.waterSupplier) {
           watersuppliercode = i.existingSupplierCode;
         }
-        if (i.name == tripSheetData.farmerCode) {}
       }
       notifyListeners();
       plantingDateController.text = tripSheetData.plantationDate ?? '';

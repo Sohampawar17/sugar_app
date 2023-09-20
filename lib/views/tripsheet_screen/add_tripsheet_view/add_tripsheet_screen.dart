@@ -769,7 +769,8 @@ class AddTripsheetScreen extends StatelessWidget {
                                   return const Iterable<String>.empty();
                                 }
                                 return model.waterSupplier
-                                    .map((route) => route.existingSupplierCode!)
+                                    .map((route) =>
+                                        route.existingSupplierCode ?? "")
                                     .toList()
                                     .where((route) => route
                                         .toLowerCase()

@@ -1,5 +1,9 @@
 class Cane {
   int? name;
+  String? owner;
+  String? modifiedBy;
+  int? docstatus;
+  int? idx;
   String? season;
   String? plantationStatus;
   String? plantName;
@@ -8,15 +12,14 @@ class Cane {
   String? vendorCode;
   String? growerName;
   String? mobileNo;
-  String? companyName;
   String? isKisanCard;
+  String? village;
+  String? route;
   String? area;
   String? circleOffice;
   String? country;
   String? taluka;
   String? district;
-  String? route;
-  String? states;
   double? routeKm;
   String? surveyNumber;
   String? cropType;
@@ -33,13 +36,18 @@ class Cane {
   String? seedMaterial;
   String? seedType;
   String? roadSide;
+  String? supervisorName;
   String? longitude;
   String? latitude;
   String? city;
-  String? state;
+  String? doctype;
 
   Cane(
       {this.name,
+      this.owner,
+      this.modifiedBy,
+      this.docstatus,
+      this.idx,
       this.season,
       this.plantationStatus,
       this.plantName,
@@ -48,15 +56,14 @@ class Cane {
       this.vendorCode,
       this.growerName,
       this.mobileNo,
-      this.companyName,
       this.isKisanCard,
+      this.village,
+      this.route,
       this.area,
       this.circleOffice,
       this.country,
       this.taluka,
       this.district,
-      this.route,
-      this.states,
       this.routeKm,
       this.surveyNumber,
       this.cropType,
@@ -73,13 +80,18 @@ class Cane {
       this.seedMaterial,
       this.seedType,
       this.roadSide,
+      this.supervisorName,
       this.longitude,
       this.latitude,
       this.city,
-      this.state});
+      this.doctype});
 
   Cane.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    owner = json['owner'];
+    modifiedBy = json['modified_by'];
+    docstatus = json['docstatus'];
+    idx = json['idx'];
     season = json['season'];
     plantationStatus = json['plantation_status'];
     plantName = json['plant_name'];
@@ -88,15 +100,14 @@ class Cane {
     vendorCode = json['vendor_code'];
     growerName = json['grower_name'];
     mobileNo = json['mobile_no'];
-    companyName = json['company_name'];
     isKisanCard = json['is_kisan_card'];
+    village = json['village'];
+    route = json['route'];
     area = json['area'];
     circleOffice = json['circle_office'];
     country = json['country'];
     taluka = json['taluka'];
     district = json['district'];
-    route = json['route'];
-    states = json['states'];
     routeKm = json['route_km'];
     surveyNumber = json['survey_number'];
     cropType = json['crop_type'];
@@ -113,52 +124,57 @@ class Cane {
     seedMaterial = json['seed_material'];
     seedType = json['seed_type'];
     roadSide = json['road_side'];
+    supervisorName = json['supervisor_name'];
     longitude = json['longitude'];
     latitude = json['latitude'];
     city = json['city'];
-    state = json['state'];
+    doctype = json['doctype'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['season'] = season;
-    data['plantation_status'] = plantationStatus;
-    data['plant_name'] = plantName;
-    data['form_number'] = formNumber;
-    data['grower_code'] = growerCode;
-    data['vendor_code'] = vendorCode;
-    data['grower_name'] = growerName;
-    data['mobile_no'] = mobileNo;
-    data['company_name'] = companyName;
-    data['is_kisan_card'] = isKisanCard;
-    data['area'] = area;
-    data['circle_office'] = circleOffice;
-    data['country'] = country;
-    data['taluka'] = taluka;
-    data['district'] = district;
-    data['route'] = route;
-    data['states'] = states;
-    data['route_km'] = routeKm;
-    data['survey_number'] = surveyNumber;
-    data['crop_type'] = cropType;
-    data['is_machine'] = isMachine;
-    data['crop_variety'] = cropVariety;
-    data['area_acrs'] = areaAcrs;
-    data['plantation_system'] = plantationSystem;
-    data['plantattion_ratooning_date'] = plantattionRatooningDate;
-    data['basal_date'] = basalDate;
-    data['irrigation_source'] = irrigationSource;
-    data['irrigation_method'] = irrigationMethod;
-    data['development_plot'] = developmentPlot;
-    data['soil_type'] = soilType;
-    data['seed_material'] = seedMaterial;
-    data['seed_type'] = seedType;
-    data['road_side'] = roadSide;
-    data['longitude'] = longitude;
-    data['latitude'] = latitude;
-    data['city'] = city;
-    data['state'] = state;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['owner'] = this.owner;
+    data['modified_by'] = this.modifiedBy;
+    data['docstatus'] = this.docstatus;
+    data['idx'] = this.idx;
+    data['season'] = this.season;
+    data['plantation_status'] = this.plantationStatus;
+    data['plant_name'] = this.plantName;
+    data['form_number'] = this.formNumber;
+    data['grower_code'] = this.growerCode;
+    data['vendor_code'] = this.vendorCode;
+    data['grower_name'] = this.growerName;
+    data['mobile_no'] = this.mobileNo;
+    data['is_kisan_card'] = this.isKisanCard;
+    data['village'] = this.village;
+    data['route'] = this.route;
+    data['area'] = this.area;
+    data['circle_office'] = this.circleOffice;
+    data['country'] = this.country;
+    data['taluka'] = this.taluka;
+    data['district'] = this.district;
+    data['route_km'] = this.routeKm;
+    data['survey_number'] = this.surveyNumber;
+    data['crop_type'] = this.cropType;
+    data['is_machine'] = this.isMachine;
+    data['crop_variety'] = this.cropVariety;
+    data['area_acrs'] = this.areaAcrs;
+    data['plantation_system'] = this.plantationSystem;
+    data['plantattion_ratooning_date'] = this.plantattionRatooningDate;
+    data['basal_date'] = this.basalDate;
+    data['irrigation_source'] = this.irrigationSource;
+    data['irrigation_method'] = this.irrigationMethod;
+    data['development_plot'] = this.developmentPlot;
+    data['soil_type'] = this.soilType;
+    data['seed_material'] = this.seedMaterial;
+    data['seed_type'] = this.seedType;
+    data['road_side'] = this.roadSide;
+    data['supervisor_name'] = this.supervisorName;
+    data['longitude'] = this.longitude;
+    data['latitude'] = this.latitude;
+    data['city'] = this.city;
+    data['doctype'] = this.doctype;
     return data;
   }
 }
