@@ -221,6 +221,20 @@ class AddCropSmaplingModel extends BaseViewModel {
     return null;
   }
 
+  String? validatebrixtop(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select Brix Top';
+    }
+    return null;
+  }
+
+  String? validatebrixMiddle(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select Brix Middle';
+    }
+    return null;
+  }
+
   String? validatenoofpairs(String? value) {
     if (value == null || value.isEmpty) {
       return 'please select no. of pairs';

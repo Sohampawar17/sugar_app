@@ -9,10 +9,6 @@ import 'package:flutter/material.dart' as _i15;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
 import 'package:stacked_services/stacked_services.dart' as _i16;
-import 'package:sugar_mill_app/views/Crop_Sampling_screens/add_sampling_view/add_crop_sampling_screen.dart'
-    as _i11;
-import 'package:sugar_mill_app/views/Crop_Sampling_screens/list_sampling_view/list_sampling_screen.dart'
-    as _i12;
 import 'package:sugar_mill_app/views/agriculture_screens/add_agri_view/add_agri_screen.dart'
     as _i9;
 import 'package:sugar_mill_app/views/agriculture_screens/list_agri_view/list_agri_screen.dart'
@@ -21,6 +17,10 @@ import 'package:sugar_mill_app/views/cane_screens/add_cane_view/add_cane_screen.
     as _i7;
 import 'package:sugar_mill_app/views/cane_screens/list_cane_view/list_cane_screen.dart'
     as _i8;
+import 'package:sugar_mill_app/views/Crop_Sampling_screens/add_sampling_view/add_crop_sampling_screen.dart'
+    as _i11;
+import 'package:sugar_mill_app/views/Crop_Sampling_screens/list_sampling_view/list_sampling_screen.dart'
+    as _i12;
 import 'package:sugar_mill_app/views/farmer_screens/add_farmer_view/add_farmer_screen.dart'
     as _i5;
 import 'package:sugar_mill_app/views/farmer_screens/list_farmers_view/list_farmers_screen.dart'

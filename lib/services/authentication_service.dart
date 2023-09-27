@@ -29,7 +29,9 @@ class Authentication {
         final SharedPreferences prefs = await _prefs;
         Logger().i(response.headers["set-cookie"]);
         prefs.setString("Cookie", response.headers["set-cookie"].toString());
+        prefs.setString("mobile", username);
         Logger().i(json.encode(response.data));
+        Logger().i(username);
         return true;
       } else {
         return false;

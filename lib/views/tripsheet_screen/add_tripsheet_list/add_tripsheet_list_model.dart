@@ -9,18 +9,13 @@ import '../../../services/list_tripsheet_service.dart';
 class ListTripsheet extends BaseViewModel {
   TextEditingController idcontroller = TextEditingController();
   TextEditingController namecontroller = TextEditingController();
-  // TextEditingController idcontroller = TextEditingController();
-  // TextEditingController namecontroller = TextEditingController();
+
   List<TripSheetSearch> triSheetList = [];
   List<TripSheetSearch> tripSheetFilter = [];
   List<String> seasonlist = [];
   String tripsheetVillageFilter = "";
   String tripsheeNameFilter = "";
   String tripsheetSeasonFilter = "";
-  // String villageNameFilter = "";
-  // String farmerNameFilter = "";
-  // String transporterNameFilter = "";
-  // String seasonFilter = "";
 
   initialise(BuildContext context) async {
     setBusy(true);

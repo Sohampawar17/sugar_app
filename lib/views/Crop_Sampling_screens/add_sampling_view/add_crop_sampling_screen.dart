@@ -98,68 +98,6 @@ class AddCropSamplingScreen extends StatelessWidget {
                       const SizedBox(
                         width: 25,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              controller: model.brixbottmAreaController,
-                              decoration: const InputDecoration(
-                                labelText: 'Brix Bottom',
-                              ),
-                              onChanged: model.setSelectedbrixbottm,
-                              validator: model.validatebrixbottom,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              controller: model.brixmiddleController,
-                              decoration: const InputDecoration(
-                                labelText: 'Brix Middle',
-                              ),
-                              onChanged: model.setSelectedbrixmiddle,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              controller: model.brixtopController,
-                              decoration: const InputDecoration(
-                                labelText: 'Brix Top',
-                              ),
-                              onChanged: model.setSelectedbrixtop,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 25,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              controller: model.noofpairsController,
-                              decoration: const InputDecoration(
-                                labelText: 'No. of  Pairs',
-                              ),
-                              onChanged: model.setSelectednoofpairs,
-                              validator: model.validatenoofpairs,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
                       Visibility(
                           visible: model.cropsamplingdata.id != null,
                           child: Column(
@@ -326,6 +264,70 @@ class AddCropSamplingScreen extends StatelessWidget {
                               ),
                             ],
                           )),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: model.brixbottmAreaController,
+                              decoration: const InputDecoration(
+                                labelText: 'Brix Bottom',
+                              ),
+                              onChanged: model.setSelectedbrixbottm,
+                              validator: model.validatebrixbottom,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: model.brixmiddleController,
+                              decoration: const InputDecoration(
+                                labelText: 'Brix Middle',
+                              ),
+                              onChanged: model.setSelectedbrixmiddle,
+                              validator: model.validatebrixMiddle,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: model.brixtopController,
+                              decoration: const InputDecoration(
+                                labelText: 'Brix Top',
+                              ),
+                              onChanged: model.setSelectedbrixtop,
+                              validator: model.validatebrixtop,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: model.noofpairsController,
+                              decoration: const InputDecoration(
+                                labelText: 'No. of  Pairs',
+                              ),
+                              onChanged: model.setSelectednoofpairs,
+                              validator: model.validatenoofpairs,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
                       const SizedBox(
                         height: 15,
                       ),

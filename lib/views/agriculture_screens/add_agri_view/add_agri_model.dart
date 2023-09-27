@@ -63,7 +63,7 @@ class AgriViewModel extends BaseViewModel {
       notifyListeners();
       datecontroller.text = agridata.date ?? '';
       developmentAreaController.text = agridata.developmentArea.toString();
-      kmController.text = agridata.route ?? "";
+
       agricultureDevelopmentItem
           .addAll(agridata.agricultureDevelopmentItem?.toList() ?? []);
       grantor.addAll(agridata.grantor?.toList() ?? []);
@@ -315,7 +315,7 @@ class AgriViewModel extends BaseViewModel {
   }
 
   String? selectedgrower;
-
+  String? route_km;
   void setPlotnumber(String? caneRegistrationId) async {
     selectedplot = caneRegistrationId;
     agridata.caneRegistrationId = selectedplot.toString();
@@ -332,7 +332,9 @@ class AgriViewModel extends BaseViewModel {
     datecontroller.text = selectedCaneData.plantattionRatooningDate!;
     selectedgrower = selectedCaneData.growerCode;
     selectedvendor = selectedCaneData.vendorCode;
+    route_km = selectedCaneData.routeKm.toString();
     agridata.growerName = selectedVendorname;
+    agridata.route = route_km;
     agridata.village = selectedvillage;
     agridata.cropVariety = selectedcropvariety;
     agridata.cropType = selectedcroptype;
@@ -453,7 +455,7 @@ class AgriViewModel extends BaseViewModel {
   }
 
   TextEditingController developmentAreaController = TextEditingController();
-  TextEditingController kmController = TextEditingController();
+  // TextEditingController kmController = TextEditingController();
 
   void setSelecteddevelopmentarea(String? surveyNumber) {
     developmentAreaController.value = developmentAreaController.value.copyWith(
@@ -465,11 +467,12 @@ class AgriViewModel extends BaseViewModel {
   }
 
   void setSelectedkm(String? km) {
-    kmController.value = kmController.value.copyWith(
-      text: km ?? '',
-      selection: TextSelection.collapsed(offset: (km ?? '').length),
-    );
-    agridata.route = km ?? '';
+    // kmController.value = kmController.value.copyWith(
+    //   text: km ?? '',
+    //   selection: TextSelection.collapsed(offset: (km ?? '').length),
+    // );
+    route_km = km ?? '';
+    agridata.route = route_km;
     notifyListeners();
   }
 

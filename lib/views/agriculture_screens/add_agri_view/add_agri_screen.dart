@@ -315,8 +315,9 @@ class AddAgriScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              controller: model.kmController,
+                              key: Key(model.agridata.route ?? "km"),
+                              readOnly: true,
+                              initialValue: model.agridata.route ?? "",
                               decoration: const InputDecoration(
                                 labelText: 'K.M.',
                               ),
