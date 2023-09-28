@@ -284,7 +284,7 @@ class AddCaneScreen extends StatelessWidget {
                                   decoration: const InputDecoration(
                                     labelText: 'Development Plot',
                                   ),
-                                  hint: const Text('Select Development Plot'),
+                                  hint: const Text('Select Plot'),
                                   items: model.yesno.map((val) {
                                     return DropdownMenuItem<String>(
                                       value: val,

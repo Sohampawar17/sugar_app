@@ -155,70 +155,98 @@ class ListFarmersScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: model.filteredList.length,
-                  itemBuilder: (context, index) {
-                    Logger().i(model.filteredList[index].existingSupplierCode
-                        .toString());
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: ListTile(
-                        tileColor:
-                            model.filteredList[index].workflowState == "New"
-                                ? const Color(0xFFD3E8FD)
-                                : model.filteredList[index].workflowState ==
-                                        "Approved"
-                                    ? const Color(0xFFEAF5EE)
-                                    : const Color(0xFFFFF5F5),
-                        trailing: AutoSizeText(
-                          model.filteredList[index].village ?? '',
-                          maxLines: 2,
-                        ),
-                        leading: SizedBox(
-                          width: getWidth(context) / 5,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              AutoSizeText(
-                                model.filteredList[index].circleOffice ?? '',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+              model.farmresList.isNotEmpty
+                  ? Expanded(
+                      child: ListView.separated(
+                        itemCount: model.filteredList.length,
+                        itemBuilder: (context, index) {
+                          Logger().i(model
+                              .filteredList[index].existingSupplierCode
+                              .toString());
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: ListTile(
+                              tileColor: model
+                                          .filteredList[index].workflowState ==
+                                      "New"
+                                  ? const Color(0xFFD3E8FD)
+                                  : model.filteredList[index].workflowState ==
+                                          "Approved"
+                                      ? const Color(0xFFEAF5EE)
+                                      : const Color(0xFFFFF5F5),
+                              trailing: AutoSizeText(
+                                model.filteredList[index].village ?? '',
+                                maxLines: 2,
                               ),
-                              AutoSizeText(
-                                model.filteredList[index].workflowState ?? '',
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  fontSize: 10,
+                              leading: SizedBox(
+                                width: getWidth(context) / 5,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    AutoSizeText(
+                                      model.filteredList[index].circleOffice ??
+                                          '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    AutoSizeText(
+                                      model.filteredList[index].workflowState ??
+                                          '',
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        title: Text(
-                          model.filteredList[index].supplierName ?? '',
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                        subtitle: Text(
-                          model.filteredList[index].existingSupplierCode ?? '',
-                          style: const TextStyle(fontSize: 13),
-                        ),
-                        onTap: () {
-                          // Handle row click here
-                          // _onRowClick(context, filteredList[index]);
-                          model.onRowClick(context, model.filteredList[index]);
+                              title: Text(
+                                model.filteredList[index].supplierName ?? '',
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                              subtitle: Text(
+                                model.filteredList[index]
+                                        .existingSupplierCode ??
+                                    '',
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                              onTap: () {
+                                // Handle row click here
+                                // _onRowClick(context, filteredList[index]);
+                                model.onRowClick(
+                                    context, model.filteredList[index]);
+                              },
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Divider(
+                            color: Colors.white, // Color of the line
+                            thickness: 0, // Thickness of the line
+                          );
                         },
                       ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      color: Colors.white, // Color of the line
-                      thickness: 0, // Thickness of the line
-                    );
-                  },
-                ),
-              ),
+                    )
+                  : Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text('No Farmer List found Status Pending.'),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.addFarmerScreen,
+                                  arguments: const AddFarmerScreenArguments(
+                                      farmerid: ""),
+                                );
+                              },
+                              child: const Text('Create a Farmer')),
+                        ],
+                      ),
+                    )
             ],
           ),
           context: context,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sugar_mill_app/router.router.dart';
 
 getHeight(context) => (MediaQuery.of(context).size.height);
 getWidth(context) => (MediaQuery.of(context).size.width);
@@ -41,6 +42,7 @@ String apifetchCaneList =
 String apiFarmerListGetwithfilter =
     '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","name"]&filters=[["workflow_state","=","approved"],["is_farmer","=",1]]&limit_page_length=999999';
 String apiCaneRegistration = '$apiBaseUrl/api/resource/Cane Master';
+String apiEmployeeCheckin = '$apiBaseUrl/api/resource/Employee Checkin';
 String apifetchroute =
     '$apiBaseUrl/api/resource/Route?fields=["route","distance_km","name"]&limit_page_length=99999';
 String apifetchcanevariety =
@@ -99,6 +101,15 @@ String getValueFromResponse(String response, String key) {
   RegExp regex = RegExp('$key=([^;,]+)');
   Match? match = regex.firstMatch(response);
   return match != null ? match.group(1) ?? '' : '';
+}
+
+void logout(BuildContext context) async {
+  final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+  final SharedPreferences prefs = await prefs0;
+  prefs.clear();
+  if (context.mounted) {
+    Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+  }
 }
 
 String generateUniqueFileName(File file) {

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/router.router.dart';
 
+import '../../../constants.dart';
 import '../../../models/cane_list_model.dart';
 import '../../../services/add_cane_service.dart';
 import '../../../services/list_cane_service.dart';
@@ -42,15 +42,8 @@ class ListCaneModel extends BaseViewModel {
     canefilterList = caneList;
     seasonlist = await AddCaneService().fetchSeason();
     setBusy(false);
-    if (caneList.isEmpty) {
-      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
-      final SharedPreferences prefs = await prefs0;
-      prefs.clear();
-      if (context.mounted) {
-        setBusy(false);
-        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
-        Logger().i('logged out success');
-      }
+    if (caneList[0] == "401") {
+      logout(context);
     }
     notifyListeners();
   }

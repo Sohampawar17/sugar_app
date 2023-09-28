@@ -54,7 +54,7 @@ class FarmerViewModel extends BaseViewModel {
 
   initialise(BuildContext context, String farmerid) async {
     setBusy(true);
-    villageList = (await FarmerService().fetchVillages());
+    villageList = await FarmerService().fetchVillages();
     bankList = await FarmerService().fetchBanks();
     Logger().i(villageList.length);
     farmerId = farmerid;
@@ -67,7 +67,6 @@ class FarmerViewModel extends BaseViewModel {
       supplierNameController.text = farmerData.supplierName ?? "";
       aadharNumberController.text =
           _formatAadhar(farmerData.aadhaarNumber ?? "");
-
       mobileNumberController.text = farmerData.mobileNumber ?? "";
       dobController.text = farmerData.dateOfBirth ?? "";
       ageController.text = farmerData.age ?? "";
@@ -85,14 +84,8 @@ class FarmerViewModel extends BaseViewModel {
     }
 
     if (villageList.isEmpty) {
-      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
-      final SharedPreferences prefs = await prefs0;
-      prefs.clear();
-      if (context.mounted) {
-        setBusy(false);
-        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
-        Logger().i('logged out success');
-      }
+      Logger().i(villageList[0]);
+      logout(context);
     }
     farmerData.supplierGroup = "CANE";
     setBusy(false);

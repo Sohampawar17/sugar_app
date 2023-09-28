@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
+
 import 'package:sugar_mill_app/models/checkin.dart';
 import 'package:sugar_mill_app/models/employee.dart';
 import 'package:sugar_mill_app/router.router.dart';
@@ -15,12 +16,25 @@ import '../../services/login_success.dart';
 class HomeViewModel extends BaseViewModel {
   Checkin checkindata = Checkin();
   Employee employee = Employee();
-
+  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   List<String> villageList = [""];
   List<Employee> empList = [];
+  List<Checkin> checkinList = [];
   String? mobile;
   String? empname;
   String? empid;
+  String? checkvalue;
+  String? time;
+  String? sharedempid;
+
+  void logout(BuildContext context) async {
+    final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await prefs0;
+    prefs.clear();
+    if (context.mounted) {
+      Navigator.popAndPushNamed(context, Routes.loginViewScreen);
+    }
+  }
 
   initialise(BuildContext context) async {
     final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
@@ -30,17 +44,115 @@ class HomeViewModel extends BaseViewModel {
     empList = await CheckinServices().fetchmobile(mobile ?? "");
     empname = empList[0].employeeName;
     notifyListeners();
-    Logger().i(empname);
-    empid = employee.name;
+    empid = empList[0].name;
+    checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
 
-    if (villageList.isEmpty) {
-      prefs.clear();
-      if (context.mounted) {
-        setBusy(false);
-        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
-        Logger().i('logged out success');
-      }
+    checkvalue = checkinList[0].logType;
+    time = checkinList[0].time;
+    notifyListeners();
+    // checkvalue = prefs.getString("Check");
+    // time = prefs.getString("Time");
+    Logger().i(checkvalue);
+    Logger().i(time);
+    if (empList.isEmpty || villageList.isEmpty) {
+      logout(context);
     }
+  }
+
+  void checkin(BuildContext context) async {
+    bool res = false;
+    setBusy(true);
+    checkindata.employee = empid;
+    checkindata.logType = "IN";
+    checkindata.time = DateTime.now().toString();
+    GeolocationService geolocationService = GeolocationService();
+    Position? position = await geolocationService.determinePosition();
+    if (position != null) {
+      Placemark? placemark = await geolocationService.getPlacemarks(position);
+      if (placemark != null) {
+        // Extract properties from the placemark
+        String formattedAddress =
+            await geolocationService.getAddressFromCoordinates(
+                    position.latitude, position.longitude) ??
+                "";
+        checkindata.latitude = position.latitude.toString();
+        checkindata.longitude = position.longitude.toString();
+        checkindata.deviceId = formattedAddress;
+        Logger().i(checkindata.toJson().toString());
+        res = await CheckinServices().addCheckin(checkindata);
+        if (res) {
+          if (context.mounted) {
+            setBusy(false);
+            setBusy(false);
+            checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
+            checkvalue = checkinList[0].logType;
+            time = checkinList[0].time;
+            notifyListeners();
+
+            Navigator.pop(context);
+            Fluttertoast.showToast(msg: "Check-In Sucessful");
+          }
+        }
+      } else {
+        // Handle case where placemark is null
+        Fluttertoast.showToast(msg: 'Failed to get placemark');
+        setBusy(false);
+      }
+    } else {
+      // Handle case where obtaining location fails
+      Fluttertoast.showToast(msg: 'Failed to get location');
+      setBusy(false);
+    }
+    setBusy(false);
+    notifyListeners();
+  }
+
+  void checkout(BuildContext context) async {
+    bool res = false;
+    setBusy(true);
+    checkindata.employee = empid;
+    checkindata.logType = "OUT";
+    checkindata.time = DateTime.now().toString();
+    GeolocationService geolocationService = GeolocationService();
+    Position? position = await geolocationService.determinePosition();
+    if (position != null) {
+      // Get the placemark using the geolocation service
+      Placemark? placemark = await geolocationService.getPlacemarks(position);
+      if (placemark != null) {
+        // Extract properties from the placemark
+        String formattedAddress =
+            await geolocationService.getAddressFromCoordinates(
+                    position.latitude, position.longitude) ??
+                "";
+        checkindata.latitude = position.latitude.toString();
+        checkindata.longitude = position.longitude.toString();
+        checkindata.deviceId = formattedAddress;
+        Logger().i(checkindata.toJson().toString());
+        res = await CheckinServices().addCheckin(checkindata);
+        if (res) {
+          if (context.mounted) {
+            setBusy(false);
+            setBusy(false);
+            checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
+            checkvalue = checkinList[0].logType;
+            time = checkinList[0].time;
+            notifyListeners();
+            Navigator.pop(context);
+            Fluttertoast.showToast(msg: "Check-Out Sucessful");
+          }
+        }
+      } else {
+        // Handle case where placemark is null
+        Fluttertoast.showToast(msg: 'Failed to get placemark');
+        setBusy(false);
+      }
+    } else {
+      // Handle case where obtaining location fails
+      Fluttertoast.showToast(msg: 'Failed to get location');
+      setBusy(false);
+    }
+    setBusy(false);
+    notifyListeners();
   }
 
   void getGeoLocation() async {
@@ -53,14 +165,5 @@ class HomeViewModel extends BaseViewModel {
         msg: placemark.toString(), toastLength: Toast.LENGTH_LONG);
     setBusy(false);
     notifyListeners();
-  }
-
-  void logout(BuildContext context) async {
-    final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
-    final SharedPreferences prefs = await prefs0;
-    prefs.clear();
-    if (context.mounted) {
-      Navigator.popAndPushNamed(context, Routes.loginViewScreen);
-    }
   }
 }

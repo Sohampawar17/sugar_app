@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import '../../../constants.dart';
 import '../../../models/agri_list_model.dart';
 import '../../../router.router.dart';
 import '../../../services/list_agri_services.dart';
@@ -16,6 +17,9 @@ class ListAgriModel extends BaseViewModel {
     filteredagriList = agriList;
     setBusy(false);
     notifyListeners();
+    if (agriList[0] == "401") {
+      logout(context);
+    }
   }
 
   void filterListByNameAndVillage({String? name}) async {

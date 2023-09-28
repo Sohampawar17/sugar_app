@@ -4,16 +4,17 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/models/cane_farmer.dart';
 import 'package:sugar_mill_app/models/cane_route.dart';
 import 'package:sugar_mill_app/services/add_cane_service.dart';
 import 'package:sugar_mill_app/services/geolocation_service.dart';
 
+import '../../../constants.dart';
 import '../../../models/cane.dart';
 import '../../../models/village_model.dart';
-import '../../../router.router.dart';
+
 import '../../../widgets/cdate_custom.dart';
 
 class CaneViewModel extends BaseViewModel {
@@ -99,14 +100,7 @@ class CaneViewModel extends BaseViewModel {
       baselDateController.text = canedata.basalDate ?? '';
     }
     if (villageList.isEmpty) {
-      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
-      final SharedPreferences prefs = await prefs0;
-      prefs.clear();
-      if (context.mounted) {
-        setBusy(false);
-        Navigator.popAndPushNamed(context, Routes.loginViewScreen);
-        Logger().i('logged out success');
-      }
+      logout(context);
     }
     setBusy(false);
   }
