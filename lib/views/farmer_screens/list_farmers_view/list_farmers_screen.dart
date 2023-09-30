@@ -30,7 +30,7 @@ class ListFarmersScreen extends StatelessWidget {
                       arguments: const AddFarmerScreenArguments(farmerid: ""),
                     );
                   },
-                  child: const Text('Add Farmer')),
+                  child: const Text('+Add Farmer')),
             )
           ],
         ),
@@ -74,7 +74,6 @@ class ListFarmersScreen extends StatelessWidget {
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'Name',
-                                    prefixIcon: Icon(Icons.search),
                                   ),
                                 ),
                               ),
@@ -92,7 +91,7 @@ class ListFarmersScreen extends StatelessWidget {
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'Vendor Code',
-                                    prefixIcon: Icon(Icons.search),
+
                                     // prefixIcon: Icon(Icons.search),
                                   ),
                                 ),
@@ -145,7 +144,7 @@ class ListFarmersScreen extends StatelessWidget {
                         color: Colors.white), // Set text color to white
                   ),
                   subtitle: Text(
-                    'ID',
+                    'Vendor Code',
                     style: TextStyle(
                         fontSize: 15,
                         color: Colors.white), // Set text color to white

@@ -47,7 +47,9 @@ class AddTripsheetScreen extends StatelessWidget {
                                     child: Text(val),
                                   );
                                 }).toList(),
-                                onChanged: model.setSelectedSeason,
+                                onChanged: (value) {
+                                  model.setSelectedSeason(context, value);
+                                },
                                 // validator: model.validateSeason,
                               ),
                             ),
@@ -122,6 +124,7 @@ class AddTripsheetScreen extends StatelessWidget {
                                 return TextFormField(
                                   controller: textEditingController,
                                   focusNode: focusNode,
+                                  keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
                                     labelText: 'Plot Number',
                                   ),

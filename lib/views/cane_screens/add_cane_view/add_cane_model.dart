@@ -4,17 +4,14 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/models/cane_farmer.dart';
 import 'package:sugar_mill_app/models/cane_route.dart';
 import 'package:sugar_mill_app/services/add_cane_service.dart';
 import 'package:sugar_mill_app/services/geolocation_service.dart';
-
 import '../../../constants.dart';
 import '../../../models/cane.dart';
 import '../../../models/village_model.dart';
-
 import '../../../widgets/cdate_custom.dart';
 
 class CaneViewModel extends BaseViewModel {
@@ -291,7 +288,7 @@ class CaneViewModel extends BaseViewModel {
             'There is no Approved farmer Available At $village village',
             style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
-          duration: const Duration(seconds: 7), // Adjust the duration as needed
+          duration: const Duration(seconds: 3), // Adjust the duration as needed
         ),
       );
     }

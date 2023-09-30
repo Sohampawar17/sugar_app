@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import 'package:stacked/stacked.dart';
-import '../../../constants.dart';
+
 import '../../../models/tripsheet_list_search.dart';
 import '../../../router.router.dart';
 import '../../../services/list_tripsheet_service.dart';
@@ -24,9 +24,7 @@ class ListTripsheet extends BaseViewModel {
     tripSheetFilter = triSheetList;
     seasonlist = await ListTripshhetService().fetchSeason();
     setBusy(false);
-    if (triSheetList.isEmpty) {
-      logout(context);
-    }
+
     notifyListeners();
   }
 

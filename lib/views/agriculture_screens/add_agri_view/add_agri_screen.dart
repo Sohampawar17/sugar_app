@@ -75,7 +75,7 @@ class AddAgriScreen extends StatelessWidget {
                                   );
                                 }).toList(),
                                 onChanged: (value) =>
-                                    model.setSelectedSeason(value),
+                                    model.setSelectedSeason(context, value),
                                 validator: model.validateSeason,
                               ),
                             ),

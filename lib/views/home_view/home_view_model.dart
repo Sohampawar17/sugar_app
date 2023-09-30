@@ -37,26 +37,30 @@ class HomeViewModel extends BaseViewModel {
   }
 
   initialise(BuildContext context) async {
+    setBusy(true);
     final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
     final SharedPreferences prefs = await prefs0;
     mobile = prefs.getString("mobile");
     villageList = await login().fetchVillages();
+    if (villageList.isEmpty) {
+      final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+      final SharedPreferences prefs = await prefs0;
+      prefs.clear();
+      if (context.mounted) {
+        Navigator.pushNamed(context, Routes.loginViewScreen);
+      }
+    }
     empList = await CheckinServices().fetchmobile(mobile ?? "");
     empname = empList[0].employeeName;
     notifyListeners();
     empid = empList[0].name;
     checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
-
+    setBusy(false);
     checkvalue = checkinList[0].logType;
     time = checkinList[0].time;
     notifyListeners();
-    // checkvalue = prefs.getString("Check");
-    // time = prefs.getString("Time");
     Logger().i(checkvalue);
     Logger().i(time);
-    if (empList.isEmpty || villageList.isEmpty) {
-      logout(context);
-    }
   }
 
   void checkin(BuildContext context) async {
@@ -88,9 +92,16 @@ class HomeViewModel extends BaseViewModel {
             checkvalue = checkinList[0].logType;
             time = checkinList[0].time;
             notifyListeners();
-
             Navigator.pop(context);
-            Fluttertoast.showToast(msg: "Check-In Sucessful");
+            Fluttertoast.showToast(
+              msg: "Check-$checkvalue Successfully!",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.white,
+              textColor: Colors.black87,
+              fontSize: 16.0,
+            );
           }
         }
       } else {
@@ -138,7 +149,15 @@ class HomeViewModel extends BaseViewModel {
             time = checkinList[0].time;
             notifyListeners();
             Navigator.pop(context);
-            Fluttertoast.showToast(msg: "Check-Out Sucessful");
+            Fluttertoast.showToast(
+              msg: "Check-$checkvalue Successfully!",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.white,
+              textColor: Colors.black87,
+              fontSize: 16.0,
+            );
           }
         }
       } else {

@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/services/add_crop_sampling_service.dart';
 import '../../../constants.dart';
 import '../../../models/agri_cane_model.dart';
 import '../../../models/crop_sampling.dart';
+import '../../../services/add_agri_services.dart';
 
 class AddCropSmaplingModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
@@ -15,9 +16,10 @@ class AddCropSmaplingModel extends BaseViewModel {
   late String samplingId;
   String? selectedfarcode;
   bool isEdit = false;
-
+  List<String> seasonlist = [""];
   initialise(BuildContext context, String samplingId) async {
     plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter());
+    seasonlist = await AddAgriServices().fetchSeason();
     for (dynamic i in plotList) {
       Logger().i(i.vendorCode);
     }
@@ -38,8 +40,21 @@ class AddCropSmaplingModel extends BaseViewModel {
       }
       notifyListeners();
     }
-    if (plotList[0] == "401") {
+    if (seasonlist.isEmpty) {
       logout(context);
+    }
+    if (plotList.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+
+          content: Text(
+            'There is No plot available',
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
+          duration: Duration(seconds: 3), // Adjust the duration as needed
+        ),
+      );
     }
   }
 

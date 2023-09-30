@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/router.router.dart';
-
-import '../../../constants.dart';
 import '../../../models/cane_list_model.dart';
 import '../../../services/add_cane_service.dart';
 import '../../../services/list_cane_service.dart';
@@ -42,9 +40,7 @@ class ListCaneModel extends BaseViewModel {
     canefilterList = caneList;
     seasonlist = await AddCaneService().fetchSeason();
     setBusy(false);
-    if (caneList[0] == "401") {
-      logout(context);
-    }
+
     notifyListeners();
   }
 

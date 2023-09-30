@@ -7,7 +7,6 @@ import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/agri.dart';
 import 'package:sugar_mill_app/models/item.dart';
-
 import '../../../models/agri_cane_model.dart';
 import '../../../models/cane_farmer.dart';
 import '../../../models/dose_type.dart';
@@ -92,6 +91,19 @@ class AgriViewModel extends BaseViewModel {
 
     if (seasonlist.isEmpty) {
       logout(context);
+    }
+    if (farmerList.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+
+          content: Text(
+            'There is No farmer available',
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
+          duration: Duration(seconds: 3), // Adjust the duration as needed
+        ),
+      );
     }
     setBusy(false);
   }
@@ -300,11 +312,23 @@ class AgriViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedSeason(String? season) async {
+  void setSelectedSeason(BuildContext context, String? season) async {
     agridata.season = season;
     canelistwithfilter =
         await AddAgriServices().fetchcanelistwithfilter(season ?? "");
+    if (canelistwithfilter.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
 
+          content: Text(
+            'There is no plot Available At $season Season',
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+          ),
+          duration: const Duration(seconds: 3), // Adjust the duration as needed
+        ),
+      );
+    }
     notifyListeners();
   }
 
@@ -337,7 +361,6 @@ class AgriViewModel extends BaseViewModel {
     agridata.supplier = selectedgrower;
     agridata.vendorCode = selectedvendor;
     agridata.branch = selectedplant;
-
     notifyListeners();
   }
 

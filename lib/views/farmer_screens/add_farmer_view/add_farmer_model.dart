@@ -84,7 +84,6 @@ class FarmerViewModel extends BaseViewModel {
     }
 
     if (villageList.isEmpty) {
-      Logger().i(villageList[0]);
       logout(context);
     }
     farmerData.supplierGroup = "CANE";

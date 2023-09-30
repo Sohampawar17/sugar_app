@@ -7,6 +7,7 @@ import 'package:sugar_mill_app/models/farmrs_list_model.dart';
 
 class ListFarmersService {
   Future<List<FarmersListModel>> getAllFarmersList() async {
+    Logger().i(apiFarmerAllListGet);
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();

@@ -30,7 +30,7 @@ class ListCaneScreen extends StatelessWidget {
                       arguments: const AddCaneScreenArguments(caneId: ""),
                     );
                   },
-                  child: const Text('Add Cane Master')),
+                  child: const Text('+Add Cane Master')),
             )
           ],
         ),
@@ -101,7 +101,7 @@ class ListCaneScreen extends StatelessWidget {
                                   },
                                   decoration: const InputDecoration(
                                     labelText: 'ID',
-                                    prefixIcon: Icon(Icons.search),
+
                                     // prefixIcon: Icon(Icons.search),
                                   ),
                                 ),

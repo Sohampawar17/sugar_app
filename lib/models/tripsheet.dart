@@ -1,5 +1,5 @@
 class Tripsheet {
-  int? name;
+  String? name;
   String? owner;
   String? modifiedBy;
   int? docstatus;
@@ -24,12 +24,12 @@ class Tripsheet {
   double? deduction;
   double? cartno;
   String? transporterCode;
+  String? oldTransporterCode;
   String? transporter;
   String? transporterName;
   String? vehicleType;
-  String? harvesterCode;
-  String? harvesterName;
   String? harvestingCodeHt;
+  String? harvesterCodeOld;
   String? harvesterCodeH;
   String? harvesterNameH;
   String? gangType;
@@ -43,9 +43,9 @@ class Tripsheet {
   double? percentage;
   String? slipBoy;
   int? canSlipFlag;
-  String? caneSlip;
   String? circleOffice;
   String? vendorCode;
+  int? basPaliFlag;
   String? doctype;
 
   Tripsheet(
@@ -74,12 +74,12 @@ class Tripsheet {
       this.deduction,
       this.cartno,
       this.transporterCode,
+      this.oldTransporterCode,
       this.transporter,
       this.transporterName,
       this.vehicleType,
-      this.harvesterCode,
-      this.harvesterName,
       this.harvestingCodeHt,
+      this.harvesterCodeOld,
       this.harvesterCodeH,
       this.harvesterNameH,
       this.gangType,
@@ -93,9 +93,9 @@ class Tripsheet {
       this.percentage,
       this.slipBoy,
       this.canSlipFlag,
-      this.caneSlip,
       this.circleOffice,
       this.vendorCode,
+      this.basPaliFlag,
       this.doctype});
 
   Tripsheet.fromJson(Map<String, dynamic> json) {
@@ -124,12 +124,12 @@ class Tripsheet {
     deduction = json['deduction'];
     cartno = json['cartno'];
     transporterCode = json['transporter_code'];
+    oldTransporterCode = json['old_transporter_code'];
     transporter = json['transporter'];
     transporterName = json['transporter_name'];
     vehicleType = json['vehicle_type'];
-    harvesterCode = json['harvester_code'];
-    harvesterName = json['harvester_name'];
     harvestingCodeHt = json['harvesting_code__ht'];
+    harvesterCodeOld = json['harvester_code_old'];
     harvesterCodeH = json['harvester_code_h'];
     harvesterNameH = json['harvester_name_h'];
     gangType = json['gang_type'];
@@ -143,9 +143,9 @@ class Tripsheet {
     percentage = json['percentage'];
     slipBoy = json['slip_boy'];
     canSlipFlag = json['can_slip_flag'];
-    caneSlip = json['cane_slip'];
     circleOffice = json['circle_office'];
     vendorCode = json['vendor_code'];
+    basPaliFlag = json['bas_pali_flag'];
     doctype = json['doctype'];
   }
 
@@ -176,12 +176,12 @@ class Tripsheet {
     data['deduction'] = this.deduction;
     data['cartno'] = this.cartno;
     data['transporter_code'] = this.transporterCode;
+    data['old_transporter_code'] = this.oldTransporterCode;
     data['transporter'] = this.transporter;
     data['transporter_name'] = this.transporterName;
     data['vehicle_type'] = this.vehicleType;
-    data['harvester_code'] = this.harvesterCode;
-    data['harvester_name'] = this.harvesterName;
     data['harvesting_code__ht'] = this.harvestingCodeHt;
+    data['harvester_code_old'] = this.harvesterCodeOld;
     data['harvester_code_h'] = this.harvesterCodeH;
     data['harvester_name_h'] = this.harvesterNameH;
     data['gang_type'] = this.gangType;
@@ -195,9 +195,9 @@ class Tripsheet {
     data['percentage'] = this.percentage;
     data['slip_boy'] = this.slipBoy;
     data['can_slip_flag'] = this.canSlipFlag;
-    data['cane_slip'] = this.caneSlip;
     data['circle_office'] = this.circleOffice;
     data['vendor_code'] = this.vendorCode;
+    data['bas_pali_flag'] = this.basPaliFlag;
     data['doctype'] = this.doctype;
     return data;
   }

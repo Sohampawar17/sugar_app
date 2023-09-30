@@ -18,6 +18,17 @@ class ListAgriScreen extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Agriculture Development'),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.addAgriScreen,
+                    arguments: const AddAgriScreenArguments(agriId: ""),
+                  );
+                },
+                child: const Text('+Add Cane Development')),
+          ],
         ),
         body: fullScreenLoader(
           child: Column(

@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/models/trip_crop_harvesting_model.dart';
 import 'package:sugar_mill_app/models/tripsheet.dart';
@@ -114,24 +112,26 @@ class AddTripSheetModel extends BaseViewModel {
       isEdit = true;
       tripSheetData =
           await AddTripSheetServices().getTripsheet(tripId) ?? Tripsheet();
-      selectedCaneRoute = tripSheetData.routeName;
+      // selectedCaneRoute = tripSheetData.routeName;
       for (caneRoute i in routeList) {
         if (i.name == tripSheetData.routeName) {
           selectedCaneRoute = i.route;
-          if (kDebugMode) {
-            print("ROUTE!!!2: ${i.route}");
-          }
+          notifyListeners();
+          Logger().i(selectedCaneRoute);
         }
       }
       for (cropharvestingModel i in plotList) {
         if (i.growerCode == tripSheetData.farmerCode) {
           selectedfarcode = i.vendorCode;
           notifyListeners();
+          Logger().i(selectedfarcode);
         }
       }
       for (WaterSupplierList i in waterSupplier) {
         if (i.name == tripSheetData.waterSupplier) {
           watersuppliercode = i.existingSupplierCode;
+          notifyListeners();
+          Logger().i(watersuppliercode);
         }
       }
       notifyListeners();
@@ -140,8 +140,34 @@ class AddTripSheetModel extends BaseViewModel {
       deductionController.text = tripSheetData.deduction.toString();
       watershareController.text = tripSheetData.waterShare.toString();
     }
-    if (transportList.isEmpty) {
+    if (season.isEmpty) {
       logout(context);
+    }
+    if (waterSupplier.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+
+          content: Text(
+            'There is farmer available',
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
+          duration: Duration(seconds: 3), // Adjust the duration as needed
+        ),
+      );
+    }
+    if (transportList.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+
+          content: Text(
+            'There is Transporter available',
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
+          duration: Duration(seconds: 3), // Adjust the duration as needed
+        ),
+      );
     }
     setBusy(false);
   }
@@ -161,9 +187,22 @@ class AddTripSheetModel extends BaseViewModel {
     }
   }
 
-  void setSelectedSeason(String? season) async {
+  void setSelectedSeason(BuildContext context, String? season) async {
     tripSheetData.season = season;
     plotList = await AddTripSheetServices().fetchPlot(season ?? "");
+    if (plotList.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+
+          content: Text(
+            'There is No plot available at season $season',
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+          ),
+          duration: const Duration(seconds: 3), // Adjust the duration as needed
+        ),
+      );
+    }
     notifyListeners();
   }
 
@@ -291,7 +330,7 @@ class AddTripSheetModel extends BaseViewModel {
     final selectedGrowerData = transportList
         .firstWhere((growerData) => growerData.name.toString() == hCode);
     harCode = selectedGrowerData.harvesterCode;
-    tripSheetData.harvesterCode = harCode;
+    tripSheetData.harvesterCodeOld = harCode;
     harName = selectedGrowerData.harvesterName;
     tripSheetData.harvesterNameH = harName;
     notifyListeners();

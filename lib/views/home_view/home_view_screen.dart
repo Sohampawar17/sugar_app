@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -19,7 +20,7 @@ class HomePageScreen extends StatelessWidget {
     return Material(
       color: Colors.white,
       elevation: 8,
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(10),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: InkWell(
         onTap: () => onPressed(),
@@ -38,7 +39,7 @@ class HomePageScreen extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Center(
-                child: Text(
+                child: AutoSizeText(
                   buttonText,
                   style: const TextStyle(color: Colors.black),
                 ),
@@ -57,10 +58,10 @@ class HomePageScreen extends StatelessWidget {
         backgroundColor: Colors.greenAccent.shade200,
         appBar: AppBar(
           leading: const Icon(Icons.factory_outlined),
-          title: const Text(
+          title: const AutoSizeText(
             'Venkateshwara Power Project',
             style: TextStyle(
-              fontWeight: FontWeight.w300,
+              fontWeight: FontWeight.w400,
             ),
           ),
           actions: [
@@ -71,192 +72,198 @@ class HomePageScreen extends StatelessWidget {
           ],
           bottom: PreferredSize(
               preferredSize: Size.fromHeight(
-                  getHeight(context) / 5.5), // Set the preferred height
-              child: model.empList.length != 0
-                  ? Column(
+                  getHeight(context) / 12.5), // Set the preferred height
+              child: model.empList.isNotEmpty
+                  ? Row(
                       children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Welcome, ${model.empname}",
-                              style: const TextStyle(
-                                fontSize: 19.0,
-                                fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    10.0, 0.0, 0.0, 0.0),
+                                child: AutoSizeText(
+                                  "Welcome, ${model.empname}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    10.0, 0.0, 0.0, 0.0),
+                                child: model.checkinList.isNotEmpty
+                                    ? AutoSizeText(
+                                        "Last ${model.checkvalue == "IN" ? "Check-In" : "Check-Out"} at ${DateFormat('dd MMM yyyy, hh:mm a').format(DateTime.tryParse(model.time ?? "") ?? DateTime.now())}",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      )
+                                    : Container(),
+                              ),
+                            ],
                           ),
                         ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: model.checkinList.isNotEmpty
-                                  ? Text(
-                                      "Last ${model.checkvalue == "IN" ? "Check-In" : "Check-Out"} at ${DateFormat('dd MMM yyyy, hh:mm a').format(DateTime.tryParse(model.time ?? "") ?? DateTime.now())}",
-                                      style: const TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    )
-                                  : Container()),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        const SizedBox(width: 10),
                         model.checkvalue != "IN"
-                            ? MaterialButton(
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    enableDrag: false,
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Center(
-                                              child: Text(
-                                                DateFormat('hh:mm:ss a')
-                                                    .format(DateTime.now()),
-                                                style: const TextStyle(
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.bold,
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      enableDrag: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Center(
+                                                child: Text(
+                                                  DateFormat('hh:mm:ss a')
+                                                      .format(DateTime.now()),
+                                                  style: const TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                DateFormat('dd MMM, yyyy')
-                                                    .format(DateTime.now()),
-                                                style: const TextStyle(
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.w300,
+                                              Center(
+                                                child: Text(
+                                                  DateFormat('dd MMM, yyyy')
+                                                      .format(DateTime.now()),
+                                                  style: const TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.w300,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 10.0),
-                                            MaterialButton(
-                                              onPressed: () {
-                                                // Add your check-in logic here
-                                                model.checkin(context);
-                                                // Close the bottom sheet
-                                              },
-                                              minWidth:
-                                                  150.0, // Set the custom width
-                                              height:
-                                                  48.0, // Set the button height
-                                              color: Colors
-                                                  .green, // Set the button color
-                                              textColor: Colors
-                                                  .white, // Set the text color
-                                              child: const Text(
-                                                "Check In",
-                                                style: TextStyle(
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.bold,
+                                              const SizedBox(height: 10.0),
+                                              MaterialButton(
+                                                onPressed: () {
+                                                  // Add your check-in logic here
+                                                  model.checkin(context);
+                                                  // Close the bottom sheet
+                                                },
+                                                minWidth:
+                                                    150.0, // Set the custom width
+                                                height:
+                                                    48.0, // Set the button height
+                                                color: Colors
+                                                    .green, // Set the button color
+                                                textColor: Colors
+                                                    .white, // Set the text color
+                                                child: const AutoSizeText(
+                                                  "Check In",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                minWidth: 200.0, // Set the custom width
-                                height: 48.0, // Set the button height
-                                color: Colors.green, // Set the button color
-                                textColor: Colors.white, // Set the text color
-                                child: const Text(
-                                  "Check In ",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  minWidth: getWidth(context) / 20,
+                                  height: getHeight(context) / 25,
+                                  color: Colors.green,
+                                  textColor: Colors.white,
+                                  child: const Flexible(
+                                    child: AutoSizeText(
+                                      "Check In ",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               )
-                            : MaterialButton(
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    enableDrag: false,
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Center(
-                                              child: Text(
-                                                DateFormat('hh:mm:ss a')
-                                                    .format(DateTime.now()),
-                                                style: const TextStyle(
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.bold,
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      enableDrag: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Center(
+                                                child: Text(
+                                                  DateFormat('hh:mm:ss a')
+                                                      .format(DateTime.now()),
+                                                  style: const TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                DateFormat('dd MMM, yyyy')
-                                                    .format(DateTime.now()),
-                                                style: const TextStyle(
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.w300,
+                                              Center(
+                                                child: Text(
+                                                  DateFormat('dd MMM, yyyy')
+                                                      .format(DateTime.now()),
+                                                  style: const TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.w300,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 10.0),
-                                            MaterialButton(
-                                              onPressed: () {
-                                                model.checkout(context);
-                                              },
-                                              minWidth:
-                                                  150.0, // Set the custom width
-                                              height:
-                                                  48.0, // Set the button height
-                                              color: Colors
-                                                  .redAccent, // Set the button color
-                                              textColor: Colors
-                                                  .white, // Set the text color
-                                              child: const Text(
-                                                "Check Out",
-                                                style: TextStyle(
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.bold,
+                                              const SizedBox(height: 10.0),
+                                              MaterialButton(
+                                                onPressed: () {
+                                                  model.checkout(context);
+                                                },
+                                                minWidth:
+                                                    150.0, // Set the custom width
+                                                height:
+                                                    48.0, // Set the button height
+                                                color: Colors
+                                                    .redAccent, // Set the button color
+                                                textColor: Colors
+                                                    .white, // Set the text color
+                                                child: const Flexible(
+                                                  child: Text(
+                                                    "Check Out",
+                                                    style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                minWidth: 200.0, // Set the custom width
-                                height: 48.0, // Set the button height
-                                color: Colors.redAccent, // Set the button color
-                                textColor: Colors.white, // Set the text color
-                                child: const Text(
-                                  "Check Out",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  minWidth: getWidth(context) /
+                                      20, // Set the custom width
+                                  height: getHeight(context) /
+                                      25, // Set the button height
+                                  color:
+                                      Colors.redAccent, // Set the button color
+                                  textColor: Colors.white, // Set the text color
+                                  child: const AutoSizeText(
+                                    "Check Out",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
-                        const SizedBox(
-                          height: 10,
-                        )
                       ],
                     )
                   : const Center(
@@ -270,7 +277,7 @@ class HomePageScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Hero(
                 tag: "TITLE",
-                child: model.empList.length != 0
+                child: model.empList.isNotEmpty
                     ? Container(
                         padding: const EdgeInsets.all(20),
                         child: Column(

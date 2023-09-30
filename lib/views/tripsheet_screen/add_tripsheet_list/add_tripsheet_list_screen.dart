@@ -18,6 +18,17 @@ class TripsheetMaster extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Trip Sheet List'),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.addTripsheetScreen,
+                    arguments: const AddTripsheetScreenArguments(tripId: ""),
+                  );
+                },
+                child: const Text('+Add Trip Sheet')),
+          ],
         ),
         body: fullScreenLoader(
             child: Column(
@@ -75,7 +86,6 @@ class TripsheetMaster extends StatelessWidget {
                                         },
                                         decoration: const InputDecoration(
                                           labelText: 'Village',
-                                          prefixIcon: Icon(Icons.search),
                                         )),
                                   ),
                                   const SizedBox(
@@ -92,7 +102,7 @@ class TripsheetMaster extends StatelessWidget {
                                       },
                                       decoration: const InputDecoration(
                                         labelText: 'Transporter',
-                                        prefixIcon: Icon(Icons.search),
+
                                         // prefixIcon: Icon(Icons.search),
                                       ),
                                     ),

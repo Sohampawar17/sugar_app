@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,22 +51,43 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      const Icon(Icons.person, size: 100),
-                      const Text(
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape
+                              .circle, // Makes the container and the image circular
+                          border: Border.all(
+                            color: Colors.white, // Border color
+                            width: 2.0, // Border width
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(
+                              10.0), // Padding around the image
+                          child: Image.asset(
+                            'assets/images/logo.png', // Replace 'your_image.png' with your actual asset image path
+                            width: 100, // Set width as per your requirement
+                            height: 100, // Set height as per your requirement
+                          ),
+                        ),
+                      ),
+                      const AutoSizeText(
                         'Log in to your Account',
+                        minFontSize: 26,
+                        maxFontSize: double.infinity,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 30,
                           color: Colors.white, // Text color
                         ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
-                      const Text(
+                      const AutoSizeText(
+                        minFontSize: 15,
+                        maxFontSize: double.infinity,
                         'Welcome back! Please Enter Your Details',
-                        style: TextStyle(
-                            fontSize: 16, color: Colors.white), // Text color
+                        style: TextStyle(color: Colors.white), // Text color
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(
@@ -118,8 +140,11 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                         autofillHints: const [
                                           AutofillHints.username
                                         ],
-                                        onEditingComplete: () =>
-                                            TextInput.finishAutofillContext(),
+                                        onEditingComplete: () {
+                                          TextInput.finishAutofillContext();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
                                         validator: (value) =>
                                             model.validateUsername(value),
                                       ),
@@ -162,8 +187,11 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                                         autofillHints: const [
                                           AutofillHints.password
                                         ],
-                                        onEditingComplete: () =>
-                                            TextInput.finishAutofillContext(),
+                                        onEditingComplete: () {
+                                          TextInput.finishAutofillContext();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
                                         validator: (value) =>
                                             model.validatePassword(value),
                                       ),
@@ -213,19 +241,19 @@ class _LoginViewScreenState extends State<LoginViewScreen> {
                         alignment: Alignment.bottomCenter,
                         child: InkWell(
                           onTap: () async {
-                            const url =
-                                'https://erpdata.in/'; // Replace with your actual website URL
-                            if (await canLaunchUrl(Uri.parse(url))) {
-                              await launchUrl(Uri.parse(url));
+                            Uri url = Uri.parse('https://erpdata.in/');
+                            // Convert Uri to String
+
+                            if (await canLaunchUrl(url)) {
+                              await launchUrl(url);
                             } else {
                               throw 'Could not launch $url';
                             }
                           },
-                          child: const Text(
+                          child: const AutoSizeText(
                             'Developed By © QuantBit Technologies Pvt. Ltd ',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 14,
                             ),
                           ),
                         ),

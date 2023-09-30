@@ -18,6 +18,18 @@ class ListSamplingScreen extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: const Text('Crop Sampling'),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.addCropSamplingScreen,
+                    arguments:
+                        const AddCropSamplingScreenArguments(samplingId: ""),
+                  );
+                },
+                child: const Text('+Add Crop Sampling')),
+          ],
         ),
         body: fullScreenLoader(
           child: Column(

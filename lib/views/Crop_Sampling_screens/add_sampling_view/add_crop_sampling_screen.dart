@@ -50,6 +50,7 @@ class AddCropSamplingScreen extends StatelessWidget {
                           return TextFormField(
                             controller: textEditingController,
                             focusNode: focusNode,
+                            keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
                               labelText: 'Plot number',
                             ),

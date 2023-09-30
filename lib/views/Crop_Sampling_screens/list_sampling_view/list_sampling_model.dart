@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
 import 'package:stacked/stacked.dart';
-
-import '../../../constants.dart';
 import '../../../models/list_crop_sampling_model.dart';
 import '../../../router.router.dart';
 import '../../../services/list_crop_sampling_service.dart';
@@ -30,9 +27,7 @@ class ListSamplingModel extends BaseViewModel {
     samplingList = (await ListCropSamplingServices().getAllCropSamplingList());
     filtersamplingList = samplingList;
     setBusy(false);
-    if (samplingList[0] == "401") {
-      logout(context);
-    }
+
     notifyListeners();
   }
 
