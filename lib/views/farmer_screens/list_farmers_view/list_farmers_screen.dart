@@ -18,7 +18,7 @@ class ListFarmersScreen extends StatelessWidget {
       onViewModelReady: (model) => model.initialise(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Farmers'),
+          title: const AutoSizeText('Farmer List'),
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -30,7 +30,7 @@ class ListFarmersScreen extends StatelessWidget {
                       arguments: const AddFarmerScreenArguments(farmerid: ""),
                     );
                   },
-                  child: const Text('+Add Farmer')),
+                  child: const AutoSizeText('+Add Farmer')),
             )
           ],
         ),

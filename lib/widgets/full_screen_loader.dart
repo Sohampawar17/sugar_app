@@ -17,7 +17,7 @@ Widget fullScreenLoader(
               child: Center(
                 child: LoadingAnimationWidget.discreteCircle(
                     color: Colors.white,
-                    size: 200,
+                    size: 150,
                     secondRingColor: Colors.blue,
                     thirdRingColor: Colors.lightBlue),
               ),

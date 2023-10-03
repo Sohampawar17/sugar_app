@@ -87,8 +87,9 @@ class HomeViewModel extends BaseViewModel {
         if (res) {
           if (context.mounted) {
             setBusy(false);
-            setBusy(false);
+
             checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
+
             checkvalue = checkinList[0].logType;
             time = checkinList[0].time;
             notifyListeners();

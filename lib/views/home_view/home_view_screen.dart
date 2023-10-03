@@ -8,9 +8,14 @@ import 'package:sugar_mill_app/widgets/full_screen_loader.dart';
 
 import '../../router.router.dart';
 
-class HomePageScreen extends StatelessWidget {
+class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
 
+  @override
+  State<HomePageScreen> createState() => _HomePageScreenState();
+}
+
+class _HomePageScreenState extends State<HomePageScreen> {
   // Helper function to create a button with an image and text
   Widget _buildImageButton({
     required String imagePath,
@@ -22,33 +27,56 @@ class HomePageScreen extends StatelessWidget {
       elevation: 8,
       borderRadius: BorderRadius.circular(10),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: InkWell(
+      child: GestureDetector(
         onTap: () => onPressed(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Ink.image(
-              image: AssetImage(
+        child: Material(
+          color: Colors.white,
+          elevation: 8,
+          borderRadius: BorderRadius.circular(10),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
                 imagePath,
+                height: 120,
+                width: 300,
+                fit: BoxFit.fill,
               ),
-              height: 120,
-              fit: BoxFit.fill,
-              width: 300,
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
+              Center(
                 child: AutoSizeText(
                   buttonText,
                   style: const TextStyle(color: Colors.black),
                 ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text('Do you want to exit an App'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(false), //<-- SEE HERE
+                child: Text('No'),
+              ),
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(true), // <-- SEE HERE
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
   }
 
   @override
@@ -112,7 +140,8 @@ class HomePageScreen extends StatelessWidget {
                                 child: MaterialButton(
                                   onPressed: () {
                                     showModalBottomSheet(
-                                      enableDrag: false,
+                                      enableDrag: true,
+                                      isDismissible: false,
                                       context: context,
                                       builder: (BuildContext context) {
                                         return Padding(
@@ -145,7 +174,6 @@ class HomePageScreen extends StatelessWidget {
                                               const SizedBox(height: 10.0),
                                               MaterialButton(
                                                 onPressed: () {
-                                                  // Add your check-in logic here
                                                   model.checkin(context);
                                                   // Close the bottom sheet
                                                 },
@@ -174,12 +202,10 @@ class HomePageScreen extends StatelessWidget {
                                   height: getHeight(context) / 25,
                                   color: Colors.green,
                                   textColor: Colors.white,
-                                  child: const Flexible(
-                                    child: AutoSizeText(
-                                      "Check In ",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  child: const AutoSizeText(
+                                    "Check In ",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
@@ -190,62 +216,66 @@ class HomePageScreen extends StatelessWidget {
                                   onPressed: () {
                                     showModalBottomSheet(
                                       enableDrag: false,
+                                      isDismissible: false,
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Center(
-                                                child: Text(
-                                                  DateFormat('hh:mm:ss a')
-                                                      .format(DateTime.now()),
-                                                  style: const TextStyle(
-                                                    fontSize: 20.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                              Center(
-                                                child: Text(
-                                                  DateFormat('dd MMM, yyyy')
-                                                      .format(DateTime.now()),
-                                                  style: const TextStyle(
-                                                    fontSize: 20.0,
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 10.0),
-                                              MaterialButton(
-                                                onPressed: () {
-                                                  model.checkout(context);
-                                                },
-                                                minWidth:
-                                                    150.0, // Set the custom width
-                                                height:
-                                                    48.0, // Set the button height
-                                                color: Colors
-                                                    .redAccent, // Set the button color
-                                                textColor: Colors
-                                                    .white, // Set the text color
-                                                child: const Flexible(
+                                        return StatefulBuilder(builder:
+                                            (BuildContext context,
+                                                StateSetter setState) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Center(
                                                   child: Text(
-                                                    "Check Out",
-                                                    style: TextStyle(
+                                                    DateFormat('hh:mm:ss a')
+                                                        .format(DateTime.now()),
+                                                    style: const TextStyle(
                                                       fontSize: 20.0,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
+                                                Center(
+                                                  child: Text(
+                                                    DateFormat('dd MMM, yyyy')
+                                                        .format(DateTime.now()),
+                                                    style: const TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10.0),
+                                                MaterialButton(
+                                                  onPressed: () {
+                                                    model.checkout(context);
+                                                  },
+                                                  minWidth:
+                                                      150.0, // Set the custom width
+                                                  height:
+                                                      48.0, // Set the button height
+                                                  color: Colors
+                                                      .redAccent, // Set the button color
+                                                  textColor: Colors
+                                                      .white, // Set the text color
+                                                  child: const AutoSizeText(
+                                                    "Check Out",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        });
                                       },
                                     );
                                   },
@@ -274,225 +304,231 @@ class HomePageScreen extends StatelessWidget {
         body: fullScreenLoader(
           loader: model.isBusy,
           context: context,
-          child: SingleChildScrollView(
-            child: Hero(
-                tag: "TITLE",
-                child: model.empList.isNotEmpty
-                    ? Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            SizedBox(
-                              height: getHeight(context) / 5,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath: 'assets/images/farmer.jpg',
-                                      buttonText: 'New Farmer',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.addFarmerScreen,
-                                          arguments:
-                                              const AddFarmerScreenArguments(
-                                                  farmerid: ""),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15.0,
-                                  ),
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath:
-                                          'assets/images/farmer_list.jpg',
-                                      buttonText: 'Farmer List',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.listFarmersScreen,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+          child: WillPopScope(
+            onWillPop: _onWillPop,
+            child: SingleChildScrollView(
+              child: Hero(
+                  tag: "TITLE",
+                  child: model.empList.isNotEmpty
+                      ? Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const SizedBox(
+                                height: 10.0,
                               ),
-                            ),
-                            const SizedBox(
-                              height: 15.0,
-                            ),
-                            SizedBox(
-                              height: getHeight(context) / 5,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath:
-                                          'assets/images/cane_registration.jpeg',
-                                      buttonText: 'New Cane Registration',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.addCaneScreen,
-                                          arguments:
-                                              const AddCaneScreenArguments(
-                                                  caneId: ""),
-                                        );
-                                      },
+                              SizedBox(
+                                height: getHeight(context) / 5,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath: 'assets/images/farmer.jpg',
+                                        buttonText: 'New Farmer',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.addFarmerScreen,
+                                            arguments:
+                                                const AddFarmerScreenArguments(
+                                                    farmerid: ""),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15.0,
-                                  ),
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath: 'assets/images/cane_list.jpg',
-                                      buttonText: 'Cane Master List',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.listCaneScreen,
-                                        );
-                                      },
+                                    const SizedBox(
+                                      width: 15.0,
                                     ),
-                                  ),
-                                ],
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/farmer_list.jpg',
+                                        buttonText: 'Farmer List',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.listFarmersScreen,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 15.0,
-                            ),
-                            SizedBox(
-                              height: getHeight(context) / 5,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath:
-                                          'assets/images/agri_developement.jpg',
-                                      buttonText: 'New Cane Development',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.addAgriScreen,
-                                          arguments:
-                                              const AddAgriScreenArguments(
-                                                  agriId: ""),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15.0,
-                                  ),
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath: 'assets/images/agri_list.jpg',
-                                      buttonText: 'Agriculture Develop List',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.listAgriScreen,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              const SizedBox(
+                                height: 15.0,
                               ),
-                            ),
-                            const SizedBox(
-                              height: 15.0,
-                            ),
-                            SizedBox(
-                              height: getHeight(context) / 5,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath:
-                                          'assets/images/crop_sampling.jpg',
-                                      buttonText: 'New Crop Sampling',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.addCropSamplingScreen,
-                                          arguments:
-                                              const AddCropSamplingScreenArguments(
-                                                  samplingId: ""),
-                                        );
-                                      },
+                              SizedBox(
+                                height: getHeight(context) / 5,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/cane_registration.jpeg',
+                                        buttonText: 'New Cane Registration',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.addCaneScreen,
+                                            arguments:
+                                                const AddCaneScreenArguments(
+                                                    caneId: ""),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15.0,
-                                  ),
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath:
-                                          'assets/images/crop_sample_list.jpg',
-                                      buttonText: 'Crop Sampling List',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.listSamplingScreen,
-                                        );
-                                      },
+                                    const SizedBox(
+                                      width: 15.0,
                                     ),
-                                  ),
-                                ],
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/cane_list.jpg',
+                                        buttonText: 'Cane Master List',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.listCaneScreen,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 15.0,
-                            ),
-                            SizedBox(
-                              height: getHeight(context) / 5,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath:
-                                          'assets/images/trip_sheet.webp',
-                                      buttonText: 'New Trip Sheet',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.addTripsheetScreen,
-                                          arguments:
-                                              const AddTripsheetScreenArguments(
-                                                  tripId: ""),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15.0,
-                                  ),
-                                  Expanded(
-                                    child: _buildImageButton(
-                                      imagePath: 'assets/images/trip_list.jpg',
-                                      buttonText: 'Trip Sheet List',
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.tripsheetMaster,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              const SizedBox(
+                                height: 15.0,
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container()),
+                              SizedBox(
+                                height: getHeight(context) / 5,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/agri_developement.jpg',
+                                        buttonText: 'New Cane Development',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.addAgriScreen,
+                                            arguments:
+                                                const AddAgriScreenArguments(
+                                                    agriId: ""),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/agri_list.jpg',
+                                        buttonText: 'Cane Development List',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.listAgriScreen,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 15.0,
+                              ),
+                              SizedBox(
+                                height: getHeight(context) / 5,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/crop_sampling.jpg',
+                                        buttonText: 'New Crop Sampling',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.addCropSamplingScreen,
+                                            arguments:
+                                                const AddCropSamplingScreenArguments(
+                                                    samplingId: ""),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/crop_sample_list.jpg',
+                                        buttonText: 'Crop Sampling List',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.listSamplingScreen,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 15.0,
+                              ),
+                              SizedBox(
+                                height: getHeight(context) / 5,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/trip_sheet.webp',
+                                        buttonText: 'New Trip Sheet',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.addTripsheetScreen,
+                                            arguments:
+                                                const AddTripsheetScreenArguments(
+                                                    tripId: ""),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Expanded(
+                                      child: _buildImageButton(
+                                        imagePath:
+                                            'assets/images/trip_list.jpg',
+                                        buttonText: 'Trip Sheet List',
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.tripsheetMaster,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container()),
+            ),
           ),
         ),
       ),

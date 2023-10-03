@@ -18,6 +18,7 @@ class AddCropSmaplingModel extends BaseViewModel {
   bool isEdit = false;
   List<String> seasonlist = [""];
   initialise(BuildContext context, String samplingId) async {
+    setBusy(true);
     plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter());
     seasonlist = await AddAgriServices().fetchSeason();
     for (dynamic i in plotList) {
@@ -56,6 +57,7 @@ class AddCropSmaplingModel extends BaseViewModel {
         ),
       );
     }
+    setBusy(false);
   }
 
   void onSavePressed(BuildContext context) async {

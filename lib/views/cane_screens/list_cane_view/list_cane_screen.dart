@@ -18,7 +18,7 @@ class ListCaneScreen extends StatelessWidget {
       onViewModelReady: (model) => model.initialise(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Cane Master'),
+          title: const AutoSizeText('Cane Master'),
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -30,7 +30,7 @@ class ListCaneScreen extends StatelessWidget {
                       arguments: const AddCaneScreenArguments(caneId: ""),
                     );
                   },
-                  child: const Text('+Add Cane Master')),
+                  child: const AutoSizeText('+Add Cane Master')),
             )
           ],
         ),
@@ -119,48 +119,40 @@ class ListCaneScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 color: Colors.grey,
                 child: const ListTile(
-                  trailing: AutoSizeText(
-                    'Village',
-                    maxLines: 2,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  leading: SizedBox(
-                    // width: getWidth(context) / 5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        AutoSizeText(
-                          'Circle Office',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        AutoSizeText(
-                          'Plantation Status',
-                          maxLines: 2,
-                          style: TextStyle(fontSize: 8, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                  title: Text(
-                    'Name',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                  subtitle: Row(
+                  trailing: Column(
                     children: [
-                      Text(
-                        'ID',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      AutoSizeText(
+                        'Village',
+                        maxLines: 2,
+                        style: TextStyle(color: Colors.white),
                       ),
-                      SizedBox(
-                        width: 35,
-                      ),
-                      Text(
+                      AutoSizeText(
                         'Plantation Date',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ],
+                  ),
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      AutoSizeText(
+                        'Circle Office',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      AutoSizeText(
+                        'Plantation Status',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  title: AutoSizeText(
+                    'Name',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  subtitle: AutoSizeText(
+                    'ID',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),

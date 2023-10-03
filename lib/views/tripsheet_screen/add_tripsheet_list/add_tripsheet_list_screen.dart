@@ -17,7 +17,7 @@ class TripsheetMaster extends StatelessWidget {
       onViewModelReady: (model) => model.initialise(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Trip Sheet List'),
+          title: const AutoSizeText('Trip Sheet List'),
           actions: [
             ElevatedButton(
                 onPressed: () {
@@ -27,7 +27,7 @@ class TripsheetMaster extends StatelessWidget {
                     arguments: const AddTripsheetScreenArguments(tripId: ""),
                   );
                 },
-                child: const Text('+Add Trip Sheet')),
+                child: const AutoSizeText('+Add Trip Sheet')),
           ],
         ),
         body: fullScreenLoader(

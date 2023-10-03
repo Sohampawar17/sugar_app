@@ -17,7 +17,7 @@ class ListSamplingScreen extends StatelessWidget {
       onViewModelReady: (model) => model.initialise(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Crop Sampling'),
+          title: const AutoSizeText('Crop Sampling'),
           actions: [
             ElevatedButton(
                 onPressed: () {
@@ -28,7 +28,7 @@ class ListSamplingScreen extends StatelessWidget {
                         const AddCropSamplingScreenArguments(samplingId: ""),
                   );
                 },
-                child: const Text('+Add Crop Sampling')),
+                child: const AutoSizeText('+Add Crop Sampling')),
           ],
         ),
         body: fullScreenLoader(

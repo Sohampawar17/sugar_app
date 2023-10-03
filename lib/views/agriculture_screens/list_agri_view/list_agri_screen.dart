@@ -17,7 +17,7 @@ class ListAgriScreen extends StatelessWidget {
       onViewModelReady: (model) => model.initialise(context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          title: const Text('Agriculture Development'),
+          title: const AutoSizeText('Agriculture Development List'),
           actions: [
             ElevatedButton(
                 onPressed: () {
@@ -27,7 +27,7 @@ class ListAgriScreen extends StatelessWidget {
                     arguments: const AddAgriScreenArguments(agriId: ""),
                   );
                 },
-                child: const Text('+Add Cane Development')),
+                child: const AutoSizeText('+Add Cane Development')),
           ],
         ),
         body: fullScreenLoader(
@@ -92,12 +92,12 @@ class ListAgriScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  title: Text(
+                  title: AutoSizeText(
                     'Name',
                     style: TextStyle(
                         fontSize: 14, color: Colors.white), // Set text color
                   ),
-                  subtitle: Text(
+                  subtitle: AutoSizeText(
                     'Plantation Date',
                     style: TextStyle(
                         fontSize: 14, color: Colors.white), // Set text color
