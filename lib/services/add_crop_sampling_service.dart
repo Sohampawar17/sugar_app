@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 import 'package:sugar_mill_app/models/crop_sampling.dart';
+import 'package:sugar_mill_app/models/sampling_formula.dart';
 
 import '../constants.dart';
 import '../models/agri_cane_model.dart';
@@ -121,5 +122,30 @@ class AddCropSmaplingServices {
       Logger().e(e);
       return [];
     }
+  }
+
+  Future<samplingformula?> fetchsamplingFormula() async {
+    try {
+      var headers = {'Cookie': await getTocken()};
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/resource/Cane Sampling Formula/1',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Logger().i(response.data["data"]);
+        return samplingformula.fromJson(response.data["data"]);
+      } else {
+        // print(response.statusMessage);
+        return null;
+      }
+    } catch (e) {
+      Logger().e(e);
+    }
+    return null;
   }
 }

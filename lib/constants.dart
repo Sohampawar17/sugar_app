@@ -32,7 +32,7 @@ String apiBankListGet =
 String apiFarmerListPost = '$apiBaseUrl/api/resource/Farmer List';
 String apiUploadFilePost = '$apiBaseUrl/api/method/upload_file';
 String apiFarmerAllListGet =
-    '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","village","name","workflow_state","circle_office","existing_supplier_code"]&limit_page_length=20&order_by=creation desc';
+    '$apiBaseUrl/api/resource/Farmer%20List?fields=["supplier_name","village","name","workflow_state","circle_office","existing_supplier_code"]&limit_page_length=20&order_by=creation%20desc&filters=[["workflow_state","in",["New","Pending"]]]';
 String apitFilterOnFarmerListGet =
     "$apiBaseUrl/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"bed%\" ],[\"supplier_name\",  \"like\", \"abhi%\" ]]";
 String apiLoginGet = '$apiBaseUrl/api/method/login';

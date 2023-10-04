@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/views/cane_screens/add_cane_view/add_cane_model.dart';
 
@@ -806,6 +808,7 @@ class AddCaneScreen extends StatelessWidget {
                                   ),
                                   validator: model.validateplantationdate,
                                   onChanged: model.onplantationdateChanged,
+                                  // Format the date before displaying it in the TextFormField
                                 ),
                               ),
                               const SizedBox(width: 15),
@@ -890,11 +893,16 @@ class AddCaneScreen extends StatelessWidget {
                                     decoration: const InputDecoration(
                                       labelText: 'Is Machine',
                                     ),
-                                    hint: const Text('Select Is Machine'),
+                                    isExpanded: true,
+                                    hint:
+                                        const AutoSizeText('Select Is Machine'),
                                     items: model.yesnomachine.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(
+                                          val,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>
@@ -909,14 +917,19 @@ class AddCaneScreen extends StatelessWidget {
                                       DropdownButtonFormField<String>(
                                     value: model.canedata.seedType,
                                     // Replace null with the selected value if needed
+                                    isExpanded: true,
                                     decoration: const InputDecoration(
                                       labelText: 'Seed Type',
                                     ),
-                                    hint: const Text('Select Seed Type'),
+                                    hint:
+                                        const AutoSizeText('Select Seed Type'),
                                     items: model.seedType.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(
+                                          val,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>

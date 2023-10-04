@@ -63,6 +63,7 @@ class CaneViewModel extends BaseViewModel {
   DateTime? selectedDate;
   DateTime? selectedBaselDate;
   String? selectedCaneRoute = "";
+  DateFormat dateFormat = DateFormat('dd-MM-yyyy');
 
   initialise(BuildContext context, String caneId) async {
     setBusy(true);
@@ -93,8 +94,20 @@ class CaneViewModel extends BaseViewModel {
       areainAcrsController.text = canedata.areaAcrs.toString();
       surveyNumberController.text = canedata.surveyNumber ?? "";
       formNumberController.text = canedata.formNumber ?? "";
-      plantationdateController.text = canedata.plantattionRatooningDate ?? '';
-      baselDateController.text = canedata.basalDate ?? '';
+      // Define the desired date format
+
+// Format and set plantationRatooningDate
+      plantationdateController.text = canedata.plantattionRatooningDate != ""
+          ? dateFormat
+              .format(DateTime.parse(canedata.plantattionRatooningDate ?? ""))
+          : "";
+
+// Format and set basalDate
+      String? formattedDate = canedata.basalDate != null
+          ? dateFormat.format(DateTime.parse(canedata.basalDate ?? ""))
+          : canedata.basalDate ?? "";
+
+      baselDateController.text = formattedDate;
     }
     if (villageList.isEmpty) {
       logout(context);

@@ -317,8 +317,16 @@ class AddCropSamplingScreen extends StatelessWidget {
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               controller: model.noofpairsController,
-                              decoration: const InputDecoration(
-                                labelText: 'No. of  Pairs',
+                              decoration: InputDecoration(
+                                labelText: 'No. of Pairs',
+                                errorText: (int.tryParse(model
+                                                    .samplingformauladata
+                                                    .minimumPairs ??
+                                                "") ??
+                                            0) >
+                                        (model.cropsamplingdata.noOfPairs ?? 0)
+                                    ? 'SugarCane Is not enough Matured to cut down'
+                                    : null,
                               ),
                               onChanged: model.setSelectednoofpairs,
                               validator: model.validatenoofpairs,

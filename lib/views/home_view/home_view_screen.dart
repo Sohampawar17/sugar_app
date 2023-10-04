@@ -43,10 +43,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 width: 300,
                 fit: BoxFit.fill,
               ),
-              Center(
-                child: AutoSizeText(
-                  buttonText,
-                  style: const TextStyle(color: Colors.black),
+              Expanded(
+                child: Center(
+                  child: AutoSizeText(
+                    buttonText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
                 ),
               ),
             ],

@@ -29,7 +29,7 @@ class FarmerViewModel extends BaseViewModel {
   TextEditingController ageController = TextEditingController();
   TextEditingController villageController = TextEditingController();
   List<BankDetails> bankAccounts = [];
-  final List<String> items = ['Farmer', 'Member'];
+  final List<String> items = ['Tran', 'Har', 'Far', 'Mem'];
   final List<String> plantlist = ['Bedkihal', 'Nagpur'];
   final List<String> vendorGroupList = ['Cane'];
   final List<String> roles = ['Farmer', 'Harvester', 'Transporter'];
@@ -75,11 +75,17 @@ class FarmerViewModel extends BaseViewModel {
         bankPassbookUrls.add(bank.bankPassbook ?? "");
       }
 
-      if (farmerData.isFarmer == 1) {
+      if (farmerData.isTransporter == 1) {
         _selectedItems.add(items[0]);
       }
-      if (farmerData.isMember == 1) {
+      if (farmerData.isHarvester == 1) {
         _selectedItems.add(items[1]);
+      }
+      if (farmerData.isFarmer == 1) {
+        _selectedItems.add(items[2]);
+      }
+      if (farmerData.isMember == 1) {
+        _selectedItems.add(items[3]);
       }
     }
 
@@ -478,18 +484,30 @@ class FarmerViewModel extends BaseViewModel {
     if (_selectedItems.contains(item)) {
       _selectedItems.remove(item);
       // 'Transporter', 'Harvester', 'Farmer', 'Member'
+      if (item == items[1]) {
+        farmerData.isTransporter = 0;
+      }
+      if (item == items[2]) {
+        farmerData.isHarvester = 0;
+      }
       if (item == items[0]) {
         farmerData.isFarmer = 0;
       }
-      if (item == items[1]) {
+      if (item == items[3]) {
         farmerData.isMember = 0;
       }
     } else {
       _selectedItems.add(item);
       if (item == items[0]) {
-        farmerData.isFarmer = 1;
+        farmerData.isTransporter = 1;
       }
       if (item == items[1]) {
+        farmerData.isHarvester = 1;
+      }
+      if (item == items[2]) {
+        farmerData.isFarmer = 1;
+      }
+      if (item == items[3]) {
         farmerData.isMember = 1;
       }
     }

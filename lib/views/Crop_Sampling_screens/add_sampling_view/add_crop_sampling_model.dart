@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
+import 'package:sugar_mill_app/models/sampling_formula.dart';
 import 'package:sugar_mill_app/services/add_crop_sampling_service.dart';
 import '../../../constants.dart';
 import '../../../models/agri_cane_model.dart';
@@ -11,9 +12,11 @@ import '../../../services/add_agri_services.dart';
 class AddCropSmaplingModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
   CropSampling cropsamplingdata = CropSampling();
+  samplingformula samplingformauladata = samplingformula();
   List<AgriCane> plotList = [];
+  late String formulaList;
   String? selectedPlot;
-  late String samplingId;
+
   String? selectedfarcode;
   bool isEdit = false;
   List<String> seasonlist = [""];
@@ -21,9 +24,10 @@ class AddCropSmaplingModel extends BaseViewModel {
     setBusy(true);
     plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter());
     seasonlist = await AddAgriServices().fetchSeason();
-    for (dynamic i in plotList) {
-      Logger().i(i.vendorCode);
-    }
+    samplingformauladata =
+        await AddCropSmaplingServices().fetchsamplingFormula() ??
+            samplingformula();
+    Logger().i(samplingformauladata);
     if (samplingId != "") {
       isEdit = true;
       cropsamplingdata =

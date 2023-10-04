@@ -420,9 +420,9 @@ class AddFarmerScreen extends StatelessWidget {
 
                     //roles of user
                     Wrap(
-                      spacing: 4.0,
+                      spacing: 3.0,
                       runSpacing: 3.0,
-                      alignment: WrapAlignment.center,
+                      alignment: WrapAlignment.spaceBetween,
                       children: [
                         for (String item in model.items)
                           Padding(

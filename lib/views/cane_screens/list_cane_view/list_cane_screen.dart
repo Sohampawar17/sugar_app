@@ -149,6 +149,7 @@ class ListCaneScreen extends StatelessWidget {
                   title: AutoSizeText(
                     'Name',
                     style: TextStyle(color: Colors.white),
+                    minFontSize: 8,
                   ),
                   subtitle: AutoSizeText(
                     'ID',
@@ -170,59 +171,43 @@ class ListCaneScreen extends StatelessWidget {
                             child: ListTile(
                               tileColor: model.getTileColor(
                                   model.canefilterList[index].plantationStatus),
-                              trailing: AutoSizeText(
-                                model.canefilterList[index].area ?? '',
-                                maxLines: 2,
-                              ),
-                              leading: SizedBox(
-                                width: getWidth(context) / 5,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    AutoSizeText(
-                                      model.canefilterList[index]
-                                              .circleOffice ??
-                                          '',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    AutoSizeText(
-                                      model.canefilterList[index]
-                                              .plantationStatus ??
-                                          '',
-                                      maxLines: 2,
-                                      style: const TextStyle(
-                                        fontSize: 8,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              title: Text(
-                                model.canefilterList[index].growerName ?? '',
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              subtitle: Row(
+                              trailing: Column(
                                 children: [
-                                  Text(
-                                    model.canefilterList[index].name.toString(),
-                                    style: const TextStyle(fontSize: 14),
+                                  AutoSizeText(
+                                    model.canefilterList[index].area ?? '',
+                                    maxLines: 2,
                                   ),
-                                  const SizedBox(
-                                    width: 35,
-                                  ),
-                                  Text(
+                                  AutoSizeText(
                                     model.canefilterList[index]
                                             .plantattionRatooningDate ??
                                         '',
-                                    style: const TextStyle(fontSize: 14),
                                   ),
                                 ],
                               ),
+                              leading: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  AutoSizeText(
+                                    model.canefilterList[index].circleOffice ??
+                                        '',
+                                    maxLines: 1,
+                                  ),
+                                  AutoSizeText(
+                                    model.canefilterList[index]
+                                            .plantationStatus ??
+                                        '',
+                                    maxLines: 2,
+                                  ),
+                                ],
+                              ),
+                              title: Text(
+                                model.canefilterList[index].growerName ?? '',
+                              ),
+                              subtitle: Text(
+                                model.canefilterList[index].name.toString(),
+                              ),
                               onTap: () {
-                                // Handle row click here
-                                // _onRowClick(context, filteredList[index]);
                                 model.onRowClick(
                                     context, model.canefilterList[index]);
                               },

@@ -300,16 +300,20 @@ class AddAgriScreen extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              controller: model.developmentAreaController,
-                              decoration: const InputDecoration(
-                                labelText: 'Developement Area',
-                              ),
-                              onChanged: model.setSelecteddevelopmentarea,
-                              validator: model.validatedevelopmentArea,
+                              child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: model.developmentAreaController,
+                            decoration: InputDecoration(
+                              labelText: 'Development Area',
+                              hintText: 'Enter the development area',
+                              errorText: (model.agridata.developmentArea ?? 0) >
+                                      (model.agridata.area ?? 0)
+                                  ? 'Enter valid development area'
+                                  : null,
                             ),
-                          ),
+                            onChanged: model.setSelecteddevelopmentarea,
+                            validator: model.validatedevelopmentArea,
+                          )),
                           const SizedBox(
                             width: 25,
                           ),
@@ -438,8 +442,11 @@ class AddAgriScreen extends StatelessWidget {
                                                 model
                                                     .agricultureDevelopmentItem[
                                                         index]
-                                                    .basel = double.parse(value);
+                                                    .basel = double.tryParse(value);
                                                 model.calculateTotal();
+                                                model.calculatebaseltotal();
+// Set the total to model.agridata.baseltotal
+                                                model.calculatetotal();
                                               },
                                             ),
                                           ),
@@ -462,6 +469,8 @@ class AddAgriScreen extends StatelessWidget {
                                                         .preEarthing =
                                                     double.parse(value);
                                                 model.calculateTotal();
+                                                model.calculateprearthtotal();
+                                                model.calculatetotal();
                                               },
                                             ),
                                           ),
@@ -483,6 +492,8 @@ class AddAgriScreen extends StatelessWidget {
                                                         index]
                                                     .earth = double.parse(value);
                                                 model.calculateTotal();
+                                                model.calculatedearthtotal();
+                                                model.calculatetotal();
                                               },
                                             ),
                                           ),
@@ -504,6 +515,8 @@ class AddAgriScreen extends StatelessWidget {
                                                         index]
                                                     .rainy = double.parse(value);
                                                 model.calculateTotal();
+                                                model.calculaterainytotal();
+                                                model.calculatetotal();
                                               },
                                             ),
                                           ),
@@ -525,6 +538,8 @@ class AddAgriScreen extends StatelessWidget {
                                                         index]
                                                     .ratoon1 = double.parse(value);
                                                 model.calculateTotal();
+                                                model.calculateratoon1total();
+                                                model.calculatetotal();
                                               },
                                             ),
                                           ),
@@ -546,6 +561,8 @@ class AddAgriScreen extends StatelessWidget {
                                                         index]
                                                     .ratoon2 = double.parse(value);
                                                 model.calculateTotal();
+                                                model.calculateratoon2total();
+                                                model.calculatetotal();
                                               },
                                             ),
                                           ),
@@ -686,6 +703,130 @@ class AddAgriScreen extends StatelessWidget {
                       const SizedBox(
                         height: 15,
                       ),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      model.agridata.salesType == 'Fertilizer'
+                          ? Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    key: Key(
+                                        model.agridata.baselTotal.toString()),
+                                    readOnly: true,
+                                    initialValue:
+                                        model.agridata.baselTotal?.toString() ??
+                                            "",
+                                    decoration: const InputDecoration(
+                                      labelText: 'basel Total',
+                                    ),
+                                    onChanged: model.setbaseltotal,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    key: Key(model.agridata.preEarthingTotal
+                                        .toString()),
+                                    readOnly: true,
+                                    initialValue: model
+                                            .agridata.preEarthingTotal
+                                            ?.toString() ??
+                                        "",
+                                    decoration: const InputDecoration(
+                                      labelText: 'PreEarthing Total',
+                                    ),
+                                    onChanged: model.setpreeath,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    key: Key(
+                                        model.agridata.earthTotal.toString()),
+                                    readOnly: true,
+                                    initialValue:
+                                        model.agridata.earthTotal?.toString() ??
+                                            "",
+                                    decoration: const InputDecoration(
+                                      labelText: 'Earth Total',
+                                    ),
+                                    onChanged: model.setearthtotal,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      model.agridata.salesType == 'Fertilizer'
+                          ? Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    key: Key(
+                                        model.agridata.rainyTotal.toString()),
+                                    readOnly: true,
+                                    initialValue:
+                                        model.agridata.rainyTotal?.toString() ??
+                                            "",
+                                    decoration: const InputDecoration(
+                                      labelText: 'Rainy Total',
+                                    ),
+                                    onChanged: model.setrainytotal,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    key: Key(
+                                        model.agridata.ratoon1Total.toString()),
+                                    readOnly: true,
+                                    initialValue: model.agridata.ratoon1Total
+                                            ?.toString() ??
+                                        "",
+                                    decoration: const InputDecoration(
+                                      labelText: 'Ratoon1 Total',
+                                    ),
+                                    onChanged: model.setratoon1total,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    key: Key(
+                                        model.agridata.ratoon2Total.toString()),
+                                    readOnly: true,
+                                    initialValue: model.agridata.ratoon2Total
+                                            ?.toString() ??
+                                        "",
+                                    decoration: const InputDecoration(
+                                      labelText: 'Ratoon2 Total',
+                                    ),
+                                    onChanged: model.setratoon2total,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      model.agridata.salesType == 'Fertilizer'
+                          ? TextFormField(
+                              key: Key(model.agridata.total.toString()),
+                              readOnly: true,
+                              initialValue:
+                                  model.agridata.total?.toString() ?? "",
+                              decoration: const InputDecoration(
+                                labelText: 'Total',
+                              ),
+                              onChanged: model.settotal,
+                            )
+                          : Container(),
                       const Divider(
                         thickness: 1,
                       ),

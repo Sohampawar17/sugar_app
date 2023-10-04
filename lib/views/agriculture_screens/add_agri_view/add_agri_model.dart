@@ -215,6 +215,13 @@ class AgriViewModel extends BaseViewModel {
           );
     }).toList();
     notifyListeners();
+    calculateratoon2total();
+    calculateratoon1total();
+    calculaterainytotal();
+    calculatedearthtotal();
+    calculateprearthtotal();
+    calculatebaseltotal();
+    calculatetotal();
   }
 
   void calculateTotal() {
@@ -330,6 +337,62 @@ class AgriViewModel extends BaseViewModel {
       );
     }
     notifyListeners();
+  }
+
+  void calculatebaseltotal() {
+    double baselTotal = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      baselTotal += agricultureDevelopmentItem[index].basel ?? 0.0;
+    }
+    agridata.baselTotal = baselTotal;
+  }
+
+  void calculateprearthtotal() {
+    double prearthtotal = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      prearthtotal += agricultureDevelopmentItem[index].preEarthing ?? 0.0;
+    }
+    agridata.preEarthingTotal = prearthtotal;
+  }
+
+  void calculatedearthtotal() {
+    double earthtotal = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      earthtotal += agricultureDevelopmentItem[index].earth ?? 0.0;
+    }
+    agridata.earthTotal = earthtotal;
+  }
+
+  void calculaterainytotal() {
+    double rainytotal = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      rainytotal += agricultureDevelopmentItem[index].rainy ?? 0.0;
+    }
+    agridata.rainyTotal = rainytotal;
+  }
+
+  void calculateratoon1total() {
+    double ratoon1total = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      ratoon1total += agricultureDevelopmentItem[index].ratoon1 ?? 0.0;
+    }
+    agridata.ratoon1Total = ratoon1total;
+  }
+
+  void calculateratoon2total() {
+    double ratoon2total = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      ratoon2total += agricultureDevelopmentItem[index].ratoon2 ?? 0.0;
+    }
+    agridata.ratoon2Total = ratoon2total;
+  }
+
+  void calculatetotal() {
+    double total = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      total += agricultureDevelopmentItem[index].qty ?? 0.0;
+    }
+    agridata.total = total;
   }
 
   String? selectedgrower;
@@ -461,7 +524,7 @@ class AgriViewModel extends BaseViewModel {
   }
 
   void setSelectedAreaInAcrs(String? area) {
-    selectedAreaInAcrs = double.parse(area ?? '');
+    selectedAreaInAcrs = double.tryParse(area ?? '');
     agridata.area = selectedAreaInAcrs;
     notifyListeners();
   }
@@ -479,7 +542,7 @@ class AgriViewModel extends BaseViewModel {
       text: surveyNumber ?? '',
       selection: TextSelection.collapsed(offset: (surveyNumber ?? '').length),
     );
-    agridata.developmentArea = double.parse(surveyNumber ?? '');
+    agridata.developmentArea = double.tryParse(surveyNumber ?? '');
     notifyListeners();
   }
 
@@ -490,6 +553,41 @@ class AgriViewModel extends BaseViewModel {
     // );
     route_km = km ?? '';
     agridata.route = route_km;
+    notifyListeners();
+  }
+
+  void setbaseltotal(String? km) {
+    agridata.baselTotal = double.tryParse(km ?? "");
+    notifyListeners();
+  }
+
+  void setpreeath(String? km) {
+    agridata.preEarthingTotal = double.tryParse(km ?? "");
+    notifyListeners();
+  }
+
+  void setearthtotal(String? km) {
+    agridata.earthTotal = double.tryParse(km ?? "");
+    notifyListeners();
+  }
+
+  void setrainytotal(String? km) {
+    agridata.rainyTotal = double.tryParse(km ?? "");
+    notifyListeners();
+  }
+
+  void setratoon1total(String? km) {
+    agridata.ratoon1Total = double.tryParse(km ?? "");
+    notifyListeners();
+  }
+
+  void setratoon2total(String? km) {
+    agridata.ratoon2Total = double.tryParse(km ?? "");
+    notifyListeners();
+  }
+
+  void settotal(String? km) {
+    agridata.total = double.tryParse(km ?? "");
     notifyListeners();
   }
 
