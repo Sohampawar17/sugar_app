@@ -15,8 +15,8 @@ const kPanpdf = "PanCard";
 
 const kBankpdf = "BankPassbook";
 const kConcentpdf = "ConcentLetter";
-const apiBaseUrl = "http://deverpvppl.erpdata.in";
-// const apiBaseUrl = "http://vpplprogress.erpdata.in";
+// const apiBaseUrl = "https://deverpvppl.erpdata.in";
+const apiBaseUrl = "https://vpplprogress.erpdata.in";
 
 // api usrls
 String apifetchSeason =
@@ -28,11 +28,13 @@ String apimethodcall =
 String apiVillageListGet =
     '$apiBaseUrl/api/resource/Village?limit_page_length=999999&fields=["name","circle_office","taluka"]';
 String apiBankListGet =
-    '$apiBaseUrl/api/resource/Bank Master?fields=["bank_name","branch","ifsc_code"]&limit_page_length=9999';
+    '$apiBaseUrl/api/resource/Bank Master?fields=["bank_name","branch","ifsc_code"]&limit_page_length=999999';
 String apiFarmerListPost = '$apiBaseUrl/api/resource/Farmer List';
 String apiUploadFilePost = '$apiBaseUrl/api/method/upload_file';
+String apiSupplierList =
+    '$apiBaseUrl/api/resource/Supplier?limit_page_length=999999999&fields=["name","supplier_name"]&filters=[["supplier_group","in",["Nursery","Drip"]]]';
 String apiFarmerAllListGet =
-    '$apiBaseUrl/api/resource/Farmer%20List?fields=["supplier_name","village","name","workflow_state","circle_office","existing_supplier_code"]&limit_page_length=20&order_by=creation%20desc&filters=[["workflow_state","in",["New","Pending"]]]';
+    '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","village","name","workflow_state","circle_office","existing_supplier_code"]&limit_page_length=30&order_by=workflow_state desc,creation desc&filters=[["workflow_state","in",["Pending","New","Approved"]]]';
 String apitFilterOnFarmerListGet =
     "$apiBaseUrl/api/resource/Farmer List?order_by=creation desc&limit_page_length=20&fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\"]&filters=[[\"village\",  \"like\", \"bed%\" ],[\"supplier_name\",  \"like\", \"abhi%\" ]]";
 String apiLoginGet = '$apiBaseUrl/api/method/login';

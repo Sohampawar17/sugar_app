@@ -1,5 +1,5 @@
 class TransportInfo {
-  int? name;
+  String? name;
   String? transporterName;
   String? transporterCode;
   String? harvesterCode;

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +34,7 @@ class AddFarmerScreen extends StatelessWidget {
             child: Form(
               key: model.formKey,
               child: Padding(
-                padding: const EdgeInsets.all(32.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
                     Row(
@@ -53,7 +54,7 @@ class AddFarmerScreen extends StatelessWidget {
                               items: model.plantlist.map((val) {
                                 return DropdownMenuItem<String>(
                                   value: val,
-                                  child: Text(val),
+                                  child: AutoSizeText(val),
                                 );
                               }).toList(),
                               onChanged: (value) =>
@@ -79,7 +80,7 @@ class AddFarmerScreen extends StatelessWidget {
                               items: model.vendorGroupList.map((val) {
                                 return DropdownMenuItem<String>(
                                   value: val,
-                                  child: Text(val),
+                                  child: AutoSizeText(val),
                                 );
                               }).toList(),
                               validator: model.validateVandorGroup,
@@ -106,6 +107,7 @@ class AddFarmerScreen extends StatelessWidget {
                                     labelText: 'Vendor Code'),
                               )),
                     TextFormField(
+
                         key: Key(model.farmerData.supplierName ?? ""),
                         initialValue: model.farmerData.supplierName,
                         decoration:
@@ -403,7 +405,7 @@ class AddFarmerScreen extends StatelessWidget {
                               items: model.genders.map((gender) {
                                 return DropdownMenuItem<String>(
                                   value: gender,
-                                  child: Text(gender),
+                                  child: AutoSizeText(gender),
                                 );
                               }).toList(),
                               onChanged: (value) =>
@@ -469,24 +471,27 @@ class AddFarmerScreen extends StatelessWidget {
                           width: 10.0,
                         ),
 
-                        //for pand card
-                        // Expanded(
-                        //   child: ElevatedButton(
-                        //     onPressed: () => pickDoc(kPanpdf, context, model),
-                        //     // model.selectPdf(kPanpdf, ImageSource.camera),
-                        //     child: model.farmerData.panCard != null
-                        //         ? Text(
-                        //             'Pan File: ${model.farmerData.panCard?.split("/").last}',
-                        //             overflow: TextOverflow.ellipsis,
-                        //           )
-                        //         : model.isFileSelected(kPanpdf)
-                        //             ? Text(
-                        //                 'Pan File: ${model.files.getFile(kPanpdf)?.path.split("/").last}',
-                        //                 overflow: TextOverflow.ellipsis,
-                        //               )
-                        //             : const Text('Attach PAN'),
-                        //   ),
-                        // ),
+                        // for pan card
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => pickDoc(kPanpdf, context, model),
+                            // model.selectPdf(kPanpdf, ImageSource.camera),
+                            child: model.farmerData.panCard != null
+                                ? Text(
+                                    'Pan File: ${model.farmerData.panCard?.split("/").last}',
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : model.isFileSelected(kPanpdf)
+                                    ? Text(
+                                        'Pan File: ${model.files.getFile(kPanpdf)?.path.split("/").last}',
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    : const Text('Attach PAN'),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () =>
@@ -762,13 +767,14 @@ class AddFarmerScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CtextButton(
-                          onPressed: () => model.onSavePressed(context),
-                          text: 'Save',
+                          text: 'Cancel',
+                          onPressed: () => Navigator.of(context).pop(), buttonColor: Colors.red,
                         ),
                         CtextButton(
-                          text: 'Cancel',
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () => model.onSavePressed(context),
+                          text: 'Save', buttonColor: Colors.green,
                         ),
+
                       ],
                     ),
                   ],

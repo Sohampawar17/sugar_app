@@ -10,8 +10,71 @@ import '../models/agri.dart';
 import '../models/cane_farmer.dart';
 import '../models/dose_type.dart';
 import '../models/item.dart';
+import '../models/supplier_List.dart';
+import '../models/village_model.dart';
 
 class AddAgriServices {
+  Future<List<villagemodel>> fetchVillages() async {
+    try {
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/resource/Village?limit_page_length=999999&fields=["name","circle_office","taluka"]',
+        options: Options(
+          method: 'GET',
+          headers: {'Cookie': await getTocken()},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(json.encode(response.data));
+        List<villagemodel> dataList = List.from(jsonData['data'])
+            .map<villagemodel>((data) => villagemodel.fromJson(data))
+            .toList();
+
+        return dataList;
+      } else {
+        Fluttertoast.showToast(msg: "Unable to fetch Villages");
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+      Fluttertoast.showToast(msg: "Unauthorized Access!");
+      return [];
+    }
+  }
+
+  Future<List<caneFarmer>> fetchfarmerListwithfilter(String village) async {
+    try {
+      var headers = {'Cookie': await getTocken()};
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","village","name"]&limit_page_length=999999&filters=[["village","like","$village%"]]',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      if (response.statusCode == 200) {
+        var jsonData = json.encode(response.data);
+        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
+        List<dynamic> dataList = jsonDataMap['data'];
+        List<caneFarmer> farmerList = dataList
+            .map<caneFarmer>((data) => caneFarmer.fromJson(data))
+            .toList();
+        Logger().i(farmerList);
+        return farmerList;
+      } else {
+        Logger().e(response.statusCode);
+        Logger().e(response.statusMessage);
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+      return [];
+    }
+  }
+
+
   Future<bool> updateAgri(Agri agri) async {
     try {
       // var data = json.encode({farmer});
@@ -97,6 +160,7 @@ class AddAgriServices {
     return false;
   }
 
+
   Future<List<String>> fetchSeason() async {
     try {
       var dio = Dio();
@@ -132,7 +196,7 @@ class AddAgriServices {
     }
   }
 
-  Future<List<DosetypeModel>> fetchdosetype(
+  Future<List<DoseTypeModel>> fetchdosetype(
       String basel,
       String preearth,
       String earth,
@@ -153,14 +217,14 @@ class AddAgriServices {
           headers: {'Cookie': await getTocken()},
         ),
       );
-
+Logger().i(response.realUri);
       if (response.statusCode == 200) {
         var jsonData = json.encode(response.data);
         Map<String, dynamic> jsonDataMap = json.decode(jsonData);
         List<dynamic> dataList = jsonDataMap['message'];
 
-        List<DosetypeModel> doseList = dataList
-            .map<DosetypeModel>((data) => DosetypeModel.fromJson(data))
+        List<DoseTypeModel> doseList = dataList
+            .map<DoseTypeModel>((data) => DoseTypeModel.fromJson(data))
             .toList();
 
         return doseList;
@@ -168,25 +232,25 @@ class AddAgriServices {
         Fluttertoast.showToast(msg: "Unable to fetch dose type");
         return [];
       }
-    } catch (e) {
-      Logger().e(e);
+    } on DioException catch (e) {
+      Logger().e(e.response?.realUri.toString());
       Fluttertoast.showToast(msg: "Unauthorized Access!");
       return [];
     }
   }
 
-  Future<List<AgriCane>> fetchcanelistwithfilter(String season) async {
+  Future<List<AgriCane>> fetchcanelistwithfilter(String season,String village,String farmercode) async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        '$apiBaseUrl/api/resource/Cane Master?fields=["vendor_code","route_km","grower_name","grower_code","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name","soil_type","season"]&filters=[["season","like","$season%"]]&limit_page_length=99999',
+        '$apiBaseUrl/api/resource/Cane Master?fields=["vendor_code","route_km","grower_name","grower_code","area","crop_type","crop_variety","plantattion_ratooning_date","area_acrs","plant_name","name","soil_type","season"]&filters=[["season","like","$season%"],["area","like","$village%"],["grower_code","like","$farmercode%"]]&limit_page_length=99999',
         options: Options(
           method: 'GET',
           headers: headers,
         ),
       );
-
+Logger().i(response.realUri);
       if (response.statusCode == 200) {
         var jsonData = json.encode(response.data);
         Map<String, dynamic> jsonDataMap = json.decode(jsonData);
@@ -206,12 +270,43 @@ class AddAgriServices {
     }
   }
 
-  Future<List<caneFarmer>> fetchfarmerListwithfilter() async {
+  // Future<List<caneFarmer>> fetchfarmerListwithfilter() async {
+  //   try {
+  //     var headers = {'Cookie': await getTocken()};
+  //     var dio = Dio();
+  //     var response = await dio.request(
+  //       '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","village","name"]&limit_page_length=999999',
+  //       options: Options(
+  //         method: 'GET',
+  //         headers: headers,
+  //       ),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       var jsonData = json.encode(response.data);
+  //       Map<String, dynamic> jsonDataMap = json.decode(jsonData);
+  //       List<dynamic> dataList = jsonDataMap['data'];
+  //       List<caneFarmer> farmerList = dataList
+  //           .map<caneFarmer>((data) => caneFarmer.fromJson(data))
+  //           .toList();
+  //       Logger().i(farmerList);
+  //       return farmerList;
+  //     } else {
+  //       Logger().e(response.statusCode);
+  //       Logger().e(response.statusMessage);
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     Logger().e(e);
+  //     return [];
+  //   }
+  // }
+
+  Future<List<SupplierList>> fetchSupplierList() async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        '$apiBaseUrl/api/resource/Farmer List?fields=["supplier_name","existing_supplier_code","village","name"]&limit_page_length=999999',
+        apiSupplierList,
         options: Options(
           method: 'GET',
           headers: headers,
@@ -221,8 +316,8 @@ class AddAgriServices {
         var jsonData = json.encode(response.data);
         Map<String, dynamic> jsonDataMap = json.decode(jsonData);
         List<dynamic> dataList = jsonDataMap['data'];
-        List<caneFarmer> farmerList = dataList
-            .map<caneFarmer>((data) => caneFarmer.fromJson(data))
+        List<SupplierList> farmerList = dataList
+            .map<SupplierList>((data) => SupplierList.fromJson(data))
             .toList();
         Logger().i(farmerList);
         return farmerList;
@@ -242,7 +337,7 @@ class AddAgriServices {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        '$apiBaseUrl/api/resource/Item?fields=["item_code","item_name"]&limit_page_length=99999',
+        '$apiBaseUrl/api/resource/Item?fields=["item_code","item_name","standard_rate"]&limit_page_length=999999',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -254,6 +349,36 @@ class AddAgriServices {
         List<dynamic> dataList = jsonDataMap['data'];
         List<Item> farmerList =
             dataList.map<Item>((data) => Item.fromJson(data)).toList();
+        Logger().i(farmerList);
+        return farmerList;
+      } else {
+        Logger().e(response.statusCode);
+        Logger().e(response.statusMessage);
+        return [];
+      }
+    } catch (e) {
+      Logger().e(e);
+      return [];
+    }
+  }
+
+  Future<List<Item>> fetchItemwithfilter() async {
+    try {
+      var headers = {'Cookie': await getTocken()};
+      var dio = Dio();
+      var response = await dio.request(
+        '$apiBaseUrl/api/method/sugar_mill.sugar_mill.doctype.agriculture_development.agriculture_development.get_item_list',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      if (response.statusCode == 200) {
+        var jsonData = json.encode(response.data);
+        Map<String, dynamic> jsonDataMap = json.decode(jsonData);
+        List<dynamic> dataList = jsonDataMap['data'];
+        List<Item> farmerList =
+        dataList.map<Item>((data) => Item.fromJson(data)).toList();
         Logger().i(farmerList);
         return farmerList;
       } else {

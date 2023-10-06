@@ -45,7 +45,7 @@ class ListFarmersService {
 
       var response = await dio.request(
         // "http://deverpvppl.erpdata.in/api/resource/Farmer List?fields=['supplier_name','village','name','circle_office']&filters=[['$filter','like','$query'']]",
-        "$apiBaseUrl/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\",\"workflow_state\"]&filters=[[\"$filter\",\"like\",\"$query%\"],[\"workflow_state\",\"=\",\"Pending\"]]",
+        "$apiBaseUrl/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\",\"workflow_state\"]&filters=[[\"$filter\",\"like\",\"$query%\"],[\"workflow_state\",\"=\",\"Pending\"]]&order_by=workflow_state desc,creation desc",
         options: Options(
           method: 'GET',
           headers: headers,
@@ -75,7 +75,7 @@ class ListFarmersService {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
       var response = await dio.request(
-        "$apiBaseUrl/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\",\"workflow_state\"]&filters=[[\"village\",  \"like\", \"$village%\" ],[\"supplier_name\",  \"like\", \"$name%\" ]]",
+        "$apiBaseUrl/api/resource/Farmer List?fields=[\"supplier_name\",\"village\",\"name\",\"circle_office\",\"existing_supplier_code\",\"workflow_state\"]&filters=[[\"village\",  \"like\", \"$village%\" ],[\"supplier_name\",  \"like\", \"%$name%\" ]]&order_by=workflow_state desc,creation desc",
         options: Options(
           method: 'GET',
           headers: headers,

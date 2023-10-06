@@ -108,6 +108,7 @@ class AddTripSheetModel extends BaseViewModel {
     routeList = await AddTripSheetServices().fetchRoute();
     transportList = await AddTripSheetServices().fetchTransport();
     waterSupplier = await AddTripSheetServices().fetchWaterSupplier();
+    tripSheetData.branch="Bedkihal";
     if (tripId != "") {
       isEdit = true;
       tripSheetData =

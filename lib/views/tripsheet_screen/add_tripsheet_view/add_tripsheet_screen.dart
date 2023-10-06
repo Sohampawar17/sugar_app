@@ -889,14 +889,15 @@ class AddTripsheetScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+
+                          CtextButton(
+                            text: 'Cancel',
+                            onPressed: () => Navigator.of(context).pop(), buttonColor: Colors.red,
+                          ),
                           CtextButton(
                             onPressed: () => model.onSavePressed(context),
                             // onPressed: () => () {},
-                            text: 'Save',
-                          ),
-                          CtextButton(
-                            text: 'Cancel',
-                            onPressed: () => Navigator.of(context).pop(),
+                            text: 'Save', buttonColor: Colors.green,
                           ),
                         ],
                       ),

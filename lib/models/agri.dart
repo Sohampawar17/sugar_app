@@ -1,6 +1,8 @@
 class Agri {
   String? name;
   String? owner;
+  String? creation;
+  String? modified;
   String? modifiedBy;
   int? docstatus;
   int? idx;
@@ -10,6 +12,8 @@ class Agri {
   String? supplier;
   String? vendorCode;
   String? growerName;
+  String? nurserySupplier;
+  String? supplierName;
   String? branch;
   String? village;
   String? cropType;
@@ -24,13 +28,18 @@ class Agri {
   int? rainy;
   int? ratoon1;
   int? ratoon2;
+  double? total;
   double? baselTotal;
   double? preEarthingTotal;
   double? earthTotal;
   double? rainyTotal;
-  double? ratoon2Total;
   double? ratoon1Total;
-  double? total;
+  double? ratoon2Total;
+  double? totalWeight;
+  double? totalGstAmount;
+  double? totalBaseAmount;
+  double? totalAmount;
+  String? creatorName;
   String? doctype;
   List<AgricultureDevelopmentItem>? agricultureDevelopmentItem;
   List<AgricultureDevelopmentItem2>? agricultureDevelopmentItem2;
@@ -38,45 +47,56 @@ class Agri {
 
   Agri(
       {this.name,
-      this.owner,
-      this.modifiedBy,
-      this.docstatus,
-      this.idx,
-      this.salesType,
-      this.season,
-      this.caneRegistrationId,
-      this.supplier,
-      this.vendorCode,
-      this.growerName,
-      this.branch,
-      this.village,
-      this.cropType,
-      this.cropVariety,
-      this.date,
-      this.area,
-      this.developmentArea,
-      this.route,
-      this.basel,
-      this.preEarthing,
-      this.earth,
-      this.rainy,
-      this.ratoon1,
-      this.ratoon2,
-      this.baselTotal,
-      this.preEarthingTotal,
-      this.earthTotal,
-      this.rainyTotal,
-      this.ratoon2Total,
-      this.ratoon1Total,
-      this.total,
-      this.doctype,
-      this.agricultureDevelopmentItem,
-      this.agricultureDevelopmentItem2,
-      this.grantor});
+        this.owner,
+        this.creation,
+        this.modified,
+        this.modifiedBy,
+        this.docstatus,
+        this.idx,
+        this.salesType,
+        this.season,
+        this.caneRegistrationId,
+        this.supplier,
+        this.vendorCode,
+        this.growerName,
+        this.nurserySupplier,
+        this.supplierName,
+        this.branch,
+        this.village,
+        this.cropType,
+        this.cropVariety,
+        this.date,
+        this.area,
+        this.developmentArea,
+        this.route,
+        this.basel,
+        this.preEarthing,
+        this.earth,
+        this.rainy,
+        this.ratoon1,
+        this.ratoon2,
+        this.total,
+        this.baselTotal,
+        this.preEarthingTotal,
+        this.earthTotal,
+        this.rainyTotal,
+        this.ratoon1Total,
+        this.ratoon2Total,
+        this.totalWeight,
+        this.totalGstAmount,
+        this.totalBaseAmount,
+        this.totalAmount,
+        this.creatorName,
+        this.doctype,
+        this.agricultureDevelopmentItem,
+        this.agricultureDevelopmentItem2,
+        this.grantor});
 
   Agri.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     owner = json['owner'];
+    creation = json['creation'];
+    modified = json['modified'];
     modifiedBy = json['modified_by'];
     docstatus = json['docstatus'];
     idx = json['idx'];
@@ -86,6 +106,8 @@ class Agri {
     supplier = json['supplier'];
     vendorCode = json['vendor_code'];
     growerName = json['grower_name'];
+    nurserySupplier = json['nursery_supplier'];
+    supplierName = json['supplier_name'];
     branch = json['branch'];
     village = json['village'];
     cropType = json['crop_type'];
@@ -100,13 +122,18 @@ class Agri {
     rainy = json['rainy'];
     ratoon1 = json['ratoon_1'];
     ratoon2 = json['ratoon_2'];
+    total = json['total'];
     baselTotal = json['basel_total'];
     preEarthingTotal = json['pre_earthing_total'];
     earthTotal = json['earth_total'];
     rainyTotal = json['rainy_total'];
-    ratoon2Total = json['ratoon_2_total'];
     ratoon1Total = json['ratoon_1_total'];
-    total = json['total'];
+    ratoon2Total = json['ratoon_2_total'];
+    totalWeight=json['total_weight'];
+    totalGstAmount=json['total_gst_amount'];
+    totalBaseAmount=json['total_base_amount'];
+    totalAmount=json['total_amount'];
+    creatorName = json['creator_name'];
     doctype = json['doctype'];
     if (json['agriculture_development_item'] != null) {
       agricultureDevelopmentItem = <AgricultureDevelopmentItem>[];
@@ -134,6 +161,8 @@ class Agri {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['owner'] = this.owner;
+    data['creation'] = this.creation;
+    data['modified'] = this.modified;
     data['modified_by'] = this.modifiedBy;
     data['docstatus'] = this.docstatus;
     data['idx'] = this.idx;
@@ -143,6 +172,8 @@ class Agri {
     data['supplier'] = this.supplier;
     data['vendor_code'] = this.vendorCode;
     data['grower_name'] = this.growerName;
+    data['nursery_supplier'] = this.nurserySupplier;
+    data['supplier_name'] = this.supplierName;
     data['branch'] = this.branch;
     data['village'] = this.village;
     data['crop_type'] = this.cropType;
@@ -157,13 +188,18 @@ class Agri {
     data['rainy'] = this.rainy;
     data['ratoon_1'] = this.ratoon1;
     data['ratoon_2'] = this.ratoon2;
+    data['total'] = this.total;
     data['basel_total'] = this.baselTotal;
     data['pre_earthing_total'] = this.preEarthingTotal;
     data['earth_total'] = this.earthTotal;
     data['rainy_total'] = this.rainyTotal;
-    data['ratoon_2_total'] = this.ratoon2Total;
     data['ratoon_1_total'] = this.ratoon1Total;
-    data['total'] = this.total;
+    data['ratoon_2_total'] = this.ratoon2Total;
+    data['total_weight']=this.totalWeight;
+    data['total_gst_amount']=this.totalGstAmount;
+    data['total_base_amount']=this.totalBaseAmount;
+    data['total_amount']=this.totalAmount;
+    data['creator_name'] = this.creatorName;
     data['doctype'] = this.doctype;
     if (this.agricultureDevelopmentItem != null) {
       data['agriculture_development_item'] =
@@ -199,8 +235,16 @@ class AgricultureDevelopmentItem {
   double? qty;
   String? description;
   String? stockUom;
+  double? actualQty;
   double? rate;
   String? itemTaxTemp;
+  double? taxNumber;
+  double? weightPerUnit;
+  double? totalWeight;
+  String? weightUom;
+  double? baseAmount;
+  double? taxableAmount;
+  double? totalAmount;
   String? parent;
   String? parentfield;
   String? parenttype;
@@ -208,29 +252,37 @@ class AgricultureDevelopmentItem {
 
   AgricultureDevelopmentItem(
       {this.name,
-      this.owner,
-      this.creation,
-      this.modified,
-      this.modifiedBy,
-      this.docstatus,
-      this.idx,
-      this.itemCode,
-      this.itemName,
-      this.basel,
-      this.preEarthing,
-      this.earth,
-      this.rainy,
-      this.ratoon1,
-      this.ratoon2,
-      this.qty,
-      this.description,
-      this.stockUom,
-      this.rate,
-      this.itemTaxTemp,
-      this.parent,
-      this.parentfield,
-      this.parenttype,
-      this.doctype});
+        this.owner,
+        this.creation,
+        this.modified,
+        this.modifiedBy,
+        this.docstatus,
+        this.idx,
+        this.itemCode,
+        this.itemName,
+        this.basel,
+        this.preEarthing,
+        this.earth,
+        this.rainy,
+        this.ratoon1,
+        this.ratoon2,
+        this.qty,
+        this.description,
+        this.stockUom,
+        this.actualQty,
+        this.rate,
+        this.itemTaxTemp,
+        this.taxNumber,
+        this.weightPerUnit,
+        this.totalWeight,
+        this.weightUom,
+        this.baseAmount,
+        this.taxableAmount,
+        this.totalAmount,
+        this.parent,
+        this.parentfield,
+        this.parenttype,
+        this.doctype});
 
   AgricultureDevelopmentItem.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -251,8 +303,16 @@ class AgricultureDevelopmentItem {
     qty = json['qty'];
     description = json['description'];
     stockUom = json['stock_uom'];
+    actualQty = json['actual_qty'];
     rate = json['rate'];
     itemTaxTemp = json['item_tax_temp'];
+    taxNumber = json['tax_number'];
+    weightPerUnit = json['weight_per_unit'];
+    totalWeight=json['total_weight'];
+    weightUom = json['weight_uom'];
+    baseAmount = json['base_amount'];
+    taxableAmount = json['taxable_amount'];
+    totalAmount = json['total_amount'];
     parent = json['parent'];
     parentfield = json['parentfield'];
     parenttype = json['parenttype'];
@@ -279,8 +339,16 @@ class AgricultureDevelopmentItem {
     data['qty'] = this.qty;
     data['description'] = this.description;
     data['stock_uom'] = this.stockUom;
+    data['actual_qty'] = this.actualQty;
     data['rate'] = this.rate;
     data['item_tax_temp'] = this.itemTaxTemp;
+    data['tax_number'] = this.taxNumber;
+    data['weight_per_unit'] = this.weightPerUnit;
+    data['total_weight']=this.totalWeight;
+    data['weight_uom'] = this.weightUom;
+    data['base_amount'] = this.baseAmount;
+    data['taxable_amount'] = this.taxableAmount;
+    data['total_amount'] = this.totalAmount;
     data['parent'] = this.parent;
     data['parentfield'] = this.parentfield;
     data['parenttype'] = this.parenttype;
@@ -311,23 +379,23 @@ class AgricultureDevelopmentItem2 {
 
   AgricultureDevelopmentItem2(
       {this.name,
-      this.owner,
-      this.creation,
-      this.modified,
-      this.modifiedBy,
-      this.docstatus,
-      this.idx,
-      this.itemCode,
-      this.itemName,
-      this.qty,
-      this.rate,
-      this.stockUom,
-      this.description,
-      this.amount,
-      this.parent,
-      this.parentfield,
-      this.parenttype,
-      this.doctype});
+        this.owner,
+        this.creation,
+        this.modified,
+        this.modifiedBy,
+        this.docstatus,
+        this.idx,
+        this.itemCode,
+        this.itemName,
+        this.qty,
+        this.rate,
+        this.stockUom,
+        this.description,
+        this.amount,
+        this.parent,
+        this.parentfield,
+        this.parenttype,
+        this.doctype});
 
   AgricultureDevelopmentItem2.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -393,20 +461,20 @@ class Grantor {
 
   Grantor(
       {this.name,
-      this.owner,
-      this.creation,
-      this.modified,
-      this.modifiedBy,
-      this.docstatus,
-      this.idx,
-      this.suretyCode,
-      this.suretyName,
-      this.suretyExistingCode,
-      this.village,
-      this.parent,
-      this.parentfield,
-      this.parenttype,
-      this.doctype});
+        this.owner,
+        this.creation,
+        this.modified,
+        this.modifiedBy,
+        this.docstatus,
+        this.idx,
+        this.suretyCode,
+        this.suretyName,
+        this.suretyExistingCode,
+        this.village,
+        this.parent,
+        this.parentfield,
+        this.parenttype,
+        this.doctype});
 
   Grantor.fromJson(Map<String, dynamic> json) {
     name = json['name'];

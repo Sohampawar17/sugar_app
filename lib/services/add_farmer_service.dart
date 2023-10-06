@@ -125,7 +125,7 @@ class FarmerService {
         if (e.response != null && e.response?.statusCode == 417) {
           Fluttertoast.showToast(msg: "Duplicate Aadhar number!");
         } else {
-          Fluttertoast.showToast(msg: "Error occurred ${e.message}");
+          Fluttertoast.showToast(msg: "Error occurred ${e.response?.data["exception"].toString()}");
           Logger().e(e.message);
         }
       } else {

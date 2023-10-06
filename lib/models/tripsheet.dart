@@ -1,5 +1,5 @@
 class Tripsheet {
-  String? name;
+  int? name;
   String? owner;
   String? modifiedBy;
   int? docstatus;

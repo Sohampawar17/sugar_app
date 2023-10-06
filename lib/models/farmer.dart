@@ -26,6 +26,7 @@ class Farmer {
   String? taluka;
   String? state;
   String? aadhaarCard;
+  String? panCard;
   String? consentLetter;
   int? isInternalSupplier;
   String? language;
@@ -70,6 +71,7 @@ class Farmer {
       this.taluka,
       this.state,
       this.aadhaarCard,
+        this.panCard,
       this.consentLetter,
       this.isInternalSupplier,
       this.language,
@@ -114,6 +116,7 @@ class Farmer {
     taluka = json['taluka'];
     state = json['state'];
     aadhaarCard = json['aadhaar_card'];
+    panCard=json['pan_card'];
     consentLetter = json['consent_letter'];
     isInternalSupplier = json['is_internal_supplier'];
     language = json['language'];
@@ -167,6 +170,7 @@ class Farmer {
     data['taluka'] = taluka;
     data['state'] = state;
     data['aadhaar_card'] = aadhaarCard;
+    data['pan_card']=panCard;
     data['consent_letter'] = consentLetter;
     data['is_internal_supplier'] = isInternalSupplier;
     data['language'] = language;

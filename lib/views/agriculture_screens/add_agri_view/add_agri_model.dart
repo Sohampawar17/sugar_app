@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-
 import 'package:stacked/stacked.dart';
 import 'package:sugar_mill_app/constants.dart';
 import 'package:sugar_mill_app/models/agri.dart';
 import 'package:sugar_mill_app/models/item.dart';
+import 'package:sugar_mill_app/models/supplier_List.dart';
 import '../../../models/agri_cane_model.dart';
 import '../../../models/cane_farmer.dart';
 import '../../../models/dose_type.dart';
-
+import '../../../models/village_model.dart';
 import '../../../services/add_agri_services.dart';
 
 class AgriViewModel extends BaseViewModel {
@@ -31,12 +31,14 @@ class AgriViewModel extends BaseViewModel {
   ];
   bool isEdit = false;
   List<String> seasonlist = [""];
-  List<String> saleslist = ["Drip", "Plant (Rope)", "Fertilizer"];
+  List<String> saleslist = ["Drip", "Nursery", "Fertilizer"];
   List<AgriCane> canelistwithfilter = [];
   List<caneFarmer> farmerList = [];
   List<Item> itemList = [];
-
+  List<SupplierList> supplierList = [];
+List<villagemodel> villagelist=[];
   String? selectedplot;
+  String? season;
   String? selectedVendorname;
   String? selectedplant;
   String? selectedvillage;
@@ -45,18 +47,19 @@ class AgriViewModel extends BaseViewModel {
   double? selectedAreaInAcrs;
   String? selectedvendor;
   DateTime? selecteddate;
+  String? selectedgrowername;
+  String? farmercode;
   TextEditingController datecontroller = TextEditingController();
   final List<String> _selectedItems = [];
   List<String> get selectedItems => _selectedItems;
-  late String AgriId;
+  late String agriId;
 
   initialise(BuildContext context, String agriid) async {
     setBusy(true);
     seasonlist = await AddAgriServices().fetchSeason();
-    canelistwithfilter =
-        await AddAgriServices().fetchcanelistwithfilter(agridata.season ?? "");
-    farmerList = await AddAgriServices().fetchfarmerListwithfilter();
+    supplierList = await AddAgriServices().fetchSupplierList();
     itemList = await AddAgriServices().fetchItem();
+villagelist=await AddAgriServices().fetchVillages();
     if (agriid != "") {
       isEdit = true;
       agridata = await AddAgriServices().getAgri(agriid) ?? Agri();
@@ -92,29 +95,23 @@ class AgriViewModel extends BaseViewModel {
     if (seasonlist.isEmpty) {
       logout(context);
     }
-    if (farmerList.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
 
-          content: Text(
-            'There is No farmer available',
-            style: TextStyle(color: Colors.white, fontSize: 15),
-          ),
-          duration: Duration(seconds: 3), // Adjust the duration as needed
-        ),
-      );
-    }
     setBusy(false);
   }
 
-  List<DosetypeModel> doseList = [];
+  List<DoseTypeModel> doseList = [];
 
   void onSavePressed(BuildContext context) async {
     if (agridata.docstatus == 1) {
       Fluttertoast.showToast(
           msg: "Can not edit Submitted document!",
           backgroundColor: Colors.redAccent,
+          textColor: Colors.white);
+      return;
+    }
+    if (grantor.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Please fill the grantor details.",
           textColor: Colors.white);
       return;
     }
@@ -210,10 +207,20 @@ class AgriViewModel extends BaseViewModel {
               (e.earthingqty ?? 0.0) +
               (e.rainyqty ?? 0.0) +
               (e.ratoon1qty ?? 0.0) +
-              (e.ratoon2qty ?? 0.0))
+              (e.ratoon2qty ?? 0.0)),
+itemTaxTemp: e.itemTaxTemp,
+          actualQty: e.actualQty,
+          taxNumber: e.taxNumber,
+          rate: e.rate,
+          weightPerUnit: e.weightPerUnit,
+totalWeight: (e.weightPerUnit ?? 0.0) * (e.qty ?? 0.0),
+          baseAmount: ((e.qty ?? 0.0) * (e.rate ?? 0.0)),
+          taxableAmount: (((e.qty ?? 0.0) * (e.rate ?? 0.0))* (e.taxNumber ?? 0.0)/100),
           // Add other properties here
+        totalAmount: (((e.qty ?? 0.0) * (e.rate ?? 0.0))+ (((e.qty ?? 0.0) * (e.rate ?? 0.0))* (e.taxNumber ?? 0.0)/100))
           );
     }).toList();
+
     notifyListeners();
     calculateratoon2total();
     calculateratoon1total();
@@ -222,6 +229,10 @@ class AgriViewModel extends BaseViewModel {
     calculateprearthtotal();
     calculatebaseltotal();
     calculatetotal();
+    calculatetotalAmount();
+calculatebaseAmount();
+    calculatetotalgstamount();
+    calculatetotalweight();
   }
 
   void calculateTotal() {
@@ -235,8 +246,17 @@ class AgriViewModel extends BaseViewModel {
 
       // Update the qty property of the item with the calculated total
       agricultureDevelopmentItem[index].qty = total;
+      agricultureDevelopmentItem[index].totalWeight=(agricultureDevelopmentItem[index].qty ?? 0.0)*(agricultureDevelopmentItem[index].weightPerUnit ?? 0.0);
+      agricultureDevelopmentItem[index].baseAmount=(agricultureDevelopmentItem[index].qty ?? 0.0)*(agricultureDevelopmentItem[index].rate ?? 0.0);
+      agricultureDevelopmentItem[index].taxableAmount=((agricultureDevelopmentItem[index].baseAmount ?? 0.0)*(agricultureDevelopmentItem[index].taxNumber ?? 0.0))/100;
+      agricultureDevelopmentItem[index].totalAmount=(agricultureDevelopmentItem[index].baseAmount ?? 0.0)+(agricultureDevelopmentItem[index].taxableAmount ?? 0.0);
     }
+    calculatetotalAmount();
+    calculatebaseAmount();
+    calculatetotalgstamount();
+    calculatetotalweight();
   }
+
 
   void validateForm(BuildContext context, int index) async {
     final formState = bankformKey.currentState;
@@ -319,23 +339,9 @@ class AgriViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedSeason(BuildContext context, String? season) async {
+  void setSelectedSeason(String? seasom) async {
+    season=seasom;
     agridata.season = season;
-    canelistwithfilter =
-        await AddAgriServices().fetchcanelistwithfilter(season ?? "");
-    if (canelistwithfilter.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-
-          content: Text(
-            'There is no plot Available At $season Season',
-            style: const TextStyle(color: Colors.white, fontSize: 15),
-          ),
-          duration: const Duration(seconds: 3), // Adjust the duration as needed
-        ),
-      );
-    }
     notifyListeners();
   }
 
@@ -394,9 +400,52 @@ class AgriViewModel extends BaseViewModel {
     }
     agridata.total = total;
   }
+  void calculatetotalweight() {
+    double totalWeight = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      totalWeight += agricultureDevelopmentItem[index].totalWeight ?? 0.0;
+    }
+    agridata.totalWeight = totalWeight;
+  }
+  void calculatetotalgstamount() {
+    double totalGstAmount = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      totalGstAmount += agricultureDevelopmentItem[index].taxableAmount ?? 0.0;
+    }
+    agridata.totalGstAmount = totalGstAmount;
+  }
+  void calculatebaseAmount() {
+    double totalBaseAmount = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      totalBaseAmount += agricultureDevelopmentItem[index].baseAmount ?? 0.0;
+    }
+    agridata.totalBaseAmount = totalBaseAmount;
+  }
+
+  void calculatetotalAmount() {
+    double totalAmount = 0.0;
+    for (int index = 0; index < agricultureDevelopmentItem.length; index++) {
+      totalAmount += agricultureDevelopmentItem[index].totalAmount ?? 0.0;
+    }
+    agridata.totalAmount = totalAmount;
+  }
 
   String? selectedgrower;
-  String? route_km;
+  String? routeKm;
+  String? supplier;
+  String? suppliername;
+  void setsupplier(String? suppli) async {
+    supplier = suppli;
+    agridata.nurserySupplier = supplier.toString();
+    Logger().i(selectedplot);
+    final selectedCaneData = supplierList
+        .firstWhere((caneData) => caneData.name.toString() == suppli);
+    Logger().i(selectedCaneData);
+    suppliername = selectedCaneData.supplierName;
+    agridata.supplierName = suppliername;
+    notifyListeners();
+  }
+
   void setPlotnumber(String? caneRegistrationId) async {
     selectedplot = caneRegistrationId;
     agridata.caneRegistrationId = selectedplot.toString();
@@ -413,9 +462,9 @@ class AgriViewModel extends BaseViewModel {
     datecontroller.text = selectedCaneData.plantattionRatooningDate!;
     selectedgrower = selectedCaneData.growerCode;
     selectedvendor = selectedCaneData.vendorCode;
-    route_km = selectedCaneData.routeKm.toString();
+    routeKm = selectedCaneData.routeKm.toString();
     agridata.growerName = selectedVendorname;
-    agridata.route = route_km;
+    agridata.route = routeKm;
     agridata.village = selectedvillage;
     agridata.cropVariety = selectedcropvariety;
     agridata.cropType = selectedcroptype;
@@ -488,6 +537,37 @@ class AgriViewModel extends BaseViewModel {
     }
   }
 
+String? selectedVillage;
+
+  void setSelectedVillage(String? village) async {
+    selectedVillage = village;
+    agridata.village = selectedVillage;
+
+    farmerList=await AddAgriServices().fetchfarmerListwithfilter(agridata.village ?? "");
+    notifyListeners();
+  }
+
+
+  void setSelectedgrowername(String? growername) async {
+    selectedgrowername = growername;
+    final selectedgrowerData = farmerList.firstWhere(
+            (growerData) => growerData.supplierName == growername);
+    Logger().i(selectedgrowerData);
+    // Set th distance in the kmController
+    farmercode=selectedgrowerData.name;
+    agridata.vendorCode = selectedgrowerData.existingSupplierCode;
+    agridata.growerName = selectedgrowername;
+    Logger().i(selectedgrowername);
+    canelistwithfilter = (await AddAgriServices().fetchcanelistwithfilter(agridata.season ?? "",agridata.village ?? "",farmercode ?? ""));
+    notifyListeners();
+  }
+
+  void setSelectedsupplier(String? supplierName) {
+    suppliername = supplierName;
+    agridata.supplierName = suppliername;
+    notifyListeners();
+  }
+
   void setSelectedVendor(String? supplier) {
     selectedVendorname = supplier;
     agridata.vendorCode = selectedVendorname;
@@ -551,8 +631,8 @@ class AgriViewModel extends BaseViewModel {
     //   text: km ?? '',
     //   selection: TextSelection.collapsed(offset: (km ?? '').length),
     // );
-    route_km = km ?? '';
-    agridata.route = route_km;
+    routeKm = km ?? '';
+    agridata.route = routeKm;
     notifyListeners();
   }
 
@@ -598,12 +678,40 @@ class AgriViewModel extends BaseViewModel {
     }
     return null;
   }
+  String? validatefarmer(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select farmer';
+    }
+    return null;
+  }
+
+
+  String? validatevillage(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select Village';
+    }
+    return null;
+  }
 
   String? validateSalesType(String? value) {
     if (value == null || value.isEmpty) {
       return 'please select Sales type';
     }
 
+    return null;
+  }
+
+  String? validateSupplier(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select Supplier';
+    }
+    return null;
+  }
+
+  String? validateSupplierName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select Supplier Name';
+    }
     return null;
   }
 
@@ -633,6 +741,8 @@ class AgriViewModel extends BaseViewModel {
   late String itemCode2 = "";
   late String itemName2 = "";
   late double total = 0.0;
+  late double rate = 0.0;
+  late double amount = 0.0;
 
   void setValuesToAgriVaribles(int index) {
     if (index != -1) {
@@ -674,6 +784,8 @@ class AgriViewModel extends BaseViewModel {
       itemCode2 = agricultureDevelopmentItem2[index].itemCode!;
       itemName2 = agricultureDevelopmentItem2[index].itemName!;
       total = agricultureDevelopmentItem2[index].qty!;
+      rate = agricultureDevelopmentItem2[index].rate!;
+      amount = agricultureDevelopmentItem2[index].amount!;
     }
     notifyListeners();
   }
@@ -689,14 +801,17 @@ class AgriViewModel extends BaseViewModel {
       agricultureDevelopmentItem2[index].itemCode = itemCode2;
       agricultureDevelopmentItem2[index].itemName = itemName2;
       agricultureDevelopmentItem2[index].qty = total;
+      agricultureDevelopmentItem2[index].rate = rate;
+      agricultureDevelopmentItem2[index].amount = amount;
       notifyListeners();
       return;
     }
     agricultureDevelopmentItem2.add(AgricultureDevelopmentItem2(
-      itemCode: itemCode2,
-      itemName: itemName2,
-      qty: total,
-    ));
+        itemCode: itemCode2,
+        itemName: itemName2,
+        qty: total,
+        rate: rate,
+        amount: amount));
     notifyListeners();
   }
 
@@ -705,8 +820,11 @@ class AgriViewModel extends BaseViewModel {
     itemCode2 = agri ?? "";
     final bankData = itemList.firstWhere((bank) => bank.itemCode == agri);
     itemName2 = bankData.itemName ?? "";
+    rate = bankData.standardRate ?? 0.0;
     notifyListeners();
   }
+  String? suretyvillage;
+  String? suretyexistingcode;
 
   void setValuesTograntorVaribles(int index) {
     if (index != -1) {
@@ -715,6 +833,7 @@ class AgriViewModel extends BaseViewModel {
       }
       // Reset all roles to false
       suretyCode = grantor[index].suretyCode!;
+      suretyvillage=grantor[index].village;
       suretyExistingCode = grantor[index].suretyExistingCode!;
       suretyname = grantor[index].suretyName!;
     }
@@ -724,10 +843,12 @@ class AgriViewModel extends BaseViewModel {
   void resetBankVariables() {
     suretyExistingCode = "";
     suretyname = "";
+    suretyvillage ="";
   }
 
   void submitBankAccount(int index) {
     if (index != -1) {
+      grantor[index].village = suretyvillage;
       grantor[index].suretyExistingCode = suretyExistingCode;
       grantor[index].suretyName = suretyname;
       grantor[index].suretyCode = suretyCode;
@@ -738,6 +859,7 @@ class AgriViewModel extends BaseViewModel {
       suretyExistingCode: suretyExistingCode,
       suretyName: suretyname,
       suretyCode: suretyCode,
+      village: suretyvillage
     ));
     notifyListeners();
   }
@@ -752,10 +874,20 @@ class AgriViewModel extends BaseViewModel {
 
   void setSelectedtotal(double? sales) async {
     total = sales ?? 0.0;
+    amount = rate * total;
     notifyListeners();
   }
 
-  String? suretyexistingcode;
+
+  void setSelectedgrantorvillage(String? village) async {
+    Logger().i(village);
+    final selectedRouteData =
+    villagelist.firstWhere((bankData) => bankData.name == village);
+    Logger().i(selectedRouteData);
+    suretyvillage = selectedRouteData.name ?? "";
+    farmerList=await AddAgriServices().fetchfarmerListwithfilter(suretyvillage ?? "");
+    notifyListeners();
+  }
 
   void setSelectedgrantor(String? bank) async {
     Logger().i(bank);

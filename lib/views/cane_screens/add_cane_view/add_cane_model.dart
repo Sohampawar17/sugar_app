@@ -28,13 +28,7 @@ class CaneViewModel extends BaseViewModel {
   final List<String> yesnomachine = ["YES", "NO"];
   final List<String> yesnoroadside = ["Yes (होय)", "No (नाही)"];
   final List<String> plantationStatus = [
-    "New",
-    "Harvester",
-    "Diversion",
-    "Added To Sampling",
-    "Added To Harvesting",
-    "To Sampling",
-    "To Harvesting"
+    "New"
   ];
   final List<String> seedType = ["Regular", "Foundation"];
   List<caneFarmer> farmerList = [];
@@ -79,6 +73,7 @@ class CaneViewModel extends BaseViewModel {
     irrigationSourceList = await AddCaneService().fetchIrrigationSource();
     soilTypeList = await AddCaneService().fetchSoilType();
     Logger().i(villageList.length);
+    canedata.plantName = "Bedkihal";
     canedata.plantationStatus = "New";
     Logger().i(caneId);
     if (caneId != "") {

@@ -102,7 +102,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           ],
           bottom: PreferredSize(
               preferredSize: Size.fromHeight(
-                  getHeight(context) / 12.5), // Set the preferred height
+                  getHeight(context) / 10.5), // Set the preferred height
               child: model.empList.isNotEmpty
                   ? Row(
                       children: [

@@ -56,6 +56,7 @@ class FarmerViewModel extends BaseViewModel {
     setBusy(true);
     villageList = await FarmerService().fetchVillages();
     bankList = await FarmerService().fetchBanks();
+    farmerData.branch="Bedkihal";
     Logger().i(villageList.length);
     farmerId = farmerid;
     //setting aleardy available data
@@ -101,6 +102,25 @@ class FarmerViewModel extends BaseViewModel {
       Fluttertoast.showToast(msg: "Can not edit approved document!");
       return;
     }
+    if(isEdit==true){if(farmerData.aadhaarCard== ""){
+      Fluttertoast.showToast(msg: "Please upload aadhaar card");
+      return;
+    }}else{if(files.adharCard == null){
+      Fluttertoast.showToast(msg: "Please upload aadhaar card");
+      return;
+    }}
+    if(isEdit==true){if(farmerData.panCard == null){
+      Fluttertoast.showToast(msg: "Please upload pan card");
+      return;
+    }}else{if(files.panCard == null){
+      Fluttertoast.showToast(msg: "Please upload pan card");
+      return;
+    }}
+
+    if(bankAccounts.isEmpty){
+      Fluttertoast.showToast(msg: "Please fill the Bank details");
+      return;
+    }
     // if (!villageList.contains(farmerData.village)) {
     //   Fluttertoast.showToast(
     //       msg: "Invalid Village", toastLength: Toast.LENGTH_LONG);
@@ -110,12 +130,14 @@ class FarmerViewModel extends BaseViewModel {
     if (formKey.currentState!.validate()) {
       // Fluttertoast.showToast(msg: "Farmer Added");
       await uploadFiles();
+
       // await uploadpassbook();
       farmerData.bankDetails = bankAccounts;
 
       bool res = false;
       if (isEdit == true) {
         farmerData.workflowState = "Pending";
+
         Logger().i(farmerData.toJson());
         res = await FarmerService().updateFarmer(farmerData);
         if (res) {
@@ -379,9 +401,7 @@ class FarmerViewModel extends BaseViewModel {
     // final selectedRouteData =
     //     bankList.firstWhere((bankData) => bankData.bankAndBranch == bank);
     // Logger().i(selectedRouteData);
-    print("HERE YOU ARE!: ${bank.bankAndBranch} ${bank.ifscCode}");
     branchifscCode = bank.ifscCode ?? "";
-    print("HERE YOU ARE!: $branchifscCode");
     notifyListeners();
   }
 
@@ -547,8 +567,8 @@ class FarmerViewModel extends BaseViewModel {
         File? compressedFile = await compressFile(fileFromXFile(result));
 
         passbookattch = compressedFile?.path ?? "";
-        Fluttertoast.showToast(
-            msg: "Passbook: ${passbookattch.split('/').last}");
+        Fluttertoast.showToast(backgroundColor:  const Color(0xFF006C50),
+            msg: "Passbook attached successfully.");
         setBusy(false);
       }
     } catch (e) {
@@ -560,23 +580,25 @@ class FarmerViewModel extends BaseViewModel {
 
   // Function to upload the selected PDF file (Aadhar card)
   Future<void> uploadFiles() async {
+
     String aadharUrl = await FarmerService().uploadDocs(files.adharCard);
     if (aadharUrl == "" && isEdit == false) {
-      Fluttertoast.showToast(msg: "Failed to upload Aadhar");
+
+      // Fluttertoast.showToast(msg: "Failed to upload Aadhar");
     }
-    // String panUrl = await FarmerService().uploadDocs(files.panCard);
-    // if (panUrl == "" && isEdit == false) {
-    //   Fluttertoast.showToast(msg: "Failed to upload Pan");
-    // }
+    String panUrl = await FarmerService().uploadDocs(files.panCard);
+    if (panUrl == "" && isEdit == false) {
+      // Fluttertoast.showToast(msg: "Failed to upload Pan");
+    }
 
     String letterUrl = await FarmerService().uploadDocs(files.consentLetter);
     if (letterUrl == "" && isEdit == false) {
-      Fluttertoast.showToast(msg: "Failed to upload Letter");
+      // Fluttertoast.showToast(msg: "Failed to upload Letter");
     }
 
     farmerData.aadhaarCard =
         aadharUrl == "" ? farmerData.aadhaarCard : aadharUrl;
-    // farmerData.panCard = panUrl == "" ? farmerData.panCard : panUrl;
+     farmerData.panCard = panUrl == "" ? farmerData.panCard : panUrl;
 
     farmerData.consentLetter =
         letterUrl == "" ? farmerData.consentLetter : letterUrl;
@@ -665,10 +687,13 @@ class FarmerViewModel extends BaseViewModel {
       Fluttertoast.showToast(msg: "Can not edit Approved document");
       return;
     }
+    if (passbookattch == "") {
+      Fluttertoast.showToast(msg: "Please attach the passbook");
+      return;
+    }
     final formState = bankformKey.currentState;
     if (formState!.validate()) {
       // Form is valid, submit it
-      setBusy(true);
       if (index == -1) {
         if (!isRoleAlreadyPresent(bankName)) {
           Fluttertoast.showToast(
@@ -676,9 +701,10 @@ class FarmerViewModel extends BaseViewModel {
           return;
         }
       }
+      setBusy(false);
       await uploadpassbook(index);
       submitBankAccount(index);
-
+      setBusy(false);
       if (context.mounted) {
         Navigator.pop(context);
       }
@@ -686,7 +712,6 @@ class FarmerViewModel extends BaseViewModel {
           msg: "Bank is Added Succesfully", toastLength: Toast.LENGTH_LONG);
       resetBankVariables();
       passbookattch = "";
-      setBusy(false);
     } else {
       // Form is invalid, show error messages
       Logger().i('Bank Form is invalid');
@@ -734,6 +759,7 @@ class FarmerViewModel extends BaseViewModel {
   }
 
   void submitBankAccount(int index) {
+
     if (index != -1) {
       bankAccounts[index].farmer = farmer ? 1 : 0;
       bankAccounts[index].harvester = harvester ? 1 : 0;
@@ -849,6 +875,7 @@ class FarmerViewModel extends BaseViewModel {
 
   void updateFarmerName(String value) {
     farmerData.supplierName = value.toUpperCase();
+    notifyListeners();
   }
 
   void deleteBankAccount(int index) {
@@ -866,7 +893,7 @@ class FarmerViewModel extends BaseViewModel {
     print(filetype);
     print("SELECTED FILE: $passbookattch");
     if (filetype == kAadharpdf) return farmerData.aadhaarCard;
-
+    if (filetype == kPanpdf) return farmerData.panCard;
     if (filetype == kBankpdf) {
       return passbookattch;
     }
@@ -881,7 +908,7 @@ class FarmerViewModel extends BaseViewModel {
 
   File? getFileFromFileType(String filetype) {
     if (filetype == kAadharpdf) return files.adharCard;
-
+    if (filetype == kPanpdf) return files.panCard;
     if (filetype == kConcentpdf) return files.consentLetter;
     return null;
   }
@@ -905,7 +932,7 @@ class UppercaseTextFormatter extends TextInputFormatter {
 class Files {
   File? adharCard;
   List<File?> bankPassbooks = []; // Use a list to store multiple bank passbooks
-  // File? panCard;
+  File? panCard;
   File? consentLetter;
 
   File? getBankPassbookFileByIndex(int index) {
@@ -919,9 +946,9 @@ class Files {
     if (fileType == kAadharpdf) {
       return adharCard;
     }
-    // if (fileType == kPanpdf) {
-    //   return panCard;
-    // }
+    if (fileType == kPanpdf) {
+      return panCard;
+    }
     // if (fileType == kBankpdf) {
     //   // Return the first bank passbook in the list, you might need to handle multiple entries differently
     //   return bankPassbooks.isNotEmpty ? bankPassbooks.first : null;
@@ -953,6 +980,9 @@ class Files {
   void setFile(String fileType, File? file) {
     if (fileType == kAadharpdf) {
       adharCard = file;
+    }
+    if (fileType == kPanpdf) {
+      panCard = file;
     }
 
     if (fileType == kConcentpdf) {

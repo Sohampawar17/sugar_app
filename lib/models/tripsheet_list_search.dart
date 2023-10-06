@@ -1,5 +1,5 @@
 class TripSheetSearch {
-  String? name;
+  int? name;
   String? farmerName;
   String? fieldVillage;
   String? transporterName;

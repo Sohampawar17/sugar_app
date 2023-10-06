@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -37,21 +38,21 @@ class AddAgriScreen extends StatelessWidget {
                             child: CdropDown(
                               dropdownButton: DropdownButtonFormField<String>(
                                 isExpanded: true,
-                                value: model.agridata.salesType,
+                                value: model.agridata.season,
                                 // Replace null with the selected value if needed
                                 decoration: const InputDecoration(
-                                  labelText: 'Sales Type',
+                                  labelText: 'Season',
                                 ),
-                                hint: const Text('Select Sales type'),
-                                items: model.saleslist.map((val) {
+                                hint: const Text('Select Season'),
+                                items: model.seasonlist.map((val) {
                                   return DropdownMenuItem<String>(
                                     value: val,
-                                    child: Text(val),
+                                    child: AutoSizeText(val),
                                   );
                                 }).toList(),
                                 onChanged: (value) =>
-                                    model.setSelectedSales(value),
-                                validator: model.validateSalesType,
+                                    model.setSelectedSeason,
+                                validator: model.validateSeason,
                               ),
                             ),
                           ),
@@ -62,44 +63,312 @@ class AddAgriScreen extends StatelessWidget {
                             child: CdropDown(
                               dropdownButton: DropdownButtonFormField<String>(
                                 isExpanded: true,
-                                value: model.agridata.season,
+                                value: model.agridata.salesType,
                                 // Replace null with the selected value if needed
                                 decoration: const InputDecoration(
-                                  labelText: 'Season',
+                                  labelText: 'Sales Type',
                                 ),
-                                hint: const Text('Select Season'),
-                                items: model.seasonlist.map((val) {
+                                hint: const Text('Select Sales type'),
+                                items: model.saleslist.map((val) {
                                   return DropdownMenuItem<String>(
                                     value: val,
-                                    child: Text(val),
+                                    child: AutoSizeText(val),
                                   );
                                 }).toList(),
                                 onChanged: (value) =>
-                                    model.setSelectedSeason(context, value),
-                                validator: model.validateSeason,
+                                    model.setSelectedSales(value),
+                                validator: model.validateSalesType,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        width: 20.0,
+                      Autocomplete<String>(
+                        key: Key(model.agridata.village ?? "03"),
+                        initialValue: TextEditingValue(
+                          text: model.agridata.village ?? "",
+                        ),
+                        optionsBuilder:
+                            (TextEditingValue textEditingValue) {
+                          if (textEditingValue.text.isEmpty) {
+                            return const Iterable<String>.empty();
+                          }
+                          return model.villagelist
+                              .map((route) => route.name ?? "")
+                              .toList()
+                              .where((route) => route
+                              .toLowerCase()
+                              .contains(textEditingValue.text
+                              .toLowerCase()));
+                        },
+                        onSelected: (String routeName) {
+                          // Find the corresponding route object
+                          final routeData = model.villagelist
+                              .firstWhere(
+                                  (route) => route.name == routeName);
+                          model.setSelectedVillage(
+                              routeData.name); // Pass the route
+                        },
+                        fieldViewBuilder: (BuildContext context,
+                            TextEditingController
+                            textEditingController,
+                            FocusNode focusNode,
+                            VoidCallback onFieldSubmitted) {
+                          return TextFormField(
+                            // key: Key(model.farmerData.village ?? ""),
+                            // initialValue: model.farmerData.village,
+                            controller: textEditingController,
+                            focusNode: focusNode,
+                            decoration: const InputDecoration(
+                              labelText: 'Village',
+                            ),
+                            onChanged: (String value) {},
+                            validator: model.validatevillage,
+                          );
+                        },
+                        optionsViewBuilder: (BuildContext contpext,
+                            AutocompleteOnSelected<String> onSelected,
+                            Iterable<String> options) {
+                          return Align(
+                            alignment: Alignment.topLeft,
+                            child: Material(
+                              elevation: 4.0,
+                              child: Container(
+                                constraints: const BoxConstraints(
+                                    maxHeight: 200),
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: options.length,
+                                  itemBuilder: (BuildContext context,
+                                      int index) {
+                                    final String option =
+                                    options.elementAt(index);
+                                    return GestureDetector(
+                                      onTap: () {
+                                        onSelected(option);
+                                      },
+                                      child: ListTile(
+                                        title: Text(option),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        optionsMaxHeight: 200,
                       ),
+                      Row(children: [
+                        Expanded(
+                          flex: 3,
+                          child: Autocomplete<String>(
+                            key: Key(model.agridata.growerName ?? "05"),
+                            initialValue: TextEditingValue(
+                              text: model.agridata.growerName ?? "",
+                            ),
+                            optionsBuilder:
+                                (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text.isEmpty) {
+                                return const Iterable<String>.empty();
+                              }
+                              return model.farmerList
+                                  .where((grower) =>
+                                  (grower.supplierName ?? "")
+                                      .toLowerCase()
+                                      .contains(textEditingValue.text
+                                      .toLowerCase()))
+                                  .map((grower) =>
+                              grower.supplierName ?? "")
+                                  .toList();
+                            },
+                            onSelected: model.setSelectedgrowername,
+                            fieldViewBuilder: (BuildContext context,
+                                TextEditingController textEditingController,
+                                FocusNode focusNode,
+                                VoidCallback onFieldSubmitted) {
+                              return TextFormField(
+                                controller: textEditingController,
+                                focusNode: focusNode,
+                                decoration: const InputDecoration(
+                                  labelText: 'Grower Name',
+                                ),
+                                onChanged: (String value) {},
+                                validator: model.validatefarmer,
+                              );
+                            },
+                            optionsViewBuilder: (BuildContext context,
+                                AutocompleteOnSelected<String> onSelected,
+                                Iterable<String> options) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  elevation: 4.0,
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                        maxHeight: 200),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: options.length,
+                                      itemBuilder: (BuildContext context,
+                                          int index) {
+                                        final String option =
+                                        options.elementAt(index);
+                                        final routeData = model.farmerList
+                                            .firstWhere((route) =>
+                                        route
+                                            .supplierName ==
+                                            option);
+                                        return GestureDetector(
+                                          onTap: () {
+                                            onSelected(option);
+                                          },
+                                          child: ListTile(
+                                            title: Text(option),
+                                            subtitle: Text(
+                                                routeData.existingSupplierCode!),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            optionsMaxHeight: 200,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          //for plant
+                          child: TextFormField(
+                              key: Key(
+                                  model.agridata.vendorCode ??
+                                      "supplier"),
+                              readOnly: true,
+                              initialValue:
+                                  model.agridata.vendorCode,
+                              decoration: const InputDecoration(
+                                labelText: 'Vendor Code',
+                              ),
+                              onChanged: model.setSelectedVendor),
+                        ),
+                      ]),
+
                       Row(
                         children: [
                           Expanded(
                             child: Autocomplete<String>(
-                              key: Key(model.agridata.caneRegistrationId ??
-                                  "registrationid"),
+                              key: Key(model.agridata.caneRegistrationId ?? "id"),
                               initialValue: TextEditingValue(
                                 text: model.agridata.caneRegistrationId ?? "",
+                              ),
+                              optionsBuilder: (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text.isEmpty) {
+                                  return const Iterable<String>.empty();
+                                }
+                                return model.canelistwithfilter
+                                    .map((route) => route.growerName.toString())
+                                    .toList()
+                                    .where((route) => route.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase()));
+                              },
+                              onSelected: model.setPlotnumber,
+                              fieldViewBuilder: (BuildContext context,
+                                  TextEditingController textEditingController,
+                                  FocusNode focusNode,
+                                  VoidCallback onFieldSubmitted) {
+                                return TextFormField(
+                                  controller: textEditingController,
+                                  focusNode: focusNode,
+
+                                  decoration: const InputDecoration(
+                                    labelText: 'Plot number',
+                                  ),
+                                  onChanged: (String value) {},
+                                  validator: model.validateplotNumber,
+                                );
+                              },
+                              optionsViewBuilder: (BuildContext contpext,
+                                  AutocompleteOnSelected<String> onSelected,
+                                  Iterable<String> options) {
+                                return Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 4.0,
+                                    child: Container(
+                                      constraints:
+                                      const BoxConstraints(maxHeight: 200),
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: options.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          final String option =
+                                          options.elementAt(index);
+                                          final routeData = model.canelistwithfilter.firstWhere(
+                                                  (route) =>
+                                              route.growerName.toString() == option);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              onSelected(routeData.name
+                                                  .toString()); // Send the name as the selected route
+                                            },
+                                            child: ListTile(
+                                              title: Text(option),
+                                              subtitle: Text(routeData.name.toString()),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              optionsMaxHeight: 200,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(model.agridata.branch ?? "branch"),
+                              readOnly: true,
+                              initialValue: model.agridata.branch ?? "",
+                              decoration: const InputDecoration(
+                                labelText: 'Plant',
+                              ),
+                              onChanged: model.setSelectedPlantName,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if(model.agridata.salesType != "Fertilizer")
+                      const SizedBox(
+                        height: 15,
+                      ),
+
+                      if(model.agridata.salesType != "Fertilizer")
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Autocomplete<String>(
+                              key: Key(model.agridata.nurserySupplier ??
+                                  "nurserySupplier"),
+                              initialValue: TextEditingValue(
+                                text: model.agridata.nurserySupplier ?? "",
                               ),
                               optionsBuilder:
                                   (TextEditingValue textEditingValue) {
                                 if (textEditingValue.text.isEmpty) {
                                   return const Iterable<String>.empty();
                                 }
-                                return model.canelistwithfilter
+                                return model.supplierList
                                     .map((route) => route.name.toString())
                                     .toList()
                                     .where((route) => route
@@ -107,7 +376,7 @@ class AddAgriScreen extends StatelessWidget {
                                         .contains(textEditingValue.text
                                             .toLowerCase()));
                               },
-                              onSelected: model.setPlotnumber,
+                              onSelected: model.setsupplier,
                               fieldViewBuilder: (BuildContext context,
                                   TextEditingController textEditingController,
                                   FocusNode focusNode,
@@ -119,10 +388,10 @@ class AddAgriScreen extends StatelessWidget {
                                   controller: textEditingController,
                                   focusNode: focusNode,
                                   decoration: const InputDecoration(
-                                    labelText: 'Plot number',
+                                    labelText: 'Nursey Supplier',
                                   ),
                                   onChanged: (String value) {},
-                                  validator: model.validateplotNumber,
+
                                 );
                               },
                               optionsViewBuilder: (BuildContext contpext,
@@ -142,8 +411,7 @@ class AddAgriScreen extends StatelessWidget {
                                             (BuildContext context, int index) {
                                           final String option =
                                               options.elementAt(index);
-                                          final routeData = model
-                                              .canelistwithfilter
+                                          final routeData = model.supplierList
                                               .firstWhere((route) =>
                                                   route.name.toString() ==
                                                   option);
@@ -155,7 +423,7 @@ class AddAgriScreen extends StatelessWidget {
                                             child: ListTile(
                                               title: Text(option),
                                               subtitle:
-                                                  Text(routeData.growerName!),
+                                                  Text(routeData.supplierName!),
                                             ),
                                           );
                                         },
@@ -172,61 +440,20 @@ class AddAgriScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: TextFormField(
-                              key: Key(model.agridata.vendorCode ?? "supplier"),
+                              key: Key(model.agridata.supplierName ??
+                                  "supplierName"),
                               readOnly: true,
-                              initialValue: model.agridata.vendorCode ?? "",
+                              initialValue: model.agridata.supplierName ?? "",
                               decoration: const InputDecoration(
-                                labelText: 'Vendor Code',
+                                labelText: 'Supplier Name',
                               ),
-                              onChanged: model.setSelectedVendor,
+                              onChanged: model.setSelectedsupplier,
+
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        key: Key(model.agridata.growerName ?? "growerName"),
-                        readOnly: true,
-                        initialValue: model.agridata.growerName ?? "",
-                        decoration: const InputDecoration(
-                          labelText: 'Farmer Name',
-                        ),
-                        onChanged: model.setSelectedfarmername,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              key: Key(model.agridata.branch ?? "branch"),
-                              readOnly: true,
-                              initialValue: model.agridata.branch ?? "",
-                              decoration: const InputDecoration(
-                                labelText: 'Plant',
-                              ),
-                              onChanged: model.setSelectedPlantName,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 25,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              key: Key(model.agridata.village ?? "village"),
-                              readOnly: true,
-                              initialValue: model.agridata.village ?? "",
-                              decoration: const InputDecoration(
-                                labelText: 'Village',
-                              ),
-                              onChanged: model.setSelectedvillage,
-                            ),
-                          ),
-                        ],
-                      ),
+
                       const SizedBox(
                         height: 15,
                       ),
@@ -413,6 +640,24 @@ class AddAgriScreen extends StatelessWidget {
                                         label: Text('Total'),
                                       ),
                                       DataColumn(
+                                        label: Text('Rate'),
+                                      ),
+                                      DataColumn(
+                                        label: Text('Weight Per Unit'),
+                                      ),
+                                      DataColumn(
+                                        label: Text('Total Weight'),
+                                      ),
+                                      DataColumn(
+                                        label: Text('Base Amount'),
+                                      ),
+                                      DataColumn(
+                                        label: Text('Total Taxes Amount'),
+                                      ),
+                                      DataColumn(
+                                        label: Text('Total Amount'),
+                                      ),
+                                      DataColumn(
                                         label: Text('Delete'),
                                       ),
                                     ],
@@ -423,7 +668,7 @@ class AddAgriScreen extends StatelessWidget {
                                         cells: [
                                           DataCell(Text(
                                             "${model.agricultureDevelopmentItem[index].itemCode.toString()}:${model.agricultureDevelopmentItem[index].itemName.toString()}",
-                                            maxLines: 3,
+                                            maxLines: 3,style: TextStyle(color: ((model.agricultureDevelopmentItem[index].actualQty ?? 0.0) > 0.0) ?Colors.green:Colors.red),
                                           )),
                                           DataCell(
                                             TextField(
@@ -572,6 +817,37 @@ class AddAgriScreen extends StatelessWidget {
                                                     '')
                                                 .toString(),
                                           )),
+                                          DataCell(Text(
+                                            (model.agricultureDevelopmentItem[index]
+                                                .rate ??
+                                                '')
+                                                .toString(),
+                                          )), DataCell(Text(
+                                            (model.agricultureDevelopmentItem[index]
+                                                .weightPerUnit ??
+                                                '')
+                                                .toString(),
+                                          )), DataCell(Text(
+                                            (model.agricultureDevelopmentItem[index]
+                                                .totalWeight ??
+                                                0.0)
+                                                .toString(),
+                                          )), DataCell(Text(
+                                            (model.agricultureDevelopmentItem[index]
+                                                .baseAmount ??
+                                                0.0)
+                                                .toString(),
+                                          )), DataCell(Text(
+                                            (model.agricultureDevelopmentItem[index]
+                                                .taxableAmount ??
+                                                0.0)
+                                                .toString(),
+                                          )), DataCell(Text(
+                                            (model.agricultureDevelopmentItem[index]
+                                                .totalAmount ??
+                                                0.0)
+                                                .toString(),
+                                          )),
                                           DataCell(IconButton(
                                             onPressed: () {
                                               showDialog(
@@ -630,6 +906,12 @@ class AddAgriScreen extends StatelessWidget {
                                         label: Text('Qty'),
                                       ),
                                       DataColumn(
+                                        label: Text('Rate'),
+                                      ),
+                                      DataColumn(
+                                        label: Text('Amount'),
+                                      ),
+                                      DataColumn(
                                         label: Text('Delete'),
                                         // Add a new DataColumn for the button
                                         numeric: false,
@@ -647,6 +929,16 @@ class AddAgriScreen extends StatelessWidget {
                                               .agricultureDevelopmentItem2[
                                                   index]
                                               .qty
+                                              .toString())),
+                                          DataCell(Text(model
+                                              .agricultureDevelopmentItem2[
+                                                  index]
+                                              .rate
+                                              .toString())),
+                                          DataCell(Text(model
+                                              .agricultureDevelopmentItem2[
+                                                  index]
+                                              .amount
                                               .toString())),
                                           DataCell(IconButton(
                                             onPressed: () {
@@ -827,6 +1119,78 @@ class AddAgriScreen extends StatelessWidget {
                               onChanged: model.settotal,
                             )
                           : Container(),
+                      if( model.agridata.salesType == 'Fertilizer')
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.agridata.totalWeight.toString()),
+                              readOnly: true,
+                              initialValue: model.agridata.totalWeight
+                                  ?.toString() ??
+                                  "",
+                              decoration: const InputDecoration(
+                                labelText: 'Total Weight',
+                              ),
+                              // onChanged: model.setratoon1total,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.agridata.totalGstAmount.toString()),
+                              readOnly: true,
+                              initialValue: model.agridata.totalGstAmount
+                                  ?.toStringAsFixed(2) ??
+                                  "",
+                              decoration: const InputDecoration(
+                                labelText: 'Total Gst Amount',
+                              ),
+                              // onChanged: model.setratoon2total,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if( model.agridata.salesType == 'Fertilizer')
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.agridata.totalBaseAmount.toString()),
+                              readOnly: true,
+                              initialValue: model.agridata.totalBaseAmount
+                                  ?.toString() ??
+                                  "",
+                              decoration: const InputDecoration(
+                                labelText: 'Total Base Amount',
+                              ),
+                              // onChanged: model.setratoon1total,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.agridata.totalAmount.toString()),
+                              readOnly: true,
+                              initialValue: model.agridata.totalAmount
+                                  ?.toStringAsFixed(2) ??
+                                  "",
+                              decoration: const InputDecoration(
+                                labelText: 'Total Amount',
+                              ),
+                              // onChanged: model.setratoon2total,
+                            ),
+                          ),
+                        ],
+                      ),
                       const Divider(
                         thickness: 1,
                       ),
@@ -846,6 +1210,9 @@ class AddAgriScreen extends StatelessWidget {
                                 dataRowHeight: 40.0,
                                 columns: const [
                                   DataColumn(
+                                    label: Text('Village'),
+                                  ),
+                                  DataColumn(
                                     label: Text('Surety Code'),
                                   ),
                                   DataColumn(
@@ -863,6 +1230,9 @@ class AddAgriScreen extends StatelessWidget {
                                   (int index) => DataRow(
                                     cells: [
                                       DataCell(Text(model
+                                          .grantor[index].village
+                                          .toString())),
+                                      DataCell(Text(model
                                           .grantor[index].suretyExistingCode
                                           .toString())),
                                       DataCell(Text(model
@@ -877,7 +1247,7 @@ class AddAgriScreen extends StatelessWidget {
                                                 title: const Text(
                                                     'Confirm Delete'),
                                                 content: const Text(
-                                                    'Are you sure you want to delete this bank account?'),
+                                                    'Are you sure you want to delete this Granter?'),
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () {
@@ -917,13 +1287,14 @@ class AddAgriScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          CtextButton(
-                            onPressed: () => model.onSavePressed(context),
-                            text: 'Save',
-                          ),
+                          
                           CtextButton(
                             text: 'Cancel',
-                            onPressed: () => Navigator.of(context).pop(),
+                            onPressed: () => Navigator.of(context).pop(), buttonColor: Colors.red,
+                          ),
+                          CtextButton(
+                            onPressed: () => model.onSavePressed(context),
+                            text: 'Save', buttonColor: Colors.green,
                           ),
                         ],
                       ),
@@ -962,6 +1333,89 @@ class AddAgriScreen extends StatelessWidget {
                             child: Autocomplete<String>(
                               key: Key(index == -1
                                   ? ""
+                                  : model.grantor[index].village ?? ""),
+                              initialValue: TextEditingValue(
+                                  text: index == -1
+                                      ? ""
+                                      : model.grantor[index]
+                                      .village ??
+                                      ""),
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text.isEmpty) {
+                                  return const Iterable<String>.empty();
+                                }
+                                return model.villagelist
+                                    .map((route) => route.name ?? "")
+                                    .toList()
+                                    .where((route) => route
+                                    .toLowerCase()
+                                    .contains(textEditingValue.text
+                                    .toLowerCase()));
+                              },
+                              onSelected: (String routeName) {
+                                // Find the corresponding route object
+                                final routeData = model.villagelist
+                                    .firstWhere(
+                                        (route) => route.name == routeName);
+                                model.setSelectedgrantorvillage(
+                                    routeData.name); // Pass the route
+                              },
+                              fieldViewBuilder: (BuildContext context,
+                                  TextEditingController
+                                  textEditingController,
+                                  FocusNode focusNode,
+                                  VoidCallback onFieldSubmitted) {
+                                return TextFormField(
+                                  // key: Key(model.farmerData.village ?? ""),
+                                  // initialValue: model.farmerData.village,
+                                  controller: textEditingController,
+                                  focusNode: focusNode,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Surety Village',
+                                  ),
+                                  onChanged: (String value) {},
+
+                                );
+                              },
+                              optionsViewBuilder: (BuildContext contpext,
+                                  AutocompleteOnSelected<String> onSelected,
+                                  Iterable<String> options) {
+                                return Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 4.0,
+                                    child: Container(
+                                      constraints: const BoxConstraints(
+                                          maxHeight: 200),
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: options.length,
+                                        itemBuilder: (BuildContext context,
+                                            int index) {
+                                          final String option =
+                                          options.elementAt(index);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              onSelected(option);
+                                            },
+                                            child: ListTile(
+                                              title: Text(option),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              optionsMaxHeight: 200,
+                            ),
+                          ),
+                          Expanded(
+                            child: Autocomplete<String>(
+                              key: Key(index == -1
+                                  ? ""
                                   : model.grantor[index].suretyCode ?? ""),
                               initialValue: TextEditingValue(
                                   text: index == -1
@@ -976,7 +1430,7 @@ class AddAgriScreen extends StatelessWidget {
                                 }
                                 return model.farmerList
                                     .map((bank) =>
-                                        bank.existingSupplierCode ?? "")
+                                        bank.supplierName ?? "")
                                     .toList()
                                     .where((bank) => bank
                                         .toLowerCase()
@@ -987,7 +1441,7 @@ class AddAgriScreen extends StatelessWidget {
                                 // Find the corresponding route object
                                 final bankData = model.farmerList.firstWhere(
                                     (bank) =>
-                                        bank.existingSupplierCode == routeName);
+                                        bank.supplierName == routeName);
                                 model.setSelectedgrantor(
                                     bankData.name); // Pass the route
                               },
@@ -998,9 +1452,9 @@ class AddAgriScreen extends StatelessWidget {
                                 return TextFormField(
                                   controller: textEditingController,
                                   focusNode: focusNode,
-                                  keyboardType: TextInputType.number,
+
                                   decoration: const InputDecoration(
-                                    labelText: 'Surety Code',
+                                    labelText: 'Surety Name',
                                   ),
                                   onChanged: (String value) {},
                                 );
@@ -1024,7 +1478,7 @@ class AddAgriScreen extends StatelessWidget {
                                               options.elementAt(index);
                                           final routeData = model.farmerList
                                               .firstWhere((route) =>
-                                                  route.existingSupplierCode ==
+                                                  route.supplierName ==
                                                   option);
                                           return GestureDetector(
                                             onTap: () {
@@ -1033,7 +1487,7 @@ class AddAgriScreen extends StatelessWidget {
                                             child: ListTile(
                                               title: Text(option),
                                               subtitle:
-                                                  Text(routeData.supplierName!),
+                                                  Text(routeData.existingSupplierCode!),
                                             ),
                                           );
                                         },
@@ -1045,18 +1499,15 @@ class AddAgriScreen extends StatelessWidget {
                               optionsMaxHeight: 200,
                             ),
                           ),
-                          Expanded(
-                            child: TextFormField(
-                              controller:
-                                  TextEditingController(text: model.suretyname),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(11),
-                              ],
-                              decoration: const InputDecoration(
-                                labelText: 'Surety Name',
-                              ),
-                            ),
-                          ),
+                          // Expanded(
+                          //   child: TextFormField(
+                          //     controller:
+                          //         TextEditingController(text: model.suretyname),
+                          //     decoration: const InputDecoration(
+                          //       labelText: 'Surety Name',
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -1261,7 +1712,7 @@ class AddAgriScreen extends StatelessWidget {
               return AlertDialog(
                 title: const Text('Add Agricultural Development'),
                 content: SizedBox(
-                  height: getHeight(context) / 6,
+                  height: getHeight(context) / 5,
                   child: fullScreenLoader(
                     child: Form(
                       key: model.agriformKey,
@@ -1341,7 +1792,7 @@ class AddAgriScreen extends StatelessWidget {
                                               onSelected(option);
                                             },
                                             child: ListTile(
-                                              title: Text(option),
+                                              title: AutoSizeText(option),
                                             ),
                                           );
                                         },
@@ -1353,13 +1804,16 @@ class AddAgriScreen extends StatelessWidget {
                               optionsMaxHeight: 200,
                             ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Expanded(
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               controller: model
                                   .totalController2, // Use the controller here
                               decoration: const InputDecoration(
-                                labelText: 'Total',
+                                labelText: 'Quantity',
                               ),
                               onChanged: (newValue) {
                                 double? parsedValue =
@@ -1368,7 +1822,7 @@ class AddAgriScreen extends StatelessWidget {
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter some Total';
+                                  return 'Please enter some Quantity';
                                 }
                                 return null;
                               },

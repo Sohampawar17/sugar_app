@@ -64,115 +64,124 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void checkin(BuildContext context) async {
-    bool res = false;
     setBusy(true);
-    checkindata.employee = empid;
-    checkindata.logType = "IN";
-    checkindata.time = DateTime.now().toString();
-    GeolocationService geolocationService = GeolocationService();
-    Position? position = await geolocationService.determinePosition();
-    if (position != null) {
-      Placemark? placemark = await geolocationService.getPlacemarks(position);
-      if (placemark != null) {
-        // Extract properties from the placemark
-        String formattedAddress =
-            await geolocationService.getAddressFromCoordinates(
-                    position.latitude, position.longitude) ??
-                "";
-        checkindata.latitude = position.latitude.toString();
-        checkindata.longitude = position.longitude.toString();
-        checkindata.deviceId = formattedAddress;
-        Logger().i(checkindata.toJson().toString());
-        res = await CheckinServices().addCheckin(checkindata);
-        if (res) {
-          if (context.mounted) {
-            setBusy(false);
 
-            checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
+    try {
+      checkindata.employee = empid;
+      checkindata.logType = "IN";
+      checkindata.time = DateTime.now().toString();
 
-            checkvalue = checkinList[0].logType;
-            time = checkinList[0].time;
-            notifyListeners();
-            Navigator.pop(context);
-            Fluttertoast.showToast(
-              msg: "Check-$checkvalue Successfully!",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.white,
-              textColor: Colors.black87,
-              fontSize: 16.0,
-            );
-          }
-        }
-      } else {
-        // Handle case where placemark is null
-        Fluttertoast.showToast(msg: 'Failed to get placemark');
-        setBusy(false);
+      GeolocationService geolocationService = GeolocationService();
+      Position? position = await geolocationService.determinePosition();
+
+      if (position == null) {
+        Fluttertoast.showToast(msg: 'Failed to get location');
+        return setBusy(false);
       }
-    } else {
-      // Handle case where obtaining location fails
-      Fluttertoast.showToast(msg: 'Failed to get location');
+
+      Placemark? placemark = await geolocationService.getPlacemarks(position);
+      if (placemark == null) {
+        Fluttertoast.showToast(msg: 'Failed to get placemark');
+        return setBusy(false);
+      }
+
+      String formattedAddress =
+          await geolocationService.getAddressFromCoordinates(
+                  position.latitude, position.longitude) ??
+              "";
+      checkindata.latitude = position.latitude.toString();
+      checkindata.longitude = position.longitude.toString();
+      checkindata.deviceId = formattedAddress;
+
+      Logger().i(checkindata.toJson().toString());
+
+      bool res = await CheckinServices().addCheckin(checkindata);
+      if (res) {
+        setBusy(false);
+        checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
+
+        if (checkinList.isNotEmpty) {
+          checkvalue = checkinList[0].logType;
+          time = checkinList[0].time;
+          notifyListeners();
+          Navigator.pop(context);
+          Fluttertoast.showToast(
+            msg: "Check-$checkvalue Successfully!",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.black87,
+            fontSize: 16.0,
+          );
+        }
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'An error occurred: $e');
+    } finally {
       setBusy(false);
+      notifyListeners();
     }
-    setBusy(false);
-    notifyListeners();
   }
 
   void checkout(BuildContext context) async {
-    bool res = false;
     setBusy(true);
-    checkindata.employee = empid;
-    checkindata.logType = "OUT";
-    checkindata.time = DateTime.now().toString();
-    GeolocationService geolocationService = GeolocationService();
-    Position? position = await geolocationService.determinePosition();
-    if (position != null) {
-      // Get the placemark using the geolocation service
-      Placemark? placemark = await geolocationService.getPlacemarks(position);
-      if (placemark != null) {
-        // Extract properties from the placemark
-        String formattedAddress =
-            await geolocationService.getAddressFromCoordinates(
-                    position.latitude, position.longitude) ??
-                "";
-        checkindata.latitude = position.latitude.toString();
-        checkindata.longitude = position.longitude.toString();
-        checkindata.deviceId = formattedAddress;
-        Logger().i(checkindata.toJson().toString());
-        res = await CheckinServices().addCheckin(checkindata);
-        if (res) {
-          if (context.mounted) {
-            setBusy(false);
-            setBusy(false);
-            checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
-            checkvalue = checkinList[0].logType;
-            time = checkinList[0].time;
-            notifyListeners();
-            Navigator.pop(context);
-            Fluttertoast.showToast(
-              msg: "Check-$checkvalue Successfully!",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.white,
-              textColor: Colors.black87,
-              fontSize: 16.0,
-            );
-          }
-        }
-      } else {
-        // Handle case where placemark is null
-        Fluttertoast.showToast(msg: 'Failed to get placemark');
-        setBusy(false);
+
+    try {
+      checkindata.employee = empid;
+      checkindata.logType = "OUT";
+      checkindata.time = DateTime.now().toString();
+
+      GeolocationService geolocationService = GeolocationService();
+      Position? position = await geolocationService.determinePosition();
+
+      if (position == null) {
+        Fluttertoast.showToast(msg: 'Failed to get location');
+        return setBusy(false);
       }
-    } else {
-      // Handle case where obtaining location fails
-      Fluttertoast.showToast(msg: 'Failed to get location');
+
+      Placemark? placemark = await geolocationService.getPlacemarks(position);
+      if (placemark == null) {
+        Fluttertoast.showToast(msg: 'Failed to get placemark');
+        return setBusy(false);
+      }
+
+      String formattedAddress =
+          await geolocationService.getAddressFromCoordinates(
+                  position.latitude, position.longitude) ??
+              "";
+      checkindata.latitude = position.latitude.toString();
+      checkindata.longitude = position.longitude.toString();
+      checkindata.deviceId = formattedAddress;
+
+      Logger().i(checkindata.toJson().toString());
+
+      bool res = await CheckinServices().addCheckin(checkindata);
+      if (res) {
+        setBusy(false);
+        checkinList = await CheckinServices().fetchcheckindata(empid ?? "");
+        if (checkinList.isNotEmpty) {
+          checkvalue = checkinList[0].logType;
+          time = checkinList[0].time;
+          notifyListeners();
+          Navigator.pop(context);
+          Fluttertoast.showToast(
+            msg: "Check-$checkvalue Successfully!",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.black87,
+            fontSize: 16.0,
+          );
+        }
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'An error occurred: $e');
+    } finally {
       setBusy(false);
+      notifyListeners();
     }
-    setBusy(false);
-    notifyListeners();
   }
 
   void getGeoLocation() async {

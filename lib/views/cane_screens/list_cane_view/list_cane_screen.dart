@@ -57,7 +57,7 @@ class ListCaneScreen extends StatelessWidget {
                               items: model.seasonlist.map((val) {
                                 return DropdownMenuItem<String>(
                                   value: val,
-                                  child: Text(val),
+                                  child: AutoSizeText(val),
                                 );
                               }).toList(),
                               onChanged: (value) {
@@ -201,8 +201,8 @@ class ListCaneScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              title: Text(
-                                model.canefilterList[index].growerName ?? '',
+                              title: AutoSizeText(
+                                model.canefilterList[index].growerName ?? '', maxLines: 2,minFontSize: 10,
                               ),
                               subtitle: Text(
                                 model.canefilterList[index].name.toString(),

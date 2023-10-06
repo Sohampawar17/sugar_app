@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../widgets/cdrop_down_widget.dart';
 import '../../../widgets/ctext_button.dart';
 import '../../../widgets/full_screen_loader.dart';
 import 'add_crop_sampling_model.dart';
@@ -27,244 +29,405 @@ class AddCropSamplingScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(children: [
-                      Autocomplete<String>(
-                        key: Key(model.cropsamplingdata.id ?? "id"),
-                        initialValue: TextEditingValue(
-                          text: model.cropsamplingdata.id ?? "",
+                      CdropDown(
+                        dropdownButton:
+                        DropdownButtonFormField<String>(
+                          isExpanded: true,
+                          value: model.cropsamplingdata.season,
+                          // Replace null with the selected value if needed
+                          decoration: const InputDecoration(
+                            labelText: 'Season',
+                          ),
+                          hint: const Text('Select Season'),
+                          items: model.seasonlist.map((val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: AutoSizeText(val),
+                            );
+                          }).toList(),
+                          onChanged: (value) =>
+                              model.setSelectedseason(value),
+                          validator: model.validateseason,
                         ),
-                        optionsBuilder: (TextEditingValue textEditingValue) {
-                          if (textEditingValue.text.isEmpty) {
-                            return const Iterable<String>.empty();
-                          }
-                          return model.plotList
-                              .map((route) => route.name.toString())
-                              .toList()
-                              .where((route) => route.toLowerCase().contains(
-                                  textEditingValue.text.toLowerCase()));
-                        },
-                        onSelected: model.setSelectedplot,
-                        fieldViewBuilder: (BuildContext context,
-                            TextEditingController textEditingController,
-                            FocusNode focusNode,
-                            VoidCallback onFieldSubmitted) {
-                          return TextFormField(
-                            controller: textEditingController,
-                            focusNode: focusNode,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Plot number',
-                            ),
-                            onChanged: (String value) {},
-                            validator: model.validateplotNumber,
-                          );
-                        },
-                        optionsViewBuilder: (BuildContext contpext,
-                            AutocompleteOnSelected<String> onSelected,
-                            Iterable<String> options) {
-                          return Align(
-                            alignment: Alignment.topLeft,
-                            child: Material(
-                              elevation: 4.0,
-                              child: Container(
-                                constraints:
-                                    const BoxConstraints(maxHeight: 200),
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: options.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    final String option =
-                                        options.elementAt(index);
-                                    final routeData = model.plotList.firstWhere(
-                                        (route) =>
-                                            route.name.toString() == option);
-                                    return GestureDetector(
-                                      onTap: () {
-                                        onSelected(routeData.name
-                                            .toString()); // Send the name as the selected route
-                                      },
-                                      child: ListTile(
-                                        title: Text(option),
-                                        subtitle: Text(routeData.growerName!),
-                                      ),
-                                    );
-                                  },
-                                ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Autocomplete<String>(
+                              key: Key(model.cropsamplingdata.area ?? "03"),
+                              initialValue: TextEditingValue(
+                                text: model.cropsamplingdata.area ?? "",
                               ),
-                            ),
-                          );
-                        },
-                        optionsMaxHeight: 200,
-                      ),
-                      const SizedBox(
-                        width: 25,
-                      ),
-                      Visibility(
-                          visible: model.cropsamplingdata.id != null,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                        key: Key(
-                                            model.cropsamplingdata.growerCode ??
-                                                "supplier"),
-                                        readOnly: true,
-                                        initialValue: model.selectedfarcode ??
-                                            model.cropsamplingdata.growerCode,
-                                        decoration: const InputDecoration(
-                                          labelText: 'Grower Code',
-                                        ),
-                                        onChanged: model.setSelectedVendor),
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text.isEmpty) {
+                                  return const Iterable<String>.empty();
+                                }
+                                return model.villagelist
+                                    .map((route) => route.name ?? "")
+                                    .toList()
+                                    .where((route) => route
+                                    .toLowerCase()
+                                    .contains(textEditingValue.text
+                                    .toLowerCase()));
+                              },
+                              onSelected: (String routeName) {
+                                // Find the corresponding route object
+                                final routeData = model.villagelist
+                                    .firstWhere(
+                                        (route) => route.name == routeName);
+                                model.setSelectedVillage(
+                                    routeData.name); // Pass the route
+                              },
+                              fieldViewBuilder: (BuildContext context,
+                                  TextEditingController
+                                  textEditingController,
+                                  FocusNode focusNode,
+                                  VoidCallback onFieldSubmitted) {
+                                return TextFormField(
+                                  // key: Key(model.farmerData.village ?? ""),
+                                  // initialValue: model.farmerData.village,
+                                  controller: textEditingController,
+                                  focusNode: focusNode,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Plot Village',
                                   ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Expanded(
-                                    child: TextFormField(
-                                      key: Key(model.cropsamplingdata.season ??
-                                          "season"),
-                                      readOnly: true,
-                                      initialValue:
-                                          model.cropsamplingdata.season ?? "",
-                                      decoration: const InputDecoration(
-                                        labelText: 'Seasom',
+                                  onChanged: (String value) {},
+                                  validator: model.validatevillage,
+                                );
+                              },
+                              optionsViewBuilder: (BuildContext contpext,
+                                  AutocompleteOnSelected<String> onSelected,
+                                  Iterable<String> options) {
+                                return Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 4.0,
+                                    child: Container(
+                                      constraints: const BoxConstraints(
+                                          maxHeight: 200),
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: options.length,
+                                        itemBuilder: (BuildContext context,
+                                            int index) {
+                                          final String option =
+                                          options.elementAt(index);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              onSelected(option);
+                                            },
+                                            child: ListTile(
+                                              title: Text(option),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                      onChanged: model.setSelectedcropvariety,
                                     ),
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              TextFormField(
-                                key: Key(model.cropsamplingdata.growerName ??
-                                    "growerName"),
+                                );
+                              },
+                              optionsMaxHeight: 200,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                              child:  TextFormField(
+                                key: Key(model.cropsamplingdata.circleOffice ??
+                                    "circleOffice"),
                                 readOnly: true,
                                 initialValue:
-                                    model.cropsamplingdata.growerName ?? "",
+                                model.cropsamplingdata.circleOffice ?? "",
                                 decoration: const InputDecoration(
-                                  labelText: 'Farmer Name',
+                                  labelText: 'Plot circle office',
                                 ),
                                 onChanged: model.setSelectedfarmername,
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                      key: Key(
-                                          model.cropsamplingdata.plantName ??
-                                              "branch"),
-                                      readOnly: true,
-                                      initialValue:
-                                          model.cropsamplingdata.plantName ??
-                                              "",
-                                      decoration: const InputDecoration(
-                                        labelText: 'Plant',
-                                      ),
-                                      onChanged: model.setSelectedPlantName,
+                              )),
+                        ],
+                      ),
+                      Row(children: [
+                        Expanded(
+                          flex: 3,
+                          child: Autocomplete<String>(
+                            key: Key(model.cropsamplingdata.growerName ?? "05"),
+                            initialValue: TextEditingValue(
+                              text: model.cropsamplingdata.growerName ?? "",
+                            ),
+                            optionsBuilder:
+                                (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text.isEmpty) {
+                                return const Iterable<String>.empty();
+                              }
+                              return model.farmerlist
+                                  .where((grower) =>
+                                  (grower.supplierName ?? "")
+                                      .toLowerCase()
+                                      .contains(textEditingValue.text
+                                      .toLowerCase()))
+                                  .map((grower) =>
+                              grower.supplierName ?? "")
+                                  .toList();
+                            },
+                            onSelected:(String routeName) {
+                          // Find the corresponding route object
+                          final routeData = model.farmerlist
+                              .firstWhere((route) =>
+                    route.supplierName ==
+                    routeName);
+                  model.setSelectedgrowername(context,
+                  routeData.supplierName); // Pass the route
+            },
+                            fieldViewBuilder: (BuildContext context,
+                                TextEditingController textEditingController,
+                                FocusNode focusNode,
+                                VoidCallback onFieldSubmitted) {
+                              return TextFormField(
+                                controller: textEditingController,
+                                focusNode: focusNode,
+                                decoration: const InputDecoration(
+                                  labelText: 'Grower Name',
+                                ),
+                                onChanged: (String value) {},
+                                validator: model.validatefarmer,
+                              );
+                            },
+                            optionsViewBuilder: (BuildContext context,
+                                AutocompleteOnSelected<String> onSelected,
+                                Iterable<String> options) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  elevation: 4.0,
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                        maxHeight: 200),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: options.length,
+                                      itemBuilder: (BuildContext context,
+                                          int index) {
+                                        final String option =
+                                        options.elementAt(index);
+                                        final routeData = model.farmerlist
+                                            .firstWhere((route) =>
+                                        route
+                                            .supplierName ==
+                                            option);
+                                        return GestureDetector(
+                                          onTap: () {
+                                            onSelected(option);
+                                          },
+                                          child: ListTile(
+                                            title: Text(option),
+                                            subtitle: Text(
+                                                routeData.existingSupplierCode!),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 25,
+                                ),
+                              );
+                            },
+                            optionsMaxHeight: 200,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          //for plant
+                          child: TextFormField(
+                              key: Key(
+                                  model.cropsamplingdata.growerCode ??
+                                      "supplier"),
+                              readOnly: true,
+                              initialValue: model.selectedfarcode ??
+                                  model.cropsamplingdata.growerCode,
+                              decoration: const InputDecoration(
+                                labelText: 'Grower Code',
+                              ),
+                              onChanged: model.setSelectedVendor),
+                        ),
+                      ]),
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Autocomplete<String>(
+                              key: Key(model.cropsamplingdata.id ?? "id"),
+                              initialValue: TextEditingValue(
+                                text: model.cropsamplingdata.id ?? "",
+                              ),
+                              optionsBuilder: (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text.isEmpty) {
+                                  return const Iterable<String>.empty();
+                                }
+                                return model.plotList
+                                    .map((route) => route.growerName.toString())
+                                    .toList()
+                                    .where((route) => route.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase()));
+                              },
+                              onSelected: model.setSelectedplot,
+                              fieldViewBuilder: (BuildContext context,
+                                  TextEditingController textEditingController,
+                                  FocusNode focusNode,
+                                  VoidCallback onFieldSubmitted) {
+                                return TextFormField(
+                                  controller: textEditingController,
+                                  focusNode: focusNode,
+
+                                  decoration: const InputDecoration(
+                                    labelText: 'Plot number',
                                   ),
-                                  Expanded(
-                                    child: TextFormField(
-                                      key: Key(model.cropsamplingdata.area ??
-                                          "village"),
-                                      readOnly: true,
-                                      initialValue:
-                                          model.cropsamplingdata.area ?? "",
-                                      decoration: const InputDecoration(
-                                        labelText: 'Village',
+                                  onChanged: (String value) {},
+                                  validator: model.validateplotNumber,
+                                );
+                              },
+                              optionsViewBuilder: (BuildContext contpext,
+                                  AutocompleteOnSelected<String> onSelected,
+                                  Iterable<String> options) {
+                                return Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 4.0,
+                                    child: Container(
+                                      constraints:
+                                      const BoxConstraints(maxHeight: 200),
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: options.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          final String option =
+                                          options.elementAt(index);
+                                          final routeData = model.plotList.firstWhere(
+                                                  (route) =>
+                                              route.growerName.toString() == option);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              onSelected(routeData.name
+                                                  .toString()); // Send the name as the selected route
+                                            },
+                                            child: ListTile(
+                                              title: Text(option),
+                                              subtitle: Text(routeData.name.toString()),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                      onChanged: model.setSelectedvillage,
                                     ),
                                   ),
-                                ],
+                                );
+                              },
+                              optionsMaxHeight: 200,
+                            ),
+
+                          ),
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.cropsamplingdata.plantName ??
+                                      "branch"),
+                              readOnly: true,
+                              initialValue:
+                                  model.cropsamplingdata.plantName ??
+                                      "",
+                              decoration: const InputDecoration(
+                                labelText: 'Plant',
                               ),
-                              const SizedBox(
-                                height: 15,
+                              onChanged: model.setSelectedPlantName,
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.cropsamplingdata.cropVariety ??
+                                      "cropVariety"),
+                              readOnly: true,
+                              initialValue:
+                                  model.cropsamplingdata.cropVariety ??
+                                      "",
+                              decoration: const InputDecoration(
+                                labelText: 'Crop Variety',
                               ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                      key: Key(
-                                          model.cropsamplingdata.cropVariety ??
-                                              "cropVariety"),
-                                      readOnly: true,
-                                      initialValue:
-                                          model.cropsamplingdata.cropVariety ??
-                                              "",
-                                      decoration: const InputDecoration(
-                                        labelText: 'Crop Variety',
-                                      ),
-                                      onChanged: model.setSelectedcropvariety,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 25,
-                                  ),
-                                  Expanded(
-                                    child: TextFormField(
-                                      key: Key(
-                                          model.cropsamplingdata.cropType ??
-                                              "cropType"),
-                                      readOnly: true,
-                                      initialValue:
-                                          model.cropsamplingdata.cropType ?? "",
-                                      decoration: const InputDecoration(
-                                        labelText: 'Crop Type',
-                                      ),
-                                      onChanged: model.setSelectedcroptype,
-                                    ),
-                                  ),
-                                ],
+                              onChanged: model.setSelectedcropvariety,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.cropsamplingdata.cropType ??
+                                      "cropType"),
+                              readOnly: true,
+                              initialValue:
+                                  model.cropsamplingdata.cropType ?? "",
+                              decoration: const InputDecoration(
+                                labelText: 'Crop Type',
                               ),
-                              const SizedBox(
-                                height: 15,
+                              onChanged: model.setSelectedcroptype,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.cropsamplingdata.areaAcrs?.toString() ??
+                                      "areaAcrs"),
+                              readOnly: true,
+                              initialValue:
+                              model.cropsamplingdata.areaAcrs?.toString() ??
+                                  "",
+                              decoration: const InputDecoration(
+                                labelText: 'Area in Acrs',
                               ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                      key: Key(model.cropsamplingdata.soilType
-                                          .toString()),
-                                      readOnly: true,
-                                      initialValue: model
-                                          .cropsamplingdata.soilType
-                                          .toString(),
-                                      decoration: const InputDecoration(
-                                        labelText: 'Soil Type',
-                                      ),
-                                      onChanged: model.setSelectedSoilType,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 25,
-                                  ),
-                                  // Expanded(
-                                  //   child: TextFormField(
-                                  //     controller: model.datecontroller,
-                                  //     onTap: () => model.selectDate(context),
-                                  //     decoration: const InputDecoration(
-                                  //       labelText: 'Plantation Date',
-                                  //       hintText: 'Select Plantation Date',
-                                  //     ),
-                                  //     // validator: model.validateplantationdate,
-                                  //     onChanged: model.ondateChanged,
-                                  //   ),
-                                  // ),
-                                ],
+                              onChanged: model.setSelectedareainacrs,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              key: Key(
+                                  model.cropsamplingdata.plantattionRatooningDate ??
+                                      "plantattionRatooningDate"),
+                              readOnly: true,
+                              initialValue:
+                              model.cropsamplingdata.plantattionRatooningDate ?? "",
+                              decoration: const InputDecoration(
+                                labelText: 'Plantation date',
                               ),
-                            ],
-                          )),
+                              onChanged: model.setSelectedPlantationDate,
+                            ),
+                          ),
+                        ],
+                      ),
                       Row(
                         children: [
                           Expanded(
@@ -312,30 +475,61 @@ class AddCropSamplingScreen extends StatelessWidget {
                           ),
                           const SizedBox(
                             width: 25,
-                          ),
-                          Expanded(
+                          ),Expanded(
                             child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              controller: model.noofpairsController,
+                              readOnly: true,
+                              key: Key(model
+                                  .cropsamplingdata.averageBrix
+                                  .toString()),
+                              initialValue: model
+                                  .cropsamplingdata.averageBrix
+                                  ?.toStringAsPrecision(4) ??
+                                  "",
                               decoration: InputDecoration(
-                                labelText: 'No. of Pairs',
-                                errorText: (int.tryParse(model
-                                                    .samplingformauladata
-                                                    .minimumPairs ??
-                                                "") ??
-                                            0) >
-                                        (model.cropsamplingdata.noOfPairs ?? 0)
-                                    ? 'SugarCane Is not enough Matured to cut down'
-                                    : null,
-                              ),
-                              onChanged: model.setSelectednoofpairs,
-                              validator: model.validatenoofpairs,
+                                  labelText: 'Average Brixs',
+                                  errorText: model.cropsamplingdata
+                                      .averageBrix !=
+                                      null &&
+                                      (int.tryParse(model
+                                          .samplingformauladata
+                                          .minimumBrix ??
+                                          "") ??
+                                          0) >
+                                          (model.cropsamplingdata
+                                              .averageBrix ??
+                                              0.0)
+                                      ? 'SugarCane Is not enough Matured to cut down'
+                                      : null,
+                                  errorMaxLines: 2),
                             ),
                           ),
+
                         ],
                       ),
                       const SizedBox(
                         height: 15,
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: model.noofpairsController,
+                        decoration: InputDecoration(
+                            labelText: 'No. of internodes',
+                            errorText: (model
+                                .cropsamplingdata.noOfPairs !=
+                                null &&
+                                (int.tryParse(model
+                                    .samplingformauladata
+                                    .minimumPairs ??
+                                    "") ??
+                                    0) >
+                                    (model.cropsamplingdata
+                                        .noOfPairs ??
+                                        0))
+                                ? 'SugarCane Is not enough Matured to cut down'
+                                : null,
+                            errorMaxLines: 3),
+                        onChanged: model.setSelectednoofpairs,
+                        validator: model.validatenoofpairs,
                       ),
                       const SizedBox(
                         height: 15,
@@ -344,13 +538,14 @@ class AddCropSamplingScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           CtextButton(
-                            onPressed: () => model.onSavePressed(context),
-                            text: 'Save',
+                            text: 'Cancel',
+                            onPressed: () => Navigator.of(context).pop(), buttonColor: Colors.red,
                           ),
                           CtextButton(
-                            text: 'Cancel',
-                            onPressed: () => Navigator.of(context).pop(),
+                            onPressed: () => model.onSavePressed(context),
+                            text: 'Save', buttonColor: Colors.green,
                           ),
+
                         ],
                       ),
                     ]),

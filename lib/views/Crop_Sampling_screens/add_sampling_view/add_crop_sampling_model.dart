@@ -1,33 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:stacked/stacked.dart';
+import 'package:sugar_mill_app/models/cane_farmer.dart';
 import 'package:sugar_mill_app/models/sampling_formula.dart';
+import 'package:sugar_mill_app/models/village_model.dart';
 import 'package:sugar_mill_app/services/add_crop_sampling_service.dart';
 import '../../../constants.dart';
 import '../../../models/agri_cane_model.dart';
 import '../../../models/crop_sampling.dart';
-import '../../../services/add_agri_services.dart';
+
 
 class AddCropSmaplingModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
   CropSampling cropsamplingdata = CropSampling();
   samplingformula samplingformauladata = samplingformula();
   List<AgriCane> plotList = [];
+  List<String> seasonlist = [""];
+  List<villagemodel> villagelist = [];
+  List<caneFarmer> farmerlist = [];
   late String formulaList;
   String? selectedPlot;
-
   String? selectedfarcode;
   bool isEdit = false;
-  List<String> seasonlist = [""];
+
+
   initialise(BuildContext context, String samplingId) async {
     setBusy(true);
-    plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter());
-    seasonlist = await AddAgriServices().fetchSeason();
+    plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter(cropsamplingdata.season ?? "",cropsamplingdata.area ?? "",cropsamplingdata.growerCode ?? ""));
+    seasonlist = await AddCropSmaplingServices().fetchSeason();
+    villagelist=await AddCropSmaplingServices().fetchVillages();
+
     samplingformauladata =
         await AddCropSmaplingServices().fetchsamplingFormula() ??
             samplingformula();
-    Logger().i(samplingformauladata);
+
+
     if (samplingId != "") {
       isEdit = true;
       cropsamplingdata =
@@ -43,24 +52,15 @@ class AddCropSmaplingModel extends BaseViewModel {
           notifyListeners();
         }
       }
+      cropsamplingdata.plantattionRatooningDate = cropsamplingdata.plantattionRatooningDate != ""
+          ? DateFormat('dd-MM-yyyy').format(DateTime.parse(cropsamplingdata.plantattionRatooningDate ?? ""))
+          : "";
       notifyListeners();
     }
     if (seasonlist.isEmpty) {
       logout(context);
     }
-    if (plotList.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
 
-          content: Text(
-            'There is No plot available',
-            style: TextStyle(color: Colors.white, fontSize: 15),
-          ),
-          duration: Duration(seconds: 3), // Adjust the duration as needed
-        ),
-      );
-    }
     setBusy(false);
   }
 
@@ -92,14 +92,16 @@ class AddCropSmaplingModel extends BaseViewModel {
     }
     setBusy(false);
   }
-
+  String? selectedVillage;
+  String? selectedoffice;
+  String? plantationdate;
   String? selectedplot;
   String? selectedVendorname;
   String? selectedplant;
   String? selectedvillage;
   String? selectedcropvariety;
   String? selectedcroptype;
-  String? selectedAreaInAcrs;
+  double? selectedAreaInAcrs;
   String? selectedvendor;
   String? selectedseason;
 
@@ -111,18 +113,18 @@ class AddCropSmaplingModel extends BaseViewModel {
     Logger().i(selectedCaneData);
     selectedVendorname = selectedCaneData.growerName;
     selectedplant = selectedCaneData.plantName;
-    selectedvillage = selectedCaneData.area;
+    plantationdate = selectedCaneData.plantattionRatooningDate;
     selectedcropvariety = selectedCaneData.cropVariety;
     selectedcroptype = selectedCaneData.cropType;
-    selectedAreaInAcrs = selectedCaneData.soilType;
+    selectedAreaInAcrs = selectedCaneData.areaAcrs;
     selectedvendor = selectedCaneData.vendorCode;
     selectedfarcode = selectedvendor;
     selectedseason = selectedCaneData.season;
     cropsamplingdata.growerName = selectedVendorname;
-    cropsamplingdata.area = selectedvillage;
+    cropsamplingdata.plantattionRatooningDate = DateFormat('dd-MM-yyyy').format(DateTime.parse(plantationdate ?? ""));
     cropsamplingdata.cropVariety = selectedcropvariety;
     cropsamplingdata.cropType = selectedcroptype;
-    cropsamplingdata.soilType = selectedAreaInAcrs;
+    cropsamplingdata.areaAcrs = selectedAreaInAcrs;
     cropsamplingdata.growerCode = selectedvendor;
     cropsamplingdata.season = selectedseason;
     cropsamplingdata.plantName = selectedplant;
@@ -140,6 +142,42 @@ class AddCropSmaplingModel extends BaseViewModel {
       selection: TextSelection.collapsed(offset: (brixbottm ?? '').length),
     );
     cropsamplingdata.brixBottom = double.parse(brixbottm ?? '');
+    setAvgBrix();
+    notifyListeners();
+  }
+
+  // 'SugarCane is not mature enough to be cut down';
+  // void setSelectedgrowercode(String? growercode) {
+  //   selectedgrowercode = growercode;
+  //   final selectedgrowerData = farmerList.firstWhere(
+  //           (growerData) => growerData.existingSupplierCode == growercode);
+  //   Logger().i(selectedgrowerData);
+  //   selectedgrowername =
+  //       selectedgrowerData.supplierName; // Set th distance in the kmController
+  //   canedata.growerCode = selectedgrowerData.name;
+  //   canedata.growerName = selectedgrowername;
+  //   Logger().i(selectedgrowername);
+  //   notifyListeners();
+  // }
+  //
+  // void setSelectedgrowername(String? growername) {
+  //   selectedgrowername = growername;
+  //   canedata.growerName = selectedgrowername;
+  //   notifyListeners();
+  // }
+
+
+
+void setSelectedVillage(String? village) async {
+    selectedVillage = village;
+    cropsamplingdata.area = selectedVillage;
+    final selectedRouteData =
+    villagelist.firstWhere((routeData) => routeData.name == village);
+    selectedoffice = selectedRouteData.circleOffice;
+    Logger().i(selectedVillage);
+    cropsamplingdata.circleOffice = selectedoffice;
+    Logger().i(cropsamplingdata.circleOffice);
+    farmerlist=await AddCropSmaplingServices().fetchfarmerListwithfilter(cropsamplingdata.area ?? "");
     notifyListeners();
   }
 
@@ -149,6 +187,7 @@ class AddCropSmaplingModel extends BaseViewModel {
       selection: TextSelection.collapsed(offset: (brixmiddle ?? '').length),
     );
     cropsamplingdata.brixMiddle = double.parse(brixmiddle ?? '');
+    setAvgBrix();
     notifyListeners();
   }
 
@@ -158,6 +197,14 @@ class AddCropSmaplingModel extends BaseViewModel {
       selection: TextSelection.collapsed(offset: (brixtop ?? '').length),
     );
     cropsamplingdata.brixTop = double.parse(brixtop ?? '');
+    setAvgBrix();
+    notifyListeners();
+  }
+
+  void setAvgBrix() {
+    cropsamplingdata.averageBrix = ((cropsamplingdata.brixTop ?? 0.0) +
+        (cropsamplingdata.brixMiddle ?? 0.0) +
+        (cropsamplingdata.brixBottom ?? 0.0) )/ 3;
     notifyListeners();
   }
 
@@ -214,16 +261,74 @@ class AddCropSmaplingModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void setSelectedSoilType(String? soilType) {
-    selectedAreaInAcrs = soilType;
-    cropsamplingdata.soilType = selectedAreaInAcrs;
+  void setSelectedareainacrs(String? cropVariety) {
+    selectedAreaInAcrs = double.tryParse(cropVariety ?? "");
+    cropsamplingdata.areaAcrs = selectedAreaInAcrs;
+    notifyListeners();
+  }
+
+  void setSelectedPlantationDate(String? date) {
+    plantationdate = date;
+    cropsamplingdata.plantattionRatooningDate = plantationdate;
+    notifyListeners();
+  }
+
+
+String? selectedgrowername;
+
+  void setSelectedgrowername(BuildContext context,String? growername) async {
+    selectedgrowername = growername;
+    final selectedgrowerData = farmerlist.firstWhere(
+            (growerData) => growerData.supplierName == growername);
+    Logger().i(selectedgrowerData);
+    selectedfarcode =
+        selectedgrowerData.existingSupplierCode; // Set th distance in the kmController
+    cropsamplingdata.growerCode = selectedgrowerData.name;
+    cropsamplingdata.growerName = selectedgrowername;
+    Logger().i(selectedgrowername);
+    plotList = (await AddCropSmaplingServices().fetchcanelistwithfilter(cropsamplingdata.season ?? "",cropsamplingdata.area ?? "",cropsamplingdata.growerCode ?? ""));
+    if (plotList.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            'There is plot available for ${cropsamplingdata.growerName}',
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
+          duration: Duration(seconds: 3), // Adjust the duration as needed
+        ),
+      );
+    }
     notifyListeners();
   }
 
   ////validators////
+  String? validateseason(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select Season';
+    }
+    return null;
+  }
+
+  String? validatevillage(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select village';
+    }
+    return null;
+  }
+
   String? validateplotNumber(String? value) {
     if (value == null || value.isEmpty) {
       return 'please select Plot Number';
+    }
+    return null;
+  }
+
+
+
+  String? validatefarmer(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'please select farmer';
     }
     return null;
   }

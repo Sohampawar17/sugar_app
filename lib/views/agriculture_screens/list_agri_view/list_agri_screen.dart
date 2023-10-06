@@ -132,7 +132,6 @@ class ListAgriScreen extends StatelessWidget {
                           return Container(
                             margin: const EdgeInsets.only(
                                 bottom: 16.0), // Add margin between containers
-
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16.0),

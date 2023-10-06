@@ -10,7 +10,6 @@ import '../../../widgets/full_screen_loader.dart';
 
 class AddCaneScreen extends StatelessWidget {
   final String caneId;
-
   const AddCaneScreen({super.key, required this.caneId});
 
   @override
@@ -50,7 +49,7 @@ class AddCaneScreen extends StatelessWidget {
                                     items: model.seasonlist.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>
@@ -77,7 +76,7 @@ class AddCaneScreen extends StatelessWidget {
                                     items: model.plantlist.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>
@@ -90,6 +89,7 @@ class AddCaneScreen extends StatelessWidget {
                           ),
 
                           Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
                                 child: Autocomplete<String>(
@@ -185,7 +185,7 @@ class AddCaneScreen extends StatelessWidget {
                                   items: model.plantationStatus.map((val) {
                                     return DropdownMenuItem<String>(
                                       value: val,
-                                      child: Text(val),
+                                      child: AutoSizeText(val),
                                     );
                                   }).toList(),
                                   onChanged: (value) =>
@@ -290,7 +290,7 @@ class AddCaneScreen extends StatelessWidget {
                                   items: model.yesno.map((val) {
                                     return DropdownMenuItem<String>(
                                       value: val,
-                                      child: Text(val),
+                                      child: AutoSizeText(val),
                                     );
                                   }).toList(),
                                   onChanged: (value) =>
@@ -317,6 +317,8 @@ class AddCaneScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: TextFormField(
+                                  keyboardType: TextInputType.numberWithOptions(
+                                      signed: false),
                                   controller: model.formNumberController,
                                   decoration: const InputDecoration(
                                       labelText: 'Form Number'),
@@ -344,7 +346,7 @@ class AddCaneScreen extends StatelessWidget {
                                     items: model.yesno.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>
@@ -530,6 +532,9 @@ class AddCaneScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: TextFormField(
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          signed: false),
                                   controller: model.surveyNumberController,
                                   decoration: const InputDecoration(
                                     labelText: 'Survey Number',
@@ -604,7 +609,7 @@ class AddCaneScreen extends StatelessWidget {
                                                   onSelected(option);
                                                 },
                                                 child: ListTile(
-                                                  title: Text(option),
+                                                  title: AutoSizeText(option),
                                                 ),
                                               );
                                             },
@@ -660,7 +665,7 @@ class AddCaneScreen extends StatelessWidget {
                                         model.plantationsystemList.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) => model
@@ -688,7 +693,7 @@ class AddCaneScreen extends StatelessWidget {
                                         model.irrigationSourceList.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) => model
@@ -715,7 +720,7 @@ class AddCaneScreen extends StatelessWidget {
                                     items: model.soilTypeList.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>
@@ -741,7 +746,7 @@ class AddCaneScreen extends StatelessWidget {
                                     items: model.yesnoroadside.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>
@@ -768,7 +773,7 @@ class AddCaneScreen extends StatelessWidget {
                                     items: model.croptypeList.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>
@@ -847,7 +852,7 @@ class AddCaneScreen extends StatelessWidget {
                                         model.irrigationmethodList.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) => model
@@ -871,7 +876,7 @@ class AddCaneScreen extends StatelessWidget {
                                     items: model.seedmaterialList.map((val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val),
+                                        child: AutoSizeText(val),
                                       );
                                     }).toList(),
                                     onChanged: (value) =>
@@ -943,13 +948,14 @@ class AddCaneScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              CtextButton(
-                                onPressed: () => model.onSavePressed(context),
-                                text: 'Save',
-                              ),
+
                               CtextButton(
                                 text: 'Cancel',
-                                onPressed: () => Navigator.of(context).pop(),
+                                onPressed: () => Navigator.of(context).pop(), buttonColor: Colors.red,
+                              ),
+                              CtextButton(
+                                onPressed: () => model.onSavePressed(context),
+                                text: 'Save', buttonColor: Colors.green,
                               ),
                             ],
                           ),
