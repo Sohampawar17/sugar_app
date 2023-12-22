@@ -9,6 +9,7 @@ import '../constants.dart';
 import '../models/agri.dart';
 import '../models/cane_farmer.dart';
 import '../models/dose_type.dart';
+import '../models/fertilizeritem.dart';
 import '../models/item.dart';
 import '../models/supplier_List.dart';
 import '../models/village_model.dart';
@@ -153,9 +154,9 @@ class AddAgriServices {
         Fluttertoast.showToast(msg: "UNABLE TO Agriculture Development!");
         return false;
       }
-    } catch (e) {
+    } on DioException catch (e) {
       Fluttertoast.showToast(msg: "Error accoured $e ");
-      Logger().e(e);
+      Logger().e(e.response?.data['exception']);
     }
     return false;
   }
@@ -362,7 +363,7 @@ Logger().i(response.realUri);
     }
   }
 
-  Future<List<Item>> fetchItemwithfilter() async {
+  Future<List<FertilizerItemList>> fetchItemwithfilter() async {
     try {
       var headers = {'Cookie': await getTocken()};
       var dio = Dio();
@@ -376,9 +377,9 @@ Logger().i(response.realUri);
       if (response.statusCode == 200) {
         var jsonData = json.encode(response.data);
         Map<String, dynamic> jsonDataMap = json.decode(jsonData);
-        List<dynamic> dataList = jsonDataMap['data'];
-        List<Item> farmerList =
-        dataList.map<Item>((data) => Item.fromJson(data)).toList();
+        List<dynamic> dataList = jsonDataMap['message'];
+        List<FertilizerItemList> farmerList =
+        dataList.map<FertilizerItemList>((data) => FertilizerItemList.fromJson(data)).toList();
         Logger().i(farmerList);
         return farmerList;
       } else {
@@ -386,8 +387,8 @@ Logger().i(response.realUri);
         Logger().e(response.statusMessage);
         return [];
       }
-    } catch (e) {
-      Logger().e(e);
+    } on DioException catch (e) {
+      Logger().e(e.response?.data['exception']);
       return [];
     }
   }

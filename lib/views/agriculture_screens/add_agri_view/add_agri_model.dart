@@ -10,6 +10,7 @@ import 'package:sugar_mill_app/models/supplier_List.dart';
 import '../../../models/agri_cane_model.dart';
 import '../../../models/cane_farmer.dart';
 import '../../../models/dose_type.dart';
+import '../../../models/fertilizeritem.dart';
 import '../../../models/village_model.dart';
 import '../../../services/add_agri_services.dart';
 
@@ -35,6 +36,7 @@ class AgriViewModel extends BaseViewModel {
   List<AgriCane> canelistwithfilter = [];
   List<caneFarmer> farmerList = [];
   List<Item> itemList = [];
+  List<FertilizerItemList> fertilizeritemlist=[];
   List<SupplierList> supplierList = [];
 List<villagemodel> villagelist=[];
   String? selectedplot;
@@ -59,6 +61,7 @@ List<villagemodel> villagelist=[];
     seasonlist = await AddAgriServices().fetchSeason();
     supplierList = await AddAgriServices().fetchSupplierList();
     itemList = await AddAgriServices().fetchItem();
+    fertilizeritemlist=await AddAgriServices().fetchItemwithfilter();
 villagelist=await AddAgriServices().fetchVillages();
     if (agriid != "") {
       isEdit = true;
@@ -122,7 +125,7 @@ villagelist=await AddAgriServices().fetchVillages();
       agridata.agricultureDevelopmentItem2 = agricultureDevelopmentItem2;
       bool res = false;
 
-      Logger().i(agridata.toJson().toString());
+      Logger().i(agridata.toJson());
       if (isEdit == true) {
         res = await AddAgriServices().updateAgri(agridata);
         if (res) {
@@ -331,19 +334,36 @@ calculatebaseAmount();
     }
   }
 
-  void setSelectedSales(String? sales) async {
+  void setSelectedSales(String? sales)  {
     agridata.salesType = sales;
     if (agridata.salesType != 'Fertilizer') {
       agricultureDevelopmentItem2.clear();
     }
+    Logger().i(agridata.salesType);
+    Logger().i(sales);
+
     notifyListeners();
   }
 
-  void setSelectedSeason(String? seasom) async {
-    season=seasom;
-    agridata.season = season;
+  void setSelectedSeason(String? seasom)  {
+    agridata.season = seasom;
+
+    Logger().i(seasom);
+
     notifyListeners();
   }
+
+
+
+   void setsseason
+    (String? sales)  {
+      agridata.season = sales;
+
+      Logger().i(agridata.salesType);
+      Logger().i(sales);
+
+      notifyListeners();
+    }
 
   void calculatebaseltotal() {
     double baselTotal = 0.0;
@@ -738,6 +758,11 @@ String? selectedVillage;
   late String suretyExistingCode;
   late String itemCode = "";
   late String itemName = "";
+  late double weight = 0.0;
+  late String itemTaxTemp = "";
+  late double taxNumber = 0.0;
+  late double fertilizerrate = 0.0;
+  late double actualQty = 0.0;
   late String itemCode2 = "";
   late String itemName2 = "";
   late double total = 0.0;
@@ -761,16 +786,27 @@ String? selectedVillage;
   }
 
   final totalController = TextEditingController();
+
   void submitAgriAccount(int index) {
     if (index != -1) {
       agricultureDevelopmentItem[index].itemCode = itemCode;
       agricultureDevelopmentItem[index].itemName = itemName;
+      agricultureDevelopmentItem[index].weightPerUnit=weight;
+      agricultureDevelopmentItem[index].itemTaxTemp=itemTaxTemp;
+      agricultureDevelopmentItem[index].taxNumber=taxNumber;
+      agricultureDevelopmentItem[index].actualQty=actualQty;
+      agricultureDevelopmentItem[index].rate=fertilizerrate;
       notifyListeners();
       return;
     }
     agricultureDevelopmentItem.add(AgricultureDevelopmentItem(
       itemCode: itemCode,
       itemName: itemName,
+      weightPerUnit: weight,
+      itemTaxTemp: itemTaxTemp,
+      taxNumber: taxNumber,
+      actualQty: actualQty,
+      rate: rate
     ));
     notifyListeners();
   }
@@ -867,8 +903,13 @@ String? selectedVillage;
   void setSelectedAgri(String? agri) async {
     Logger().i(agri);
     itemCode = agri ?? "";
-    final bankData = itemList.firstWhere((bank) => bank.itemCode == agri);
+    final bankData = fertilizeritemlist.firstWhere((bank) => bank.itemCode == agri);
     itemName = bankData.itemName ?? "";
+    weight=bankData.weightPerUnit?? 0.0;
+    itemTaxTemp=bankData.itemTaxTemp ?? "";
+    taxNumber=bankData.taxNumber ?? 0.0;
+    actualQty=bankData.actualQty ?? 0.0;
+    rate=bankData.rate ?? 0.0;
     notifyListeners();
   }
 

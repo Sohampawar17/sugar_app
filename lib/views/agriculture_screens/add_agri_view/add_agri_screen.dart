@@ -51,7 +51,7 @@ class AddAgriScreen extends StatelessWidget {
                                   );
                                 }).toList(),
                                 onChanged: (value) =>
-                                    model.setSelectedSeason,
+                                    model.setsseason(value),
                                 validator: model.validateSeason,
                               ),
                             ),
@@ -1577,7 +1577,7 @@ class AddAgriScreen extends StatelessWidget {
                                 if (textEditingValue.text.isEmpty) {
                                   return const Iterable<String>.empty();
                                 }
-                                return model.itemList
+                                return model.fertilizeritemlist
                                     .map((bank) => bank.itemName ?? "")
                                     .toList()
                                     .where((bank) => bank
